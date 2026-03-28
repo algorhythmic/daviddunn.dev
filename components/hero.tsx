@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useRef } from "react"
 import { ChevronDown, Cpu, Code, Plug } from "lucide-react"
 import { AnimatedBackground } from "@/components/hero-background"
 
@@ -11,55 +11,50 @@ const PAUSE_AFTER_TYPE = 2000
 const PAUSE_AFTER_DELETE = 400
 
 function useTypewriter(words: string[]) {
-  const [text, setText] = useState("")
+  const [display, setDisplay] = useState("")
   const [wordIndex, setWordIndex] = useState(0)
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  const tick = useCallback(() => {
-    const currentWord = words[wordIndex]
-
-    if (!isDeleting) {
-      // Typing forward
-      const next = currentWord.slice(0, text.length + 1)
-      setText(next)
-
-      if (next === currentWord) {
-        // Finished typing — pause then start deleting
-        return PAUSE_AFTER_TYPE
-      }
-      return TYPE_SPEED + Math.random() * 40
-    } else {
-      // Deleting backward
-      const next = currentWord.slice(0, text.length - 1)
-      setText(next)
-
-      if (next === "") {
-        // Finished deleting — move to next word
-        setIsDeleting(false)
-        setWordIndex((prev) => (prev + 1) % words.length)
-        return PAUSE_AFTER_DELETE
-      }
-      return DELETE_SPEED
-    }
-  }, [text, wordIndex, isDeleting, words])
+  const [phase, setPhase] = useState<"typing" | "pausing" | "deleting" | "waiting">("typing")
+  const randRef = useRef(0)
 
   useEffect(() => {
-    const delay = tick()
+    const word = words[wordIndex]
+    let timeout: ReturnType<typeof setTimeout>
 
-    // After typing a full word and pausing, switch to deleting
-    if (!isDeleting && text === words[wordIndex]) {
-      const timeout = setTimeout(() => setIsDeleting(true), PAUSE_AFTER_TYPE)
-      return () => clearTimeout(timeout)
+    switch (phase) {
+      case "typing":
+        if (display.length < word.length) {
+          randRef.current = Math.random() * 40
+          timeout = setTimeout(() => {
+            setDisplay(word.slice(0, display.length + 1))
+          }, TYPE_SPEED + randRef.current)
+        } else {
+          setPhase("pausing")
+        }
+        break
+      case "pausing":
+        timeout = setTimeout(() => setPhase("deleting"), PAUSE_AFTER_TYPE)
+        break
+      case "deleting":
+        if (display.length > 0) {
+          timeout = setTimeout(() => {
+            setDisplay(display.slice(0, -1))
+          }, DELETE_SPEED)
+        } else {
+          setPhase("waiting")
+        }
+        break
+      case "waiting":
+        timeout = setTimeout(() => {
+          setWordIndex((prev) => (prev + 1) % words.length)
+          setPhase("typing")
+        }, PAUSE_AFTER_DELETE)
+        break
     }
 
-    const timeout = setTimeout(() => {
-      tick()
-    }, delay)
-
     return () => clearTimeout(timeout)
-  }, [text, isDeleting, wordIndex, tick, words])
+  }, [display, phase, wordIndex, words])
 
-  return text
+  return display
 }
 
 export function Hero() {

@@ -18,44 +18,44 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
     >
       {/* Header band */}
       <div
-        className={`${study.accentColor} ${study.darkAccentColor} border-b-4 border-black dark:border-neo-blue-500 px-6 md:px-8 py-5`}
+        className={`${study.accentColor} ${study.darkAccentColor} border-b-4 border-black dark:border-neo-blue-500 px-4 md:px-8 py-4 md:py-5`}
       >
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-3xl">{study.icon}</span>
-              <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight leading-tight">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-4">
+          <div className="flex-1 min-w-0 text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start gap-2 md:gap-3 mb-1 md:mb-2">
+              <span className="text-2xl md:text-3xl">{study.icon}</span>
+              <h3 className="text-xl md:text-3xl font-black text-white tracking-tight leading-tight">
                 {study.title}
               </h3>
             </div>
-            <p className="text-sm md:text-base font-bold text-white/90">
+            <p className="text-xs md:text-base font-bold text-white/90">
               {study.subtitle}
             </p>
           </div>
-          <span className="text-xs font-black bg-black text-white px-3 py-1.5 border-2 border-white shrink-0 uppercase tracking-wider">
+          <span className="text-[10px] md:text-xs font-black bg-black text-white px-2 py-1 md:px-3 md:py-1.5 border-2 border-white shrink-0 uppercase tracking-wider self-center md:self-start">
             Case Study {String(index + 1).padStart(2, "0")}
           </span>
         </div>
       </div>
 
       {/* Body */}
-      <div className="px-6 md:px-8 py-6">
+      <div className="px-4 md:px-8 py-4 md:py-6">
         {/* Hook */}
-        <p className="text-base md:text-lg font-bold text-foreground dark:text-gray-200 leading-relaxed mb-6">
+        <p className="text-sm md:text-lg font-bold text-foreground dark:text-gray-200 leading-relaxed mb-4 md:mb-6 text-center md:text-left">
           {study.hook}
         </p>
 
         {/* Highlight metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-4 md:mb-6">
           {study.highlights.map((h, i) => (
             <div
               key={i}
-              className="bg-neo-yellow-light/20 dark:bg-neo-yellow-dark/20 border-2 border-black dark:border-neo-blue-500 p-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+              className="bg-neo-yellow-light/20 dark:bg-neo-yellow-dark/20 border-2 border-black dark:border-neo-blue-500 p-2 md:p-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center md:text-left"
             >
-              <div className="text-xl md:text-2xl font-black text-foreground dark:text-white mb-1">
+              <div className="text-lg md:text-2xl font-black text-foreground dark:text-white mb-0.5 md:mb-1">
                 {h.metric}
               </div>
-              <div className="text-xs font-bold text-muted-foreground dark:text-gray-300 leading-snug">
+              <div className="text-[10px] md:text-xs font-bold text-muted-foreground dark:text-gray-300 leading-snug">
                 {h.description}
               </div>
             </div>
@@ -63,7 +63,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
         </div>
 
         {/* Tech badges */}
-        <div className="flex flex-wrap gap-1.5 mb-6">
+        <div className="flex flex-wrap justify-center md:justify-start gap-1.5 mb-4 md:mb-6">
           {study.technologies.map((tech) => (
             <Badge
               key={tech}
@@ -142,7 +142,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
         )}
 
         {/* Links + expand toggle */}
-        <div className="flex flex-wrap items-center gap-3 mt-6 pt-4 border-t-2 border-black/10 dark:border-white/10">
+        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 md:gap-3 mt-4 md:mt-6 pt-3 md:pt-4 border-t-2 border-black/10 dark:border-white/10">
           {study.links.map((link) => (
             <a
               key={link.label}
@@ -164,7 +164,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
 
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="ml-auto flex items-center gap-1.5 font-black py-2 px-4 border-2 border-black dark:border-neo-blue-500 bg-white dark:bg-slate-700 text-foreground dark:text-white text-sm transition-all duration-150 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px]"
+            className="w-full md:w-auto md:ml-auto flex items-center justify-center gap-1.5 font-black py-2 px-4 border-2 border-black dark:border-neo-blue-500 bg-white dark:bg-slate-700 text-foreground dark:text-white text-sm transition-all duration-150 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px]"
           >
             {isExpanded ? (
               <>

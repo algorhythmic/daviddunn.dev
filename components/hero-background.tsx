@@ -2,7 +2,6 @@
 
 // Layer 1: Traversing dots aligned to the 40px CSS grid
 function GridDots() {
-  // Horizontal dots — y positions are multiples of 40px to align with CSS grid
   const hDots = [
     { y: 40, dur: "12s", delay: "0s", color: "#3b82f6" },
     { y: 120, dur: "9s", delay: "2s", color: "#ec4899" },
@@ -16,7 +15,6 @@ function GridDots() {
     { y: 760, dur: "11s", delay: "8s", color: "#ec4899" },
   ]
 
-  // Vertical dots — x positions are multiples of 40px
   const vDots = [
     { x: 80, dur: "15s", delay: "0s", color: "#10b981" },
     { x: 200, dur: "11s", delay: "4s", color: "#3b82f6" },
@@ -31,11 +29,10 @@ function GridDots() {
 
   return (
     <>
-      {/* Horizontal traversing dots — positioned in px to match CSS grid */}
       {hDots.map((dot, i) => (
         <div
           key={`h-${i}`}
-          className="absolute left-0 w-3 h-3 rounded-full animate-dot-traverse-h"
+          className="absolute left-0 w-3 h-3 rounded-full opacity-0 animate-dot-traverse-h"
           style={{
             top: `${dot.y}px`,
             backgroundColor: dot.color,
@@ -45,12 +42,10 @@ function GridDots() {
           } as React.CSSProperties}
         />
       ))}
-
-      {/* Vertical traversing dots — positioned in px to match CSS grid */}
       {vDots.map((dot, i) => (
         <div
           key={`v-${i}`}
-          className="absolute top-0 w-3 h-3 rounded-full animate-dot-traverse-v"
+          className="absolute top-0 w-3 h-3 rounded-full opacity-0 animate-dot-traverse-v"
           style={{
             left: `${dot.x}px`,
             backgroundColor: dot.color,
@@ -97,94 +92,87 @@ function ChartLines() {
   )
 }
 
-// Layer 3: Pipeline flow — uses percentage-based viewBox for full coverage
+// Layer 3: Pipeline flow — SVG for edges, HTML divs for nodes (no Y-stretch)
 function PipelineFlow() {
-  // Coordinates in a 100x100 viewBox (percentages of the section)
   const stages = [
-    { label: "STREAM", x: 1, y: 3, fill: "#06b6d4" },
-    { label: "INGEST", x: 15, y: 18, fill: "#3b82f6" },
-    { label: "DETECT", x: 2, y: 55, fill: "#ec4899" },
-    { label: "ANALYZE", x: 78, y: 5, fill: "#10b981" },
-    { label: "SCORE", x: 85, y: 38, fill: "#8b5cf6" },
-    { label: "EXECUTE", x: 75, y: 72, fill: "#ef4444" },
+    { label: "STREAM", left: "1%", top: "5%", fill: "#06b6d4" },
+    { label: "INGEST", left: "16%", top: "18%", fill: "#3b82f6" },
+    { label: "DETECT", left: "2%", top: "58%", fill: "#ec4899" },
+    { label: "ANALYZE", left: "79%", top: "5%", fill: "#10b981" },
+    { label: "SCORE", left: "86%", top: "40%", fill: "#8b5cf6" },
+    { label: "EXECUTE", left: "76%", top: "75%", fill: "#ef4444" },
   ]
 
-  // Node dimensions in viewBox units
-  const nw = 10 // node width
-  const nh = 4.5 // node height
-
+  // Edge paths in the percentage viewBox (preserveAspectRatio="none" for full stretch)
+  // Coordinates match the percentage positions of the nodes
   const edges = [
-    // Left cluster: STREAM → INGEST
-    `M${1 + nw} ${3 + nh / 2} C${8 + nw} ${3 + nh / 2}, ${15} ${18 + nh / 2}, ${15} ${18 + nh / 2}`,
+    // STREAM → INGEST
+    "M11 7.5 C13 7.5, 14 20.5, 16 20.5",
     // INGEST → DETECT
-    `M${15 + nw / 2} ${18 + nh} C${15 + nw / 2} ${36}, ${2 + nw / 2} ${40}, ${2 + nw / 2} ${55}`,
-    // Right cluster: ANALYZE → SCORE
-    `M${78 + nw} ${5 + nh / 2} C${85 + nw} ${5 + nh / 2}, ${85 + nw / 2} ${25}, ${85 + nw / 2} ${38}`,
+    "M21 22.5 C21 38, 7 42, 7 58",
+    // ANALYZE → SCORE
+    "M89 7.5 C93 7.5, 91 28, 91 40",
     // SCORE → EXECUTE
-    `M${85 + nw / 2} ${38 + nh} C${85 + nw / 2} ${55}, ${75 + nw / 2} ${60}, ${75 + nw / 2} ${72}`,
-    // Cross: DETECT → ANALYZE
-    `M${2 + nw} ${55 + nh / 2} C${35} ${55 + nh / 2}, ${55} ${5 + nh / 2}, ${78} ${5 + nh / 2}`,
+    "M91 44.5 C91 58, 81 62, 81 75",
+    // DETECT → ANALYZE (cross)
+    "M12 60.5 C35 60.5, 55 7.5, 79 7.5",
   ]
 
   return (
-    <svg
-      className="absolute inset-0 w-full h-full hidden md:block"
-      preserveAspectRatio="none"
-      viewBox="0 0 100 100"
-    >
-      {edges.map((d, i) => (
-        <g key={`edge-${i}`}>
-          <path
-            d={d}
-            fill="none"
-            className="stroke-black/15 dark:stroke-neo-blue-500/20"
-            strokeWidth="0.3"
-          />
-          <path
-            d={d}
-            fill="none"
-            className="stroke-black/30 dark:stroke-neo-blue-400/40 animate-dash-flow"
-            strokeWidth="0.3"
-            strokeDasharray="1.5 1"
-          />
-          <circle r="0.5" className="fill-neo-blue-500 dark:fill-neo-blue-400">
-            <animateMotion
-              dur={`${3.5 + i * 0.8}s`}
-              repeatCount="indefinite"
-              path={d}
+    <div className="absolute inset-0 hidden md:block">
+      {/* SVG edges only — stretches to fill */}
+      <svg
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="none"
+        viewBox="0 0 100 100"
+      >
+        {edges.map((d, i) => (
+          <g key={`edge-${i}`}>
+            <path
+              d={d}
+              fill="none"
+              className="stroke-black/15 dark:stroke-neo-blue-500/20"
+              strokeWidth="0.3"
             />
-          </circle>
-        </g>
-      ))}
+            <path
+              d={d}
+              fill="none"
+              className="stroke-black/30 dark:stroke-neo-blue-400/40 animate-dash-flow"
+              strokeWidth="0.3"
+              strokeDasharray="1.5 1"
+            />
+            <circle r="0.5" className="fill-neo-blue-500 dark:fill-neo-blue-400">
+              <animateMotion
+                dur={`${3.5 + i * 0.8}s`}
+                repeatCount="indefinite"
+                path={d}
+              />
+            </circle>
+          </g>
+        ))}
+      </svg>
 
+      {/* HTML nodes — maintain aspect ratio, no stretch */}
       {stages.map((stage, i) => (
-        <g
+        <div
           key={stage.label}
-          className="animate-node-pulse"
-          style={{ animationDelay: `${i * 0.7}s`, transformOrigin: `${stage.x + nw / 2}% ${stage.y + nh / 2}%` }}
+          className="absolute px-3 py-1.5 border-[3px] border-black dark:border-neo-blue-400 rounded-sm animate-node-pulse"
+          style={{
+            left: stage.left,
+            top: stage.top,
+            backgroundColor: stage.fill,
+            animationDelay: `${i * 0.7}s`,
+          }}
         >
-          <rect
-            x={stage.x}
-            y={stage.y}
-            width={nw}
-            height={nh}
-            rx="0.5"
-            fill={stage.fill}
-            className="stroke-black dark:stroke-neo-blue-400"
-            strokeWidth="0.4"
-          />
-          <text
-            x={stage.x + nw / 2}
-            y={stage.y + nh * 0.65}
-            textAnchor="middle"
-            className="fill-white"
-            style={{ fontFamily: "Inter, system-ui, sans-serif", fontWeight: 900, fontSize: "2px" }}
+          <span
+            className="text-white text-[11px] tracking-wide"
+            style={{ fontFamily: "Inter, system-ui, sans-serif", fontWeight: 900 }}
           >
             {stage.label}
-          </text>
-        </g>
+          </span>
+        </div>
       ))}
-    </svg>
+    </div>
   )
 }
 
@@ -195,7 +183,6 @@ export function AnimatedBackground({
 }) {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50 dark:opacity-25">
-      {/* CSS grid via neo-grid-bg class — fixed attachment for cross-section continuity */}
       <div className="absolute inset-0 neo-grid-bg" />
       <GridDots />
       <ChartLines />
