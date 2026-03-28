@@ -1,19 +1,69 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { ChevronDown, Cpu, Code, Plug } from "lucide-react"
 import { AnimatedBackground } from "@/components/hero-background"
 
-export function Hero() {
-  const [currentRole, setCurrentRole] = useState(0)
-  const roles = ["AI Engineer", "LLM Application Engineer", "Full-Stack Developer"]
+const roles = ["AI Engineer", "LLM Application Engineer", "Full-Stack Developer"]
+const TYPE_SPEED = 80
+const DELETE_SPEED = 50
+const PAUSE_AFTER_TYPE = 2000
+const PAUSE_AFTER_DELETE = 400
+
+function useTypewriter(words: string[]) {
+  const [text, setText] = useState("")
+  const [wordIndex, setWordIndex] = useState(0)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const tick = useCallback(() => {
+    const currentWord = words[wordIndex]
+
+    if (!isDeleting) {
+      // Typing forward
+      const next = currentWord.slice(0, text.length + 1)
+      setText(next)
+
+      if (next === currentWord) {
+        // Finished typing — pause then start deleting
+        return PAUSE_AFTER_TYPE
+      }
+      return TYPE_SPEED + Math.random() * 40
+    } else {
+      // Deleting backward
+      const next = currentWord.slice(0, text.length - 1)
+      setText(next)
+
+      if (next === "") {
+        // Finished deleting — move to next word
+        setIsDeleting(false)
+        setWordIndex((prev) => (prev + 1) % words.length)
+        return PAUSE_AFTER_DELETE
+      }
+      return DELETE_SPEED
+    }
+  }, [text, wordIndex, isDeleting, words])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentRole((prev) => (prev + 1) % roles.length)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [])
+    const delay = tick()
+
+    // After typing a full word and pausing, switch to deleting
+    if (!isDeleting && text === words[wordIndex]) {
+      const timeout = setTimeout(() => setIsDeleting(true), PAUSE_AFTER_TYPE)
+      return () => clearTimeout(timeout)
+    }
+
+    const timeout = setTimeout(() => {
+      tick()
+    }, delay)
+
+    return () => clearTimeout(timeout)
+  }, [text, isDeleting, wordIndex, tick, words])
+
+  return text
+}
+
+export function Hero() {
+  const typedRole = useTypewriter(roles)
 
   return (
     <section
@@ -27,8 +77,9 @@ export function Hero() {
             DAVID DUNN
           </h1>
           <div className="h-10 md:h-14 mb-4 md:mb-5 flex items-center justify-center">
-            <h2 className="text-xl md:text-3xl font-bold text-neo-blue-500 dark:text-neo-blue-400 transition-all duration-500 dark:neo-text-glow min-w-0 text-center">
-              {roles[currentRole]}
+            <h2 className="text-xl md:text-3xl font-bold text-neo-blue-500 dark:text-neo-blue-400 dark:neo-text-glow min-w-0 text-center font-mono">
+              {typedRole}
+              <span className="inline-block w-[3px] h-[1em] bg-neo-blue-500 dark:bg-neo-blue-400 ml-0.5 align-middle animate-cursor-blink" />
             </h2>
           </div>
           <p className="text-sm md:text-lg font-bold text-black dark:text-white mb-5 md:mb-6 max-w-2xl mx-auto">

@@ -296,6 +296,15 @@ html {
   animation: dot-traverse-v var(--dot-duration, 8s) linear infinite;
 }
 
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-cursor-blink {
+  animation: cursor-blink 0.8s step-end infinite;
+}
+
 /* Reduced motion: disable all custom animations */
 @media (prefers-reduced-motion: reduce) {
   .animate-dash-flow,
@@ -303,6 +312,7 @@ html {
   .animate-chart-drift-2,
   .animate-chart-drift-3,
   .animate-node-pulse,
+  .animate-cursor-blink,
   .animate-dot-traverse-h,
   .animate-dot-traverse-v,
   .float,
