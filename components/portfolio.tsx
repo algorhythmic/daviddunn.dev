@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { ExternalLink, Github, ChevronDown, ChevronUp, Layers, Lightbulb, Wrench, User } from "lucide-react"
 import { caseStudies, type CaseStudy } from "@/lib/portfolio-data"
+import { AnimatedBackground } from "@/components/hero-background"
 
 function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -183,8 +184,9 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
 
 export function Portfolio() {
   return (
-    <section id="portfolio" className="min-h-screen bg-neo-cyan-light dark:bg-gray-800 py-20">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="portfolio" className="min-h-screen bg-neo-cyan-light dark:bg-gray-800 py-20 relative overflow-hidden">
+      <AnimatedBackground gridId="portfolio-grid" />
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-black text-foreground dark:text-white mb-4">
             CASE STUDIES

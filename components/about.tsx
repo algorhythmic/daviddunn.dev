@@ -2,6 +2,7 @@
 
 import { ExternalLink, Linkedin, Github, Twitter, Mail, MapPin, Calendar } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
+import { AnimatedBackground } from "@/components/hero-background"
 
 export function About() {
   const skills = [
@@ -33,8 +34,9 @@ export function About() {
   ]
 
   return (
-    <section id="about" className="min-h-screen bg-neo-red-light dark:bg-gray-900 py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="about" className="min-h-screen bg-neo-red-light dark:bg-gray-900 py-20 relative overflow-hidden">
+      <AnimatedBackground gridId="about-grid" />
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-6xl font-black text-foreground mb-4 dark:text-white">ABOUT ME</h2>
           <p className="text-xl font-bold text-foreground mb-8 dark:text-gray-200">
