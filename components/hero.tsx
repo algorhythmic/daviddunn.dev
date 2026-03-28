@@ -20,7 +20,7 @@ export function Hero() {
       id="hero"
       className="min-h-screen bg-neo-yellow-light dark:bg-slate-900 flex items-center justify-center pt-16 relative overflow-hidden"
     >
-      <AnimatedBackground showPipeline gridId="hero-grid" />
+      <AnimatedBackground showPipeline />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="bg-white dark:bg-slate-800 border-4 md:border-6 border-black dark:border-neo-blue-500 px-5 py-6 md:px-10 md:py-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transform -rotate-1 hover:rotate-0 transition-transform duration-300 w-full max-w-2xl md:max-w-3xl mx-auto">
           <h1 className="text-3xl md:text-6xl font-black mb-3 md:mb-4 text-black dark:text-white dark:neo-text-glow">
@@ -58,9 +58,13 @@ export function Hero() {
           </button>
         </div>
 
-        <div className="mt-8 animate-bounce">
+        <button
+          onClick={() => document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })}
+          className="mt-8 animate-bounce cursor-pointer bg-transparent border-none"
+          aria-label="Scroll to case studies"
+        >
           <ChevronDown size={36} className="mx-auto text-black dark:text-neo-blue-400 dark:neo-text-glow" />
-        </div>
+        </button>
       </div>
     </section>
   )

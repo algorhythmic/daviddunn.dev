@@ -1,7 +1,7 @@
 "use client"
 
-// Layer 1: Grid with traversing dots
-function GridLayer({ id = "grid" }: { id?: string }) {
+// Layer 1: Grid (CSS) with traversing dots (SVG)
+function GridLayer() {
   const hDots = [
     { y: 40, dur: "12s", delay: "0s", color: "#3b82f6" },
     { y: 120, dur: "9s", delay: "2s", color: "#ec4899" },
@@ -27,55 +27,48 @@ function GridLayer({ id = "grid" }: { id?: string }) {
   ]
 
   return (
-    <svg
-      className="absolute inset-0 w-full h-full"
-      preserveAspectRatio="xMidYMid slice"
-      viewBox="0 0 1200 800"
-    >
-      <defs>
-        <pattern id={id} width="40" height="40" patternUnits="userSpaceOnUse">
-          <path
-            d="M 40 0 L 0 0 0 40"
-            fill="none"
-            className="stroke-black/[0.12] dark:stroke-neo-blue-500/[0.2]"
-            strokeWidth="2.5"
+    <>
+      {/* CSS grid - fixed attachment makes it continuous across all sections */}
+      <div className="absolute inset-0 neo-grid-bg" />
+
+      {/* SVG traversing dots only */}
+      <svg
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="xMidYMid slice"
+        viewBox="0 0 1200 800"
+      >
+        {hDots.map((dot, i) => (
+          <circle
+            key={`h-${i}`}
+            cx={0}
+            cy={dot.y}
+            r="5"
+            fill={dot.color}
+            className="animate-dot-traverse-h"
+            style={{
+              "--traverse-x": "1200px",
+              "--dot-duration": dot.dur,
+              animationDelay: dot.delay,
+            } as React.CSSProperties}
           />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill={`url(#${id})`} />
-
-      {hDots.map((dot, i) => (
-        <circle
-          key={`h-${i}`}
-          cx={0}
-          cy={dot.y}
-          r="5"
-          fill={dot.color}
-          className="animate-dot-traverse-h"
-          style={{
-            "--traverse-x": "1200px",
-            "--dot-duration": dot.dur,
-            animationDelay: dot.delay,
-          } as React.CSSProperties}
-        />
-      ))}
-
-      {vDots.map((dot, i) => (
-        <circle
-          key={`v-${i}`}
-          cx={dot.x}
-          cy={0}
-          r="5"
-          fill={dot.color}
-          className="animate-dot-traverse-v"
-          style={{
-            "--traverse-y": "800px",
-            "--dot-duration": dot.dur,
-            animationDelay: dot.delay,
-          } as React.CSSProperties}
-        />
-      ))}
-    </svg>
+        ))}
+        {vDots.map((dot, i) => (
+          <circle
+            key={`v-${i}`}
+            cx={dot.x}
+            cy={0}
+            r="5"
+            fill={dot.color}
+            className="animate-dot-traverse-v"
+            style={{
+              "--traverse-y": "800px",
+              "--dot-duration": dot.dur,
+              animationDelay: dot.delay,
+            } as React.CSSProperties}
+          />
+        ))}
+      </svg>
+    </>
   )
 }
 
@@ -124,13 +117,10 @@ function PipelineFlow() {
   ]
 
   const edges = [
-    // Left cluster: STREAM → INGEST → DETECT
     "M150 80 C195 80, 195 150, 240 150",
     "M200 150 C150 150, 150 400, 60 400",
-    // Right cluster: ANALYZE → SCORE → EXECUTE
     "M1020 100 C1080 100, 1080 300, 1040 300",
     "M1100 300 C1100 400, 1040 490, 920 490",
-    // Cross connection: DETECT → ANALYZE (passes behind card)
     "M180 400 C450 400, 700 100, 900 100",
   ]
 
@@ -198,14 +188,12 @@ function PipelineFlow() {
 
 export function AnimatedBackground({
   showPipeline = false,
-  gridId = "grid",
 }: {
   showPipeline?: boolean
-  gridId?: string
 }) {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40 dark:opacity-25">
-      <GridLayer id={gridId} />
+      <GridLayer />
       <ChartLines />
       {showPipeline && <PipelineFlow />}
     </div>

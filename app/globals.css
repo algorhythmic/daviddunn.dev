@@ -77,6 +77,22 @@
     background-size: 20px 20px;
   }
 
+  .neo-grid-bg {
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.13) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.13) 1.5px, transparent 1.5px);
+    background-size: 40px 40px;
+    background-attachment: fixed;
+  }
+
+  .dark .neo-grid-bg {
+    background-image:
+      linear-gradient(rgba(59, 130, 246, 0.22) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.22) 1.5px, transparent 1.5px);
+    background-size: 40px 40px;
+    background-attachment: fixed;
+  }
+
   .bg-graph-paper-dark {
     background-color: rgb(30, 41, 59);
     background-image: linear-gradient(rgba(75, 85, 99, 0.3) 1px, transparent 1px),

@@ -35,7 +35,7 @@ export function About() {
 
   return (
     <section id="about" className="min-h-screen bg-neo-red-light dark:bg-gray-900 py-20 relative overflow-hidden">
-      <AnimatedBackground gridId="about-grid" />
+      <AnimatedBackground />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-6xl font-black text-foreground mb-4 dark:text-white">ABOUT ME</h2>
