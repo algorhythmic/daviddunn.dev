@@ -1,7 +1,7 @@
 "use client"
 
 // Traversing dots aligned to the 40px CSS grid
-// Dots are centered on gridlines using transform: translate(-50%, -50%)
+// Use margin offset for centering (not transform, which gets overridden by animation)
 function GridDots() {
   const hDots = [
     { y: 40, dur: "12s", delay: "0s", color: "#3b82f6" },
@@ -30,6 +30,7 @@ function GridDots() {
 
   return (
     <>
+      {/* Horizontal dots: traverse left→right, centered on gridline via margin-top */}
       {hDots.map((dot, i) => (
         <div
           key={`h-${i}`}
@@ -37,7 +38,7 @@ function GridDots() {
           style={{
             top: `${dot.y}px`,
             left: 0,
-            transform: "translateY(-50%)",
+            marginTop: "-6px",
             backgroundColor: dot.color,
             "--traverse-x": "100vw",
             "--dot-duration": dot.dur,
@@ -45,6 +46,7 @@ function GridDots() {
           } as React.CSSProperties}
         />
       ))}
+      {/* Vertical dots: traverse top→bottom, centered on gridline via margin-left */}
       {vDots.map((dot, i) => (
         <div
           key={`v-${i}`}
@@ -52,7 +54,7 @@ function GridDots() {
           style={{
             left: `${dot.x}px`,
             top: 0,
-            transform: "translateX(-50%)",
+            marginLeft: "-6px",
             backgroundColor: dot.color,
             "--traverse-y": "100vh",
             "--dot-duration": dot.dur,
@@ -64,47 +66,45 @@ function GridDots() {
   )
 }
 
-// Pipeline flow — single SVG with uniform scaling (xMidYMid slice)
-// Nodes and edges share the same coordinate system so they always connect
+// Pipeline flow — single SVG, uniform scaling, always fully visible
+// viewBox 1000x700 with preserveAspectRatio="xMidYMid meet"
 function PipelineFlow() {
-  const nw = 110
-  const nh = 36
+  const nw = 100
+  const nh = 34
 
   const stages = [
-    { label: "STREAM", x: 30, y: 50, fill: "#06b6d4" },
-    { label: "INGEST", x: 250, y: 160, fill: "#3b82f6" },
-    { label: "DETECT", x: 50, y: 500, fill: "#ec4899" },
-    { label: "ANALYZE", x: 1260, y: 60, fill: "#10b981" },
-    { label: "SCORE", x: 1380, y: 320, fill: "#8b5cf6" },
-    { label: "EXECUTE", x: 1230, y: 600, fill: "#ef4444" },
+    { label: "STREAM", x: 20, y: 30, fill: "#06b6d4" },
+    { label: "INGEST", x: 180, y: 140, fill: "#3b82f6" },
+    { label: "DETECT", x: 40, y: 400, fill: "#ec4899" },
+    { label: "ANALYZE", x: 780, y: 40, fill: "#10b981" },
+    { label: "SCORE", x: 860, y: 260, fill: "#8b5cf6" },
+    { label: "EXECUTE", x: 770, y: 460, fill: "#ef4444" },
   ]
 
-  // Center points for edge connections
   const cx = (s: typeof stages[0]) => s.x + nw / 2
   const cy = (s: typeof stages[0]) => s.y + nh / 2
-  const r = (s: typeof stages[0]) => s.x + nw  // right edge
-  const b = (s: typeof stages[0]) => s.y + nh   // bottom edge
+  const r = (s: typeof stages[0]) => s.x + nw
+  const b = (s: typeof stages[0]) => s.y + nh
 
   const edges = [
     // STREAM → INGEST
-    `M${r(stages[0])} ${cy(stages[0])} C${r(stages[0]) + 60} ${cy(stages[0])}, ${stages[1].x - 60} ${cy(stages[1])}, ${stages[1].x} ${cy(stages[1])}`,
+    `M${r(stages[0])} ${cy(stages[0])} C${r(stages[0]) + 30} ${cy(stages[0])}, ${stages[1].x - 30} ${cy(stages[1])}, ${stages[1].x} ${cy(stages[1])}`,
     // INGEST → DETECT
-    `M${cx(stages[1])} ${b(stages[1])} C${cx(stages[1])} ${b(stages[1]) + 120}, ${cx(stages[2])} ${stages[2].y - 120}, ${cx(stages[2])} ${stages[2].y}`,
+    `M${cx(stages[1])} ${b(stages[1])} C${cx(stages[1])} ${b(stages[1]) + 80}, ${cx(stages[2])} ${stages[2].y - 80}, ${cx(stages[2])} ${stages[2].y}`,
     // ANALYZE → SCORE
-    `M${cx(stages[3])} ${b(stages[3])} C${cx(stages[3])} ${b(stages[3]) + 80}, ${cx(stages[4])} ${stages[4].y - 80}, ${cx(stages[4])} ${stages[4].y}`,
+    `M${cx(stages[3])} ${b(stages[3])} C${cx(stages[3])} ${b(stages[3]) + 60}, ${cx(stages[4])} ${stages[4].y - 60}, ${cx(stages[4])} ${stages[4].y}`,
     // SCORE → EXECUTE
-    `M${cx(stages[4])} ${b(stages[4])} C${cx(stages[4])} ${b(stages[4]) + 80}, ${cx(stages[5])} ${stages[5].y - 80}, ${cx(stages[5])} ${stages[5].y}`,
-    // DETECT → ANALYZE (cross connection)
-    `M${r(stages[2])} ${cy(stages[2])} C${r(stages[2]) + 300} ${cy(stages[2])}, ${stages[3].x - 300} ${cy(stages[3])}, ${stages[3].x} ${cy(stages[3])}`,
+    `M${cx(stages[4])} ${b(stages[4])} C${cx(stages[4])} ${b(stages[4]) + 60}, ${cx(stages[5])} ${stages[5].y - 60}, ${cx(stages[5])} ${stages[5].y}`,
+    // DETECT → ANALYZE (cross)
+    `M${r(stages[2])} ${cy(stages[2])} C${r(stages[2]) + 200} ${cy(stages[2])}, ${stages[3].x - 200} ${cy(stages[3])}, ${stages[3].x} ${cy(stages[3])}`,
   ]
 
   return (
     <svg
-      className="absolute inset-0 w-full h-full hidden md:block"
-      preserveAspectRatio="xMidYMid slice"
-      viewBox="0 0 1600 750"
+      className="absolute inset-0 w-full h-full"
+      preserveAspectRatio="xMidYMid meet"
+      viewBox="0 0 1000 520"
     >
-      {/* Edges */}
       {edges.map((d, i) => (
         <g key={`edge-${i}`}>
           <path
@@ -130,7 +130,6 @@ function PipelineFlow() {
         </g>
       ))}
 
-      {/* Nodes */}
       {stages.map((stage, i) => (
         <g
           key={stage.label}
@@ -149,7 +148,7 @@ function PipelineFlow() {
           />
           <text
             x={cx(stage)}
-            y={stage.y + 24}
+            y={stage.y + 23}
             textAnchor="middle"
             className="fill-white"
             style={{ fontFamily: "Inter, system-ui, sans-serif", fontWeight: 900, fontSize: "13px" }}
