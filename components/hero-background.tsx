@@ -1,7 +1,6 @@
 "use client"
 
 // Traversing dots aligned to the 40px CSS grid
-// Use margin offset for centering (not transform, which gets overridden by animation)
 function GridDots() {
   const hDots = [
     { y: 40, dur: "12s", delay: "0s", color: "#3b82f6" },
@@ -30,7 +29,6 @@ function GridDots() {
 
   return (
     <>
-      {/* Horizontal dots: traverse left→right, centered on gridline via margin-top */}
       {hDots.map((dot, i) => (
         <div
           key={`h-${i}`}
@@ -46,7 +44,6 @@ function GridDots() {
           } as React.CSSProperties}
         />
       ))}
-      {/* Vertical dots: traverse top→bottom, centered on gridline via margin-left */}
       {vDots.map((dot, i) => (
         <div
           key={`v-${i}`}
@@ -66,98 +63,113 @@ function GridDots() {
   )
 }
 
-// Pipeline flow — single SVG, uniform scaling, always fully visible
-// viewBox 1000x700 with preserveAspectRatio="xMidYMid meet"
-function PipelineFlow() {
-  const nw = 100
-  const nh = 34
+// Shared edge renderer
+function PipelineEdge({ d, index }: { d: string; index: number }) {
+  return (
+    <g>
+      <path d={d} fill="none" className="stroke-black/15 dark:stroke-neo-blue-500/20" strokeWidth="3" />
+      <path d={d} fill="none" className="stroke-black/30 dark:stroke-neo-blue-400/40 animate-dash-flow" strokeWidth="3" strokeDasharray="14 10" />
+      <circle r="5" className="fill-neo-blue-500 dark:fill-neo-blue-400">
+        <animateMotion dur={`${4 + index * 0.8}s`} repeatCount="indefinite" path={d} />
+      </circle>
+    </g>
+  )
+}
 
-  const stages = [
-    { label: "STREAM", x: 20, y: 30, fill: "#06b6d4" },
-    { label: "INGEST", x: 180, y: 140, fill: "#3b82f6" },
-    { label: "DETECT", x: 40, y: 400, fill: "#ec4899" },
-    { label: "ANALYZE", x: 780, y: 40, fill: "#10b981" },
-    { label: "SCORE", x: 860, y: 260, fill: "#8b5cf6" },
-    { label: "EXECUTE", x: 770, y: 460, fill: "#ef4444" },
-  ]
+// Shared node renderer
+function PipelineNode({ label, x, y, nw, nh, fill, delay }: {
+  label: string; x: number; y: number; nw: number; nh: number; fill: string; delay: string
+}) {
+  return (
+    <g className="animate-node-pulse" style={{ animationDelay: delay, transformOrigin: `${x + nw / 2}px ${y + nh / 2}px` }}>
+      <rect x={x} y={y} width={nw} height={nh} rx="4" fill={fill} className="stroke-black dark:stroke-neo-blue-400" strokeWidth="3" />
+      <text x={x + nw / 2} y={y + 23} textAnchor="middle" className="fill-white" style={{ fontFamily: "Inter, system-ui, sans-serif", fontWeight: 900, fontSize: "13px" }}>
+        {label}
+      </text>
+    </g>
+  )
+}
 
-  const cx = (s: typeof stages[0]) => s.x + nw / 2
-  const cy = (s: typeof stages[0]) => s.y + nh / 2
-  const r = (s: typeof stages[0]) => s.x + nw
-  const b = (s: typeof stages[0]) => s.y + nh
+// Top pipeline cluster: STREAM → INGEST, ANALYZE → SCORE
+// Positioned in the top ~35% of the section
+function PipelineTop() {
+  const nw = 100, nh = 34
+
+  const stream = { x: 30, y: 20, fill: "#06b6d4" }
+  const ingest = { x: 200, y: 110, fill: "#3b82f6" }
+  const analyze = { x: 700, y: 20, fill: "#10b981" }
+  const score = { x: 780, y: 110, fill: "#8b5cf6" }
 
   const edges = [
     // STREAM → INGEST
-    `M${r(stages[0])} ${cy(stages[0])} C${r(stages[0]) + 30} ${cy(stages[0])}, ${stages[1].x - 30} ${cy(stages[1])}, ${stages[1].x} ${cy(stages[1])}`,
-    // INGEST → DETECT
-    `M${cx(stages[1])} ${b(stages[1])} C${cx(stages[1])} ${b(stages[1]) + 80}, ${cx(stages[2])} ${stages[2].y - 80}, ${cx(stages[2])} ${stages[2].y}`,
+    `M${stream.x + nw} ${stream.y + nh / 2} C${stream.x + nw + 40} ${stream.y + nh / 2}, ${ingest.x - 40} ${ingest.y + nh / 2}, ${ingest.x} ${ingest.y + nh / 2}`,
     // ANALYZE → SCORE
-    `M${cx(stages[3])} ${b(stages[3])} C${cx(stages[3])} ${b(stages[3]) + 60}, ${cx(stages[4])} ${stages[4].y - 60}, ${cx(stages[4])} ${stages[4].y}`,
-    // SCORE → EXECUTE
-    `M${cx(stages[4])} ${b(stages[4])} C${cx(stages[4])} ${b(stages[4]) + 60}, ${cx(stages[5])} ${stages[5].y - 60}, ${cx(stages[5])} ${stages[5].y}`,
-    // DETECT → ANALYZE (cross)
-    `M${r(stages[2])} ${cy(stages[2])} C${r(stages[2]) + 200} ${cy(stages[2])}, ${stages[3].x - 200} ${cy(stages[3])}, ${stages[3].x} ${cy(stages[3])}`,
+    `M${analyze.x + nw / 2} ${analyze.y + nh} C${analyze.x + nw / 2} ${analyze.y + nh + 20}, ${score.x + nw / 2} ${score.y - 20}, ${score.x + nw / 2} ${score.y}`,
+  ]
+
+  // Downward exit lines (fade into the card area)
+  const exitLines = [
+    `M${ingest.x + nw / 2} ${ingest.y + nh} L${ingest.x + nw / 2} 200`,
+    `M${score.x + nw / 2} ${score.y + nh} L${score.x + nw / 2} 200`,
   ]
 
   return (
     <svg
-      className="absolute inset-0 w-full h-full"
+      className="absolute top-0 left-0 right-0 h-[38%]"
       preserveAspectRatio="xMidYMid meet"
-      viewBox="0 0 1000 520"
+      viewBox="0 0 950 200"
     >
-      {edges.map((d, i) => (
-        <g key={`edge-${i}`}>
-          <path
-            d={d}
-            fill="none"
-            className="stroke-black/15 dark:stroke-neo-blue-500/20"
-            strokeWidth="3"
-          />
-          <path
-            d={d}
-            fill="none"
-            className="stroke-black/30 dark:stroke-neo-blue-400/40 animate-dash-flow"
-            strokeWidth="3"
-            strokeDasharray="14 10"
-          />
-          <circle r="5" className="fill-neo-blue-500 dark:fill-neo-blue-400">
-            <animateMotion
-              dur={`${4 + i * 0.8}s`}
-              repeatCount="indefinite"
-              path={d}
-            />
-          </circle>
-        </g>
+      {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i} />)}
+      {exitLines.map((d, i) => (
+        <path key={`exit-${i}`} d={d} fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="2" strokeDasharray="8 6" />
       ))}
-
-      {stages.map((stage, i) => (
-        <g
-          key={stage.label}
-          className="animate-node-pulse"
-          style={{ animationDelay: `${i * 0.7}s`, transformOrigin: `${cx(stage)}px ${cy(stage)}px` }}
-        >
-          <rect
-            x={stage.x}
-            y={stage.y}
-            width={nw}
-            height={nh}
-            rx="4"
-            fill={stage.fill}
-            className="stroke-black dark:stroke-neo-blue-400"
-            strokeWidth="3"
-          />
-          <text
-            x={cx(stage)}
-            y={stage.y + 23}
-            textAnchor="middle"
-            className="fill-white"
-            style={{ fontFamily: "Inter, system-ui, sans-serif", fontWeight: 900, fontSize: "13px" }}
-          >
-            {stage.label}
-          </text>
-        </g>
-      ))}
+      <PipelineNode label="STREAM" {...stream} nw={nw} nh={nh} delay="0s" />
+      <PipelineNode label="INGEST" {...ingest} nw={nw} nh={nh} delay="0.7s" />
+      <PipelineNode label="ANALYZE" {...analyze} nw={nw} nh={nh} delay="1.4s" />
+      <PipelineNode label="SCORE" {...score} nw={nw} nh={nh} delay="2.1s" />
     </svg>
+  )
+}
+
+// Bottom pipeline cluster: DETECT, EXECUTE + cross-connection hint
+// Positioned in the bottom ~35% of the section
+function PipelineBottom() {
+  const nw = 100, nh = 34
+
+  const detect = { x: 50, y: 60, fill: "#ec4899" }
+  const execute = { x: 760, y: 60, fill: "#ef4444" }
+
+  // Upward entry lines (arriving from the card area)
+  const entryLines = [
+    `M${detect.x + nw / 2} 0 L${detect.x + nw / 2} ${detect.y}`,
+    `M${execute.x + nw / 2} 0 L${execute.x + nw / 2} ${execute.y}`,
+  ]
+
+  // Cross-connection: DETECT → EXECUTE
+  const crossEdge = `M${detect.x + nw} ${detect.y + nh / 2} C${detect.x + nw + 200} ${detect.y + nh / 2}, ${execute.x - 200} ${execute.y + nh / 2}, ${execute.x} ${execute.y + nh / 2}`
+
+  return (
+    <svg
+      className="absolute bottom-0 left-0 right-0 h-[38%]"
+      preserveAspectRatio="xMidYMid meet"
+      viewBox="0 0 950 130"
+    >
+      {entryLines.map((d, i) => (
+        <path key={`entry-${i}`} d={d} fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="2" strokeDasharray="8 6" />
+      ))}
+      <PipelineEdge d={crossEdge} index={3} />
+      <PipelineNode label="DETECT" {...detect} nw={nw} nh={nh} delay="2.8s" />
+      <PipelineNode label="EXECUTE" {...execute} nw={nw} nh={nh} delay="3.5s" />
+    </svg>
+  )
+}
+
+function PipelineFlow() {
+  return (
+    <>
+      <PipelineTop />
+      <PipelineBottom />
+    </>
   )
 }
 
