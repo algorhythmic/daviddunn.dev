@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { ChevronDown, Cpu, Code, Plug } from "lucide-react"
+import { HeroBackground } from "@/components/hero-background"
 
 export function Hero() {
   const [currentRole, setCurrentRole] = useState(0)
@@ -17,9 +18,10 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="min-h-screen bg-neo-yellow-light dark:bg-slate-900 flex items-center justify-center pt-16"
+      className="min-h-screen bg-neo-yellow-light dark:bg-slate-900 flex items-center justify-center pt-16 relative overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <HeroBackground />
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="bg-white dark:bg-slate-800 border-8 border-black dark:border-neo-blue-500 p-8 md:p-12 shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] dark:shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] transform -rotate-1 hover:rotate-0 transition-transform duration-300 w-full max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-7xl font-black mb-6 text-black dark:text-white dark:neo-text-glow">
             DAVID DUNN

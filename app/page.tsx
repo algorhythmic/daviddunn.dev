@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { Hero } from "@/components/hero"
-import { Dashboard } from "@/components/dashboard"
 import { Portfolio } from "@/components/portfolio"
 import { About } from "@/components/about"
 import { Navigation } from "@/components/navigation"
@@ -34,7 +33,6 @@ export default function Home() {
         <Navigation />
         <main>
           <Hero />
-          <Dashboard />
           <Portfolio />
           <About />
         </main>
