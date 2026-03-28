@@ -14,7 +14,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
 
   return (
     <div
-      className={`bg-white dark:bg-slate-800 border-4 border-black dark:border-neo-blue-500 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ${rotation} hover:rotate-0`}
+      className={`bg-white dark:bg-slate-800 border-2 md:border-4 border-black dark:border-neo-blue-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ${rotation} hover:rotate-0`}
     >
       {/* Header band */}
       <div
@@ -184,19 +184,19 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
 
 export function Portfolio() {
   return (
-    <section id="portfolio" className="min-h-screen bg-neo-cyan-light dark:bg-gray-800 py-20 relative overflow-hidden">
+    <section id="portfolio" className="min-h-screen bg-neo-cyan-light dark:bg-gray-800 py-10 md:py-20 relative overflow-hidden">
       <AnimatedBackground />
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-black text-foreground dark:text-white mb-4">
+      <div className="relative z-10 max-w-5xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div className="text-center mb-6 md:mb-16">
+          <h2 className="text-2xl md:text-6xl font-black text-foreground dark:text-white mb-2 md:mb-4">
             CASE STUDIES
           </h2>
-          <p className="text-xl font-bold text-foreground dark:text-gray-200 max-w-2xl mx-auto">
+          <p className="text-xs md:text-xl font-bold text-foreground dark:text-gray-200 max-w-2xl mx-auto">
             Real projects, real code, real users — not lorem ipsum placeholders
           </p>
         </div>
 
-        <div className="space-y-12">
+        <div className="space-y-6 md:space-y-12">
           {caseStudies.map((study, index) => (
             <CaseStudyCard key={study.id} study={study} index={index} />
           ))}
