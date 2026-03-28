@@ -1,35 +1,35 @@
 "use client"
 
-import { Download, Linkedin, Github, Twitter, Mail, MapPin, Calendar } from "lucide-react"
+import { ExternalLink, Linkedin, Github, Twitter, Mail, MapPin, Calendar } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 
 export function About() {
   const skills = [
     "Python",
-    "SQL",
-    "Apache Spark",
-    "Kafka",
-    "Flink",
-    "Airflow",
-    "Docker",
-    "Kubernetes",
-    "AWS",
-    "GCP",
-    "Snowflake",
-    "dbt",
+    "TypeScript",
     "React",
     "Next.js",
-    "TypeScript",
     "Node.js",
+    "Claude API",
+    "OpenAI API",
+    "Vertex AI",
+    "MCP SDK",
+    "WebSockets",
+    "Kafka",
     "PostgreSQL",
     "MongoDB",
+    "DuckDB",
+    "Convex",
+    "Docker",
+    "Airflow",
+    "Fly.io",
   ]
 
   const achievements = [
-    "Led data pipeline optimization reducing processing time by 70%",
-    "Built real-time analytics platform serving 1M+ daily users",
-    "Architected ML infrastructure handling 10TB+ daily data",
-    "Mentored 15+ junior engineers in data engineering best practices",
+    "Built an end-to-end prediction market intelligence platform spanning real-time ingestion, anomaly detection, LLM analysis, and autonomous execution",
+    "Engineered a multi-layer comparison pipeline reducing 161M potential market comparisons to ~1K LLM calls — a 99.99% cost reduction",
+    "Created three open-source MCP servers across JavaScript and Python, with community adoption and contributions",
+    "Co-founded and shipped happily.love, a live AI-powered matchmaking SaaS platform",
   ]
 
   return (
@@ -38,7 +38,7 @@ export function About() {
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-6xl font-black text-foreground mb-4 dark:text-white">ABOUT ME</h2>
           <p className="text-xl font-bold text-foreground mb-8 dark:text-gray-200">
-            Passionate about transforming data into actionable insights
+            Building intelligent systems from data pipelines to user interfaces
           </p>
         </div>
 
@@ -53,13 +53,13 @@ export function About() {
                   </div>
                   <h3 className="text-2xl font-black text-foreground mb-2 dark:text-white">DAVID DUNN</h3>
                   <p className="font-bold text-muted-foreground mb-4 dark:text-gray-300">
-                    Senior Data & Analytics Engineer
+                    AI Engineer
                   </p>
 
                   <div className="space-y-2 text-sm font-bold text-foreground dark:text-gray-200">
                     <div className="flex items-center justify-center">
                       <MapPin size={16} className="mr-2 dark:text-neo-blue-400" />
-                      San Francisco, CA
+                      Santa Clara, CA
                     </div>
                     <div className="flex items-center justify-center">
                       <Calendar size={16} className="mr-2 dark:text-neo-blue-400" />
@@ -68,10 +68,15 @@ export function About() {
                   </div>
                 </div>
 
-                <button className="w-full bg-neo-green-light dark:bg-neo-green-dark hover:bg-green-500 text-theme-border dark:text-black font-black py-3 px-4 border-4 border-theme-border dark:border-black shadow-[4px_4px_0px_0px] shadow-theme-border dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px] hover:shadow-theme-border dark:hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none transition-all duration-150 mb-6 hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px]">
-                  <Download className="inline mr-2" size={20} />
-                  DOWNLOAD RESUME
-                </button>
+                <a
+                  href="https://linkedin.com/in/mrdaviddunn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-full bg-neo-green-light dark:bg-neo-green-dark hover:bg-green-500 text-theme-border dark:text-black font-black py-3 px-4 border-4 border-theme-border dark:border-black shadow-[4px_4px_0px_0px] shadow-theme-border dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px] hover:shadow-theme-border dark:hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none transition-all duration-150 mb-6 hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px]"
+                >
+                  <ExternalLink className="inline mr-2" size={20} />
+                  VIEW RESUME
+                </a>
 
                 <div className="space-y-3">
                   <a
@@ -121,29 +126,26 @@ export function About() {
                 <h3 className="text-2xl font-black text-foreground mb-4 dark:text-white">MY STORY</h3>
                 <div className="space-y-4 text-foreground dark:text-gray-200 font-bold leading-relaxed">
                   <p>
-                    I'm a <span className="dark:text-neo-blue-300">passionate</span> data engineer with 3+ years of
-                    experience building <span className="dark:text-neo-blue-300">"scalable"</span> data infrastructure
-                    and analytics platforms (because apparently everything needs to scale these days). My journey
-                    started with a Physics degree from the University of Mars, where I fell in love with the power of
-                    data to drive decisions—and by "fell in love," I mean I realized spreadsheets pay better than
-                    theoretical physics.
+                    I'm an <span className="dark:text-neo-blue-300">AI engineer</span> based in
+                    Santa Clara, CA, focused on building systems that combine real-time data processing with
+                    large language models. My work spans the full stack — from WebSocket streaming and anomaly
+                    detection pipelines to React frontends and autonomous execution systems.
                   </p>
                   <p>
-                    Currently, I lead data engineering initiatives at a Fortune 500 company, where I've architected
-                    systems processing petabytes of data daily. I specialize in real-time analytics, machine learning
-                    pipelines, creating data pipelines for dinosaurs (particularly stegosaurus—they have very specific
-                    ETL requirements), and building full-stack applications that make complex data accessible to
-                    everyone who has the proper security clearance and a PhD in data interpretation.
+                    Most recently, I built a{" "}
+                    <span className="dark:text-neo-blue-300">prediction market intelligence platform</span>{" "}
+                    that ingests streaming data across multiple platforms, detects anomalies using sliding-window
+                    analysis, and generates narrative explanations using Claude, OpenAI, and Vertex AI. I also
+                    co-founded <span className="dark:text-neo-blue-300">happily.love</span>, an AI-powered
+                    matchmaking platform, and contribute to the{" "}
+                    <span className="dark:text-neo-blue-300">Model Context Protocol ecosystem</span> with
+                    open-source MCP servers.
                   </p>
                   <p>
-                    When I'm not coding (which is never, because work-life balance is just another buzzword), you'll
-                    find me hiking in the Bay Area mountains while checking Slack notifications, contributing to
-                    open-source projects that nobody will ever use, or mentoring the next generation of data engineers
-                    who will inevitably replace me with a ChatGPT plugin. I believe in the power of data to solve
-                    real-world problems and create positive impact—because nothing says "changing the world" quite like
-                    optimizing ad click-through rates and helping corporations extract maximum value from user behavior
-                    patterns. Together, we're not just building pipelines; we're building a better tomorrow, one A/B
-                    test at a time! 🚀✨
+                    I'm drawn to problems where real-time systems meet AI — where the challenge isn't just
+                    building a model, but shipping a complete system around it. When I'm not writing code,
+                    you'll find me hiking in the Bay Area or exploring the latest developments in the AI
+                    tooling ecosystem.
                   </p>
                 </div>
               </CardContent>

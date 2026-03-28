@@ -11,8 +11,7 @@ export function Navigation() {
   const navItems = [
     { id: "hero", label: "Home" },
     { id: "dashboard", label: "Dashboard" },
-    { id: "portfolio", label: "Projects" },
-    { id: "gallery", label: "Gallery" },
+    { id: "portfolio", label: "Case Studies" },
     { id: "about", label: "About" },
   ]
 
@@ -58,7 +57,7 @@ export function Navigation() {
             >
               DUNN
             </button>{" "}
-            .TECH
+            .DEV
           </div>
 
           {/* Desktop Navigation */}

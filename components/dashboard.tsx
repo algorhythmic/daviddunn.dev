@@ -59,7 +59,7 @@ export function Dashboard() {
             </span>
           </h2>
           <p className="text-xl font-bold text-white mb-8">
-            Live analytics and data visualizations showcasing my expertise
+            Interactive data visualization demo — built with Recharts and randomized sample data
           </p>
           <button
             onClick={refreshData}

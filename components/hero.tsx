@@ -1,11 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ChevronDown, Database, BarChart3, Code } from "lucide-react"
+import { ChevronDown, Cpu, Code, Plug } from "lucide-react"
 
 export function Hero() {
   const [currentRole, setCurrentRole] = useState(0)
-  const roles = ["Data Engineer", "Real-time Analytics", "Full-Stack Development"]
+  const roles = ["AI Engineer", "LLM Application Engineer", "Full-Stack Developer"]
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -30,21 +30,21 @@ export function Hero() {
             </h2>
           </div>
           <p className="text-lg md:text-xl font-bold text-black dark:text-white mb-8 max-w-3xl mx-auto">
-            Welcome! Thanks for checking out my personal website.
+            Building intelligent systems at the intersection of real-time data and large language models.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mb-8">
             <div className="flex items-center bg-neo-blue-500 dark:bg-neo-blue-600 border-4 border-black dark:border-neo-blue-400 px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <Database className="mr-2 text-white" size={24} />
-              <span className="font-bold text-white">Big Data</span>
+              <Cpu className="mr-2 text-white" size={24} />
+              <span className="font-bold text-white">AI / LLM</span>
             </div>
             <div className="flex items-center bg-neo-pink-light dark:bg-orange-500 border-4 border-black dark:border-neo-blue-400 px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <BarChart3 className="mr-2 text-white dark:text-white" size={24} />
-              <span className="font-bold text-white dark:text-white">Analytics</span>
+              <Code className="mr-2 text-white dark:text-white" size={24} />
+              <span className="font-bold text-white dark:text-white">Full-Stack</span>
             </div>
             <div className="flex items-center bg-neo-green-light dark:bg-emerald-500 border-4 border-black dark:border-neo-blue-400 px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <Code className="mr-2 text-white" size={24} />
-              <span className="font-bold text-white">Full-Stack</span>
+              <Plug className="mr-2 text-white" size={24} />
+              <span className="font-bold text-white">MCP Servers</span>
             </div>
           </div>
 
