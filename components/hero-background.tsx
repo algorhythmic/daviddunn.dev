@@ -90,10 +90,10 @@ function PipelineNode({ label, x, y, nw, nh, fill, delay }: {
   )
 }
 
-// Top pipeline cluster: STREAM → INGEST, ANALYZE → SCORE
-function PipelineTop() {
-  const nw = 100, nh = 34
+// ============ DESKTOP LAYOUT (hidden on mobile) ============
 
+function DesktopPipelineTop() {
+  const nw = 100, nh = 34
   const stream = { x: 30, y: 20, fill: "#06b6d4" }
   const ingest = { x: 200, y: 110, fill: "#3b82f6" }
   const analyze = { x: 700, y: 20, fill: "#10b981" }
@@ -105,11 +105,7 @@ function PipelineTop() {
   ]
 
   return (
-    <svg
-      className="absolute top-0 left-0 right-0 h-[22%] md:h-[38%]"
-      preserveAspectRatio="xMidYMin meet"
-      viewBox="0 0 950 200"
-    >
+    <svg className="absolute top-0 left-0 right-0 h-[38%]" preserveAspectRatio="xMidYMin meet" viewBox="0 0 950 200">
       {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i} />)}
       <PipelineNode label="STREAM" {...stream} nw={nw} nh={nh} delay="0s" />
       <PipelineNode label="INGEST" {...ingest} nw={nw} nh={nh} delay="0.7s" />
@@ -119,21 +115,15 @@ function PipelineTop() {
   )
 }
 
-// Bottom pipeline cluster: DETECT ← → EXECUTE
-function PipelineBottom() {
+function DesktopPipelineBottom() {
   const nw = 100, nh = 34
-
   const detect = { x: 50, y: 60, fill: "#ec4899" }
   const execute = { x: 760, y: 60, fill: "#ef4444" }
 
   const crossEdge = `M${detect.x + nw} ${detect.y + nh / 2} C${detect.x + nw + 200} ${detect.y + nh / 2}, ${execute.x - 200} ${execute.y + nh / 2}, ${execute.x} ${execute.y + nh / 2}`
 
   return (
-    <svg
-      className="absolute bottom-0 left-0 right-0 h-[22%] md:h-[38%]"
-      preserveAspectRatio="xMidYMax meet"
-      viewBox="0 0 950 130"
-    >
+    <svg className="absolute bottom-0 left-0 right-0 h-[38%]" preserveAspectRatio="xMidYMax meet" viewBox="0 0 950 130">
       <PipelineEdge d={crossEdge} index={3} />
       <PipelineNode label="DETECT" {...detect} nw={nw} nh={nh} delay="2.8s" />
       <PipelineNode label="EXECUTE" {...execute} nw={nw} nh={nh} delay="3.5s" />
@@ -141,45 +131,94 @@ function PipelineBottom() {
   )
 }
 
-// Full-height connector lines bridging top → bottom clusters through the card area
-// Uses percentage coordinates so lines stay aligned regardless of viewport
-function PipelineConnectors() {
-  // These map to approximate screen positions of the node centers
-  // Top: INGEST center ≈ 26%, SCORE center ≈ 87%
-  // Bottom: DETECT center ≈ 10%, EXECUTE center ≈ 85%
-  const connectors = [
-    // INGEST → DETECT (diagonal left)
-    "M26 22 C26 40, 10 55, 10 78",
-    // SCORE → EXECUTE (nearly vertical)
-    "M87 22 C87 40, 85 55, 85 78",
-  ]
-
+function DesktopConnectors() {
   return (
-    <svg
-      className="absolute inset-0 w-full h-full"
-      preserveAspectRatio="none"
-      viewBox="0 0 100 100"
-    >
-      {connectors.map((d, i) => (
-        <path
-          key={`conn-${i}`}
-          d={d}
-          fill="none"
-          className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow"
-          strokeWidth="0.25"
-          strokeDasharray="1.2 0.8"
-        />
-      ))}
+    <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
+      <path d="M26 22 C26 40, 10 55, 10 78" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.25" strokeDasharray="1.2 0.8" />
+      <path d="M87 22 C87 40, 85 55, 85 78" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.25" strokeDasharray="1.2 0.8" />
     </svg>
   )
 }
 
+// ============ MOBILE LAYOUT (hidden on desktop) ============
+// Vertical column layout — 3 nodes above card, 3 nodes below
+
+function MobilePipelineTop() {
+  const nw = 90, nh = 30
+
+  // Three nodes arranged in a zigzag column
+  const stream =  { x: 20,  y: 10,  fill: "#06b6d4" }
+  const ingest =  { x: 160, y: 70,  fill: "#3b82f6" }
+  const analyze = { x: 40,  y: 130, fill: "#10b981" }
+
+  const edges = [
+    // STREAM → INGEST
+    `M${stream.x + nw} ${stream.y + nh / 2} C${stream.x + nw + 20} ${stream.y + nh / 2}, ${ingest.x - 20} ${ingest.y + nh / 2}, ${ingest.x} ${ingest.y + nh / 2}`,
+    // INGEST → ANALYZE
+    `M${ingest.x} ${ingest.y + nh / 2} C${ingest.x - 30} ${ingest.y + nh / 2}, ${analyze.x + nw + 30} ${analyze.y + nh / 2}, ${analyze.x + nw} ${analyze.y + nh / 2}`,
+  ]
+
+  return (
+    <svg className="absolute top-0 left-0 right-0 h-[28%]" preserveAspectRatio="xMidYMin meet" viewBox="0 0 300 175">
+      {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i} />)}
+      <PipelineNode label="STREAM" {...stream} nw={nw} nh={nh} delay="0s" />
+      <PipelineNode label="INGEST" {...ingest} nw={nw} nh={nh} delay="0.7s" />
+      <PipelineNode label="ANALYZE" {...analyze} nw={nw} nh={nh} delay="1.4s" />
+    </svg>
+  )
+}
+
+function MobilePipelineBottom() {
+  const nw = 90, nh = 30
+
+  // Three nodes in a zigzag column
+  const score =   { x: 160, y: 15,  fill: "#8b5cf6" }
+  const detect =  { x: 20,  y: 75,  fill: "#ec4899" }
+  const execute = { x: 160, y: 135, fill: "#ef4444" }
+
+  const edges = [
+    // SCORE → DETECT
+    `M${score.x} ${score.y + nh / 2} C${score.x - 30} ${score.y + nh / 2}, ${detect.x + nw + 30} ${detect.y + nh / 2}, ${detect.x + nw} ${detect.y + nh / 2}`,
+    // DETECT → EXECUTE
+    `M${detect.x + nw} ${detect.y + nh / 2} C${detect.x + nw + 30} ${detect.y + nh / 2}, ${execute.x - 30} ${execute.y + nh / 2}, ${execute.x} ${execute.y + nh / 2}`,
+  ]
+
+  return (
+    <svg className="absolute bottom-0 left-0 right-0 h-[28%]" preserveAspectRatio="xMidYMax meet" viewBox="0 0 300 180">
+      {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i + 3} />)}
+      <PipelineNode label="SCORE" {...score} nw={nw} nh={nh} delay="2.1s" />
+      <PipelineNode label="DETECT" {...detect} nw={nw} nh={nh} delay="2.8s" />
+      <PipelineNode label="EXECUTE" {...execute} nw={nw} nh={nh} delay="3.5s" />
+    </svg>
+  )
+}
+
+function MobileConnectors() {
+  return (
+    <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
+      {/* ANALYZE (bottom of top cluster) → SCORE (top of bottom cluster) */}
+      <path d="M30 28 C30 45, 70 55, 70 72" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.3" strokeDasharray="1.2 0.8" />
+    </svg>
+  )
+}
+
+// ============ Combined Pipeline ============
+
 function PipelineFlow() {
   return (
     <>
-      <PipelineTop />
-      <PipelineConnectors />
-      <PipelineBottom />
+      {/* Desktop: horizontal spread */}
+      <div className="hidden md:block">
+        <DesktopPipelineTop />
+        <DesktopConnectors />
+        <DesktopPipelineBottom />
+      </div>
+      {/* Mobile: vertical zigzag */}
+      <div className="md:hidden">
+        <MobilePipelineTop />
+        <MobileConnectors />
+        <MobilePipelineBottom />
+      </div>
     </>
   )
 }
