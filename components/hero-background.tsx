@@ -83,7 +83,7 @@ function PipelineNode({ label, x, y, nw, nh, fill, delay }: {
   return (
     <g className="animate-node-pulse" style={{ animationDelay: delay, transformOrigin: `${x + nw / 2}px ${y + nh / 2}px` }}>
       <rect x={x} y={y} width={nw} height={nh} rx="4" fill={fill} className="stroke-black dark:stroke-neo-blue-400" strokeWidth="3" />
-      <text x={x + nw / 2} y={y + 23} textAnchor="middle" className="fill-white" style={{ fontFamily: "Inter, system-ui, sans-serif", fontWeight: 900, fontSize: "13px" }}>
+      <text x={x + nw / 2} y={y + nh / 2} textAnchor="middle" dominantBaseline="central" className="fill-white" style={{ fontFamily: "Inter, system-ui, sans-serif", fontWeight: 900, fontSize: "13px" }}>
         {label}
       </text>
     </g>
