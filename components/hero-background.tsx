@@ -115,8 +115,8 @@ function PipelineTop() {
 
   return (
     <svg
-      className="absolute top-0 left-0 right-0 h-[38%]"
-      preserveAspectRatio="xMidYMid meet"
+      className="absolute top-0 left-0 right-0 h-[22%] md:h-[38%]"
+      preserveAspectRatio="xMidYMin meet"
       viewBox="0 0 950 200"
     >
       {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i} />)}
@@ -150,8 +150,8 @@ function PipelineBottom() {
 
   return (
     <svg
-      className="absolute bottom-0 left-0 right-0 h-[38%]"
-      preserveAspectRatio="xMidYMid meet"
+      className="absolute bottom-0 left-0 right-0 h-[22%] md:h-[38%]"
+      preserveAspectRatio="xMidYMax meet"
       viewBox="0 0 950 130"
     >
       {entryLines.map((d, i) => (
