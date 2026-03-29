@@ -63,160 +63,143 @@ function GridDots() {
   )
 }
 
-// Shared edge renderer
-function PipelineEdge({ d, index }: { d: string; index: number }) {
-  return (
-    <g>
-      <path d={d} fill="none" className="stroke-black/15 dark:stroke-neo-blue-500/20" strokeWidth="3" />
-      <path d={d} fill="none" className="stroke-black/30 dark:stroke-neo-blue-400/40 animate-dash-flow" strokeWidth="3" strokeDasharray="14 10" />
-      <circle r="5" className="fill-neo-blue-500 dark:fill-neo-blue-400">
-        <animateMotion dur={`${4 + index * 0.8}s`} repeatCount="indefinite" path={d} />
-      </circle>
-    </g>
-  )
-}
-
-// Shared node renderer
-function PipelineNode({ label, x, y, nw, nh, fill, delay }: {
-  label: string; x: number; y: number; nw: number; nh: number; fill: string; delay: string
+// HTML-based pipeline node — fixed pixel size, percentage positioned
+function Node({
+  label, left, top, fill, delay,
+}: {
+  label: string; left: string; top: string; fill: string; delay: string
 }) {
   return (
-    <g className="animate-node-pulse" style={{ animationDelay: delay, transformOrigin: `${x + nw / 2}px ${y + nh / 2}px` }}>
-      <rect x={x} y={y} width={nw} height={nh} rx="4" fill={fill} className="stroke-black dark:stroke-neo-blue-400" strokeWidth="3" />
-      <text x={x + nw / 2} y={y + nh / 2} textAnchor="middle" dominantBaseline="central" className="fill-white" style={{ fontFamily: "Inter, system-ui, sans-serif", fontWeight: 900, fontSize: "13px" }}>
-        {label}
-      </text>
-    </g>
+    <div
+      className="absolute animate-node-pulse px-2.5 md:px-3 py-1 md:py-1.5 border-2 md:border-[3px] border-black dark:border-neo-blue-400 rounded-sm text-white text-[10px] md:text-xs tracking-wide"
+      style={{
+        left,
+        top,
+        transform: "translate(-50%, -50%)",
+        backgroundColor: fill,
+        fontFamily: "Inter, system-ui, sans-serif",
+        fontWeight: 900,
+        animationDelay: delay,
+      }}
+    >
+      {label}
+    </div>
   )
 }
 
-// ============ DESKTOP LAYOUT (hidden on mobile) ============
+// Edges drawn in percentage space — stretches to fill any container
+function Edges({ paths }: { paths: string[] }) {
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full"
+      preserveAspectRatio="none"
+      viewBox="0 0 100 100"
+    >
+      {paths.map((d, i) => (
+        <g key={i}>
+          <path d={d} fill="none" className="stroke-black/15 dark:stroke-neo-blue-500/20" strokeWidth="0.4" />
+          <path d={d} fill="none" className="stroke-black/30 dark:stroke-neo-blue-400/40 animate-dash-flow" strokeWidth="0.4" strokeDasharray="2 1.5" />
+          <circle r="0.6" className="fill-neo-blue-500 dark:fill-neo-blue-400">
+            <animateMotion dur={`${3.5 + i * 0.7}s`} repeatCount="indefinite" path={d} />
+          </circle>
+        </g>
+      ))}
+    </svg>
+  )
+}
+
+// ============ DESKTOP (md+) ============
 
 function DesktopPipelineTop() {
-  const nw = 100, nh = 34
-  const stream = { x: 30, y: 20, fill: "#06b6d4" }
-  const ingest = { x: 200, y: 110, fill: "#3b82f6" }
-  const analyze = { x: 700, y: 20, fill: "#10b981" }
-  const score = { x: 780, y: 110, fill: "#8b5cf6" }
-
+  // Percentage positions within a top container
   const edges = [
-    `M${stream.x + nw} ${stream.y + nh / 2} C${stream.x + nw + 40} ${stream.y + nh / 2}, ${ingest.x - 40} ${ingest.y + nh / 2}, ${ingest.x} ${ingest.y + nh / 2}`,
-    `M${analyze.x + nw / 2} ${analyze.y + nh} C${analyze.x + nw / 2} ${analyze.y + nh + 20}, ${score.x + nw / 2} ${score.y - 20}, ${score.x + nw / 2} ${score.y}`,
+    "M8 30 C12 30, 16 65, 20 65",       // STREAM → INGEST
+    "M80 30 C78 30, 78 65, 82 65",       // ANALYZE → SCORE
   ]
-
   return (
-    <svg className="absolute top-0 left-0 right-0 h-[38%]" preserveAspectRatio="xMidYMin meet" viewBox="0 0 950 200">
-      {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i} />)}
-      <PipelineNode label="STREAM" {...stream} nw={nw} nh={nh} delay="0s" />
-      <PipelineNode label="INGEST" {...ingest} nw={nw} nh={nh} delay="0.7s" />
-      <PipelineNode label="ANALYZE" {...analyze} nw={nw} nh={nh} delay="1.4s" />
-      <PipelineNode label="SCORE" {...score} nw={nw} nh={nh} delay="2.1s" />
-    </svg>
+    <div className="absolute top-0 left-0 right-0 h-[38%]">
+      <Edges paths={edges} />
+      <Node label="STREAM"  left="5%"  top="25%" fill="#06b6d4" delay="0s" />
+      <Node label="INGEST"  left="20%" top="65%" fill="#3b82f6" delay="0.7s" />
+      <Node label="ANALYZE" left="80%" top="25%" fill="#10b981" delay="1.4s" />
+      <Node label="SCORE"   left="85%" top="65%" fill="#8b5cf6" delay="2.1s" />
+    </div>
   )
 }
 
 function DesktopPipelineBottom() {
-  const nw = 100, nh = 34
-  const detect = { x: 50, y: 60, fill: "#ec4899" }
-  const execute = { x: 760, y: 60, fill: "#ef4444" }
-
-  const crossEdge = `M${detect.x + nw} ${detect.y + nh / 2} C${detect.x + nw + 200} ${detect.y + nh / 2}, ${execute.x - 200} ${execute.y + nh / 2}, ${execute.x} ${execute.y + nh / 2}`
-
+  const edges = [
+    "M10 50 C30 50, 70 50, 90 50",  // DETECT → EXECUTE
+  ]
   return (
-    <svg className="absolute bottom-0 left-0 right-0 h-[38%]" preserveAspectRatio="xMidYMax meet" viewBox="0 0 950 130">
-      <PipelineEdge d={crossEdge} index={3} />
-      <PipelineNode label="DETECT" {...detect} nw={nw} nh={nh} delay="2.8s" />
-      <PipelineNode label="EXECUTE" {...execute} nw={nw} nh={nh} delay="3.5s" />
-    </svg>
+    <div className="absolute bottom-0 left-0 right-0 h-[38%]">
+      <Edges paths={edges} />
+      <Node label="DETECT"  left="8%"  top="50%" fill="#ec4899" delay="2.8s" />
+      <Node label="EXECUTE" left="92%" top="50%" fill="#ef4444" delay="3.5s" />
+    </div>
   )
 }
 
 function DesktopConnectors() {
   return (
-    <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-      <path d="M26 22 C26 40, 10 55, 10 78" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.25" strokeDasharray="1.2 0.8" />
-      <path d="M87 22 C87 40, 85 55, 85 78" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.25" strokeDasharray="1.2 0.8" />
-    </svg>
+    <Edges paths={[
+      "M20 25 C20 45, 8 60, 8 78",    // INGEST → DETECT
+      "M85 25 C85 45, 92 60, 92 78",   // SCORE → EXECUTE
+    ]} />
   )
 }
 
-// ============ MOBILE LAYOUT (hidden on desktop) ============
-// Vertical column layout — 3 nodes above card, 3 nodes below
+// ============ MOBILE (<md) ============
 
 function MobilePipelineTop() {
-  const nw = 80, nh = 26
-
-  // 1:1:3 fan-out — STREAM → INGEST → (ANALYZE, SCORE, DETECT)
-  const stream =  { x: 110, y: 8,   fill: "#06b6d4" }  // centered
-  const ingest =  { x: 110, y: 58,  fill: "#3b82f6" }  // centered
-  const analyze = { x: 10,  y: 115, fill: "#10b981" }  // left
-  const score =   { x: 110, y: 115, fill: "#8b5cf6" }  // center
-  const detect =  { x: 210, y: 115, fill: "#ec4899" }  // right
-
-  const cx = (n: { x: number }) => n.x + nw / 2
-  const cy = (n: { y: number }) => n.y + nh / 2
-  const bot = (n: { y: number }) => n.y + nh
-
+  // 1:1:3 fan-out layout
   const edges = [
-    // STREAM → INGEST (vertical)
-    `M${cx(stream)} ${bot(stream)} L${cx(ingest)} ${ingest.y}`,
-    // INGEST → ANALYZE (fan left)
-    `M${cx(ingest)} ${bot(ingest)} C${cx(ingest)} ${bot(ingest) + 20}, ${cx(analyze)} ${analyze.y - 20}, ${cx(analyze)} ${analyze.y}`,
-    // INGEST → SCORE (fan center)
-    `M${cx(ingest)} ${bot(ingest)} L${cx(score)} ${score.y}`,
-    // INGEST → DETECT (fan right)
-    `M${cx(ingest)} ${bot(ingest)} C${cx(ingest)} ${bot(ingest) + 20}, ${cx(detect)} ${detect.y - 20}, ${cx(detect)} ${detect.y}`,
+    "M50 12 L50 35",                     // STREAM → INGEST (vertical)
+    "M50 42 C50 55, 15 60, 15 78",       // INGEST → ANALYZE (fan left)
+    "M50 42 L50 78",                      // INGEST → SCORE (fan center)
+    "M50 42 C50 55, 85 60, 85 78",       // INGEST → DETECT (fan right)
   ]
-
   return (
-    <svg className="absolute top-10 left-0 right-0 h-44" preserveAspectRatio="xMidYMin meet" viewBox="0 0 300 150">
-      {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i} />)}
-      <PipelineNode label="STREAM" {...stream} nw={nw} nh={nh} delay="0s" />
-      <PipelineNode label="INGEST" {...ingest} nw={nw} nh={nh} delay="0.7s" />
-      <PipelineNode label="ANALYZE" {...analyze} nw={nw} nh={nh} delay="1.4s" />
-      <PipelineNode label="SCORE" {...score} nw={nw} nh={nh} delay="2.1s" />
-      <PipelineNode label="DETECT" {...detect} nw={nw} nh={nh} delay="2.8s" />
-    </svg>
+    <div className="absolute top-10 left-0 right-0 h-44">
+      <Edges paths={edges} />
+      <Node label="STREAM"  left="50%" top="8%"  fill="#06b6d4" delay="0s" />
+      <Node label="INGEST"  left="50%" top="38%" fill="#3b82f6" delay="0.7s" />
+      <Node label="ANALYZE" left="15%" top="82%" fill="#10b981" delay="1.4s" />
+      <Node label="SCORE"   left="50%" top="82%" fill="#8b5cf6" delay="2.1s" />
+      <Node label="DETECT"  left="85%" top="82%" fill="#ec4899" delay="2.8s" />
+    </div>
   )
 }
 
 function MobilePipelineBottom() {
-  const nw = 80, nh = 26
-
-  // Single node — EXECUTE (converge point)
-  const execute = { x: 110, y: 15, fill: "#ef4444" }
-
   return (
-    <svg className="absolute bottom-0 left-0 right-0 h-20" preserveAspectRatio="xMidYMax meet" viewBox="0 0 300 55">
-      <PipelineNode label="EXECUTE" {...execute} nw={nw} nh={nh} delay="3.5s" />
-    </svg>
+    <div className="absolute bottom-2 left-0 right-0 h-14">
+      <Node label="EXECUTE" left="50%" top="50%" fill="#ef4444" delay="3.5s" />
+    </div>
   )
 }
 
 function MobileConnectors() {
   return (
-    <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-      {/* Three converging lines from top fan-out to EXECUTE at bottom */}
-      <path d="M20 32 C20 55, 50 70, 50 82" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.25" strokeDasharray="1.2 0.8" />
-      <path d="M50 32 L50 82" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.25" strokeDasharray="1.2 0.8" />
-      <path d="M80 32 C80 55, 50 70, 50 82" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.25" strokeDasharray="1.2 0.8" />
-    </svg>
+    <Edges paths={[
+      "M15 28 C15 50, 50 65, 50 85",   // ANALYZE → EXECUTE
+      "M50 28 L50 85",                   // SCORE → EXECUTE
+      "M85 28 C85 50, 50 65, 50 85",   // DETECT → EXECUTE
+    ]} />
   )
 }
 
-// ============ Combined Pipeline ============
+// ============ Combined ============
 
 function PipelineFlow() {
   return (
     <>
-      {/* Desktop: horizontal spread */}
-      <div className="hidden md:block">
+      <div className="hidden md:block absolute inset-0">
         <DesktopPipelineTop />
         <DesktopConnectors />
         <DesktopPipelineBottom />
       </div>
-      {/* Mobile: vertical zigzag */}
-      <div className="md:hidden">
+      <div className="md:hidden absolute inset-0">
         <MobilePipelineTop />
         <MobileConnectors />
         <MobilePipelineBottom />
