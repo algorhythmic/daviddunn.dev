@@ -91,7 +91,6 @@ function PipelineNode({ label, x, y, nw, nh, fill, delay }: {
 }
 
 // Top pipeline cluster: STREAM → INGEST, ANALYZE → SCORE
-// Positioned in the top ~35% of the section
 function PipelineTop() {
   const nw = 100, nh = 34
 
@@ -101,16 +100,8 @@ function PipelineTop() {
   const score = { x: 780, y: 110, fill: "#8b5cf6" }
 
   const edges = [
-    // STREAM → INGEST
     `M${stream.x + nw} ${stream.y + nh / 2} C${stream.x + nw + 40} ${stream.y + nh / 2}, ${ingest.x - 40} ${ingest.y + nh / 2}, ${ingest.x} ${ingest.y + nh / 2}`,
-    // ANALYZE → SCORE
     `M${analyze.x + nw / 2} ${analyze.y + nh} C${analyze.x + nw / 2} ${analyze.y + nh + 20}, ${score.x + nw / 2} ${score.y - 20}, ${score.x + nw / 2} ${score.y}`,
-  ]
-
-  // Downward exit lines (fade into the card area)
-  const exitLines = [
-    `M${ingest.x + nw / 2} ${ingest.y + nh} L${ingest.x + nw / 2} 200`,
-    `M${score.x + nw / 2} ${score.y + nh} L${score.x + nw / 2} 200`,
   ]
 
   return (
@@ -120,9 +111,6 @@ function PipelineTop() {
       viewBox="0 0 950 200"
     >
       {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i} />)}
-      {exitLines.map((d, i) => (
-        <path key={`exit-${i}`} d={d} fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="2" strokeDasharray="8 6" />
-      ))}
       <PipelineNode label="STREAM" {...stream} nw={nw} nh={nh} delay="0s" />
       <PipelineNode label="INGEST" {...ingest} nw={nw} nh={nh} delay="0.7s" />
       <PipelineNode label="ANALYZE" {...analyze} nw={nw} nh={nh} delay="1.4s" />
@@ -131,21 +119,13 @@ function PipelineTop() {
   )
 }
 
-// Bottom pipeline cluster: DETECT, EXECUTE + cross-connection hint
-// Positioned in the bottom ~35% of the section
+// Bottom pipeline cluster: DETECT ← → EXECUTE
 function PipelineBottom() {
   const nw = 100, nh = 34
 
   const detect = { x: 50, y: 60, fill: "#ec4899" }
   const execute = { x: 760, y: 60, fill: "#ef4444" }
 
-  // Upward entry lines (arriving from the card area)
-  const entryLines = [
-    `M${detect.x + nw / 2} 0 L${detect.x + nw / 2} ${detect.y}`,
-    `M${execute.x + nw / 2} 0 L${execute.x + nw / 2} ${execute.y}`,
-  ]
-
-  // Cross-connection: DETECT → EXECUTE
   const crossEdge = `M${detect.x + nw} ${detect.y + nh / 2} C${detect.x + nw + 200} ${detect.y + nh / 2}, ${execute.x - 200} ${execute.y + nh / 2}, ${execute.x} ${execute.y + nh / 2}`
 
   return (
@@ -154,12 +134,42 @@ function PipelineBottom() {
       preserveAspectRatio="xMidYMax meet"
       viewBox="0 0 950 130"
     >
-      {entryLines.map((d, i) => (
-        <path key={`entry-${i}`} d={d} fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="2" strokeDasharray="8 6" />
-      ))}
       <PipelineEdge d={crossEdge} index={3} />
       <PipelineNode label="DETECT" {...detect} nw={nw} nh={nh} delay="2.8s" />
       <PipelineNode label="EXECUTE" {...execute} nw={nw} nh={nh} delay="3.5s" />
+    </svg>
+  )
+}
+
+// Full-height connector lines bridging top → bottom clusters through the card area
+// Uses percentage coordinates so lines stay aligned regardless of viewport
+function PipelineConnectors() {
+  // These map to approximate screen positions of the node centers
+  // Top: INGEST center ≈ 26%, SCORE center ≈ 87%
+  // Bottom: DETECT center ≈ 10%, EXECUTE center ≈ 85%
+  const connectors = [
+    // INGEST → DETECT (diagonal left)
+    "M26 22 C26 40, 10 55, 10 78",
+    // SCORE → EXECUTE (nearly vertical)
+    "M87 22 C87 40, 85 55, 85 78",
+  ]
+
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full"
+      preserveAspectRatio="none"
+      viewBox="0 0 100 100"
+    >
+      {connectors.map((d, i) => (
+        <path
+          key={`conn-${i}`}
+          d={d}
+          fill="none"
+          className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow"
+          strokeWidth="0.25"
+          strokeDasharray="1.2 0.8"
+        />
+      ))}
     </svg>
   )
 }
@@ -168,6 +178,7 @@ function PipelineFlow() {
   return (
     <>
       <PipelineTop />
+      <PipelineConnectors />
       <PipelineBottom />
     </>
   )
