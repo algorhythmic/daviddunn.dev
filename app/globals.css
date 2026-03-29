@@ -79,15 +79,15 @@
 
   .neo-grid-bg {
     background-image:
-      linear-gradient(rgba(0, 0, 0, 0.22) 1.5px, transparent 1.5px),
-      linear-gradient(90deg, rgba(0, 0, 0, 0.22) 1.5px, transparent 1.5px);
+      linear-gradient(rgba(0, 0, 0, 0.35) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.35) 1.5px, transparent 1.5px);
     background-size: 40px 40px;
   }
 
   .dark .neo-grid-bg {
     background-image:
-      linear-gradient(rgba(59, 130, 246, 0.22) 1.5px, transparent 1.5px),
-      linear-gradient(90deg, rgba(59, 130, 246, 0.22) 1.5px, transparent 1.5px);
+      linear-gradient(rgba(59, 130, 246, 0.3) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1.5px, transparent 1.5px);
     background-size: 40px 40px;
   }
 

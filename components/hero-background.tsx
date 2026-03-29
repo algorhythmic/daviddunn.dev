@@ -129,7 +129,7 @@ function GridDots() {
 
 export function AnimatedBackground() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50 dark:opacity-25">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-70 dark:opacity-40">
       <div className="absolute inset-0 neo-grid-bg" />
       <GridDots />
     </div>
