@@ -259,11 +259,25 @@ html {
   100% { transform: translateX(var(--traverse-x, 100vw)); opacity: 0; }
 }
 
+@keyframes dot-traverse-h-rev {
+  0% { transform: translateX(0); opacity: 0; }
+  5% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { transform: translateX(var(--traverse-x, -100vw)); opacity: 0; }
+}
+
 @keyframes dot-traverse-v {
   0% { transform: translateY(0); opacity: 0; }
   5% { opacity: 0.8; }
   90% { opacity: 0.8; }
   100% { transform: translateY(var(--traverse-y, 100vh)); opacity: 0; }
+}
+
+@keyframes dot-traverse-v-rev {
+  0% { transform: translateY(0); opacity: 0; }
+  5% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { transform: translateY(var(--traverse-y, -100vh)); opacity: 0; }
 }
 
 .animate-dash-flow {
@@ -290,8 +304,16 @@ html {
   animation: dot-traverse-h var(--dot-duration, 8s) linear infinite;
 }
 
+.animate-dot-traverse-h-rev {
+  animation: dot-traverse-h-rev var(--dot-duration, 8s) linear infinite;
+}
+
 .animate-dot-traverse-v {
   animation: dot-traverse-v var(--dot-duration, 8s) linear infinite;
+}
+
+.animate-dot-traverse-v-rev {
+  animation: dot-traverse-v-rev var(--dot-duration, 8s) linear infinite;
 }
 
 @keyframes cursor-blink {
@@ -312,7 +334,9 @@ html {
   .animate-node-pulse,
   .animate-cursor-blink,
   .animate-dot-traverse-h,
+  .animate-dot-traverse-h-rev,
   .animate-dot-traverse-v,
+  .animate-dot-traverse-v-rev,
   .float,
   .pulse-neo {
     animation: none !important;
