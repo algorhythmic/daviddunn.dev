@@ -72,7 +72,7 @@ export function Hero() {
       className="bg-neo-yellow-light dark:bg-slate-900 flex items-center justify-center pt-10 md:pt-16 relative overflow-hidden"
       style={{ height: heroHeight ? `${heroHeight}px` : "100svh" }}
     >
-      <AnimatedBackground showPipeline />
+      <AnimatedBackground />
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
         <div className="bg-white dark:bg-slate-800 border-2 md:border-4 border-black dark:border-neo-blue-500 px-3 py-3 md:px-10 md:py-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transform -rotate-1 hover:rotate-0 transition-transform duration-300 w-full max-w-[280px] sm:max-w-sm md:max-w-3xl mx-auto">
           <h1 className="text-xl md:text-6xl font-black mb-1 md:mb-4 text-black dark:text-white dark:neo-text-glow">
