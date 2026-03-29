@@ -1,9 +1,10 @@
 "use client"
 
+import { useState, useEffect } from "react"
+
 const colors = ["#3b82f6", "#ec4899", "#10b981", "#8b5cf6"]
 const durations = ["9s", "10s", "11s", "12s", "13s", "14s", "15s"]
 
-// Deterministic pseudo-random from index for consistent renders
 function pick<T>(arr: T[], i: number): T {
   return arr[i % arr.length]
 }
@@ -11,12 +12,15 @@ function delay(i: number): string {
   return `${(i * 1.7) % 8}s`
 }
 
-// Generate dots on every gridline (every 40px), alternating direction
-function GridDots() {
-  // Horizontal dots: every 40px from 40 to 960, alternating LR/RL
-  const hLines = Array.from({ length: 24 }, (_, i) => (i + 1) * 40)
-  // Vertical dots: every 40px from 40 to 2000, alternating TB/BT
-  const vLines = Array.from({ length: 50 }, (_, i) => (i + 1) * 40)
+function GridDots({ width, height }: { width: number; height: number }) {
+  const hLines = Array.from(
+    { length: Math.ceil(height / 40) },
+    (_, i) => (i + 1) * 40
+  )
+  const vLines = Array.from(
+    { length: Math.ceil(width / 40) },
+    (_, i) => (i + 1) * 40
+  )
 
   return (
     <>
@@ -31,7 +35,7 @@ function GridDots() {
               [isReverse ? "right" : "left"]: 0,
               marginTop: "-6px",
               backgroundColor: pick(colors, i),
-              "--traverse-x": isReverse ? "-100vw" : "100vw",
+              "--traverse-x": isReverse ? `-${width}px` : `${width}px`,
               "--dot-duration": pick(durations, i + 3),
               animationDelay: delay(i),
             } as React.CSSProperties}
@@ -50,7 +54,7 @@ function GridDots() {
               [isReverse ? "bottom" : "top"]: 0,
               marginLeft: "-6px",
               backgroundColor: pick(colors, i + 2),
-              "--traverse-y": isReverse ? "-100vh" : "100vh",
+              "--traverse-y": isReverse ? `-${height}px` : `${height}px`,
               "--dot-duration": pick(durations, i),
               animationDelay: delay(i + 5),
             } as React.CSSProperties}
@@ -62,10 +66,16 @@ function GridDots() {
 }
 
 export function AnimatedBackground() {
+  const [dims, setDims] = useState<{ w: number; h: number } | null>(null)
+
+  useEffect(() => {
+    setDims({ w: window.innerWidth, h: window.innerHeight })
+  }, [])
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-70 dark:opacity-40">
       <div className="absolute inset-0 neo-grid-bg" />
-      <GridDots />
+      {dims && <GridDots width={dims.w} height={dims.h} />}
     </div>
   )
 }
