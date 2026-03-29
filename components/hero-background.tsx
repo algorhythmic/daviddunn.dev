@@ -144,48 +144,50 @@ function DesktopConnectors() {
 // Vertical column layout — 3 nodes above card, 3 nodes below
 
 function MobilePipelineTop() {
-  const nw = 90, nh = 30
+  const nw = 80, nh = 26
 
-  // Three nodes in zigzag — spread vertically with more room
-  const stream =  { x: 20,  y: 10,  fill: "#06b6d4" }
-  const ingest =  { x: 160, y: 80,  fill: "#3b82f6" }
-  const analyze = { x: 40,  y: 150, fill: "#10b981" }
+  // 1:1:3 fan-out — STREAM → INGEST → (ANALYZE, SCORE, DETECT)
+  const stream =  { x: 110, y: 8,   fill: "#06b6d4" }  // centered
+  const ingest =  { x: 110, y: 58,  fill: "#3b82f6" }  // centered
+  const analyze = { x: 10,  y: 115, fill: "#10b981" }  // left
+  const score =   { x: 110, y: 115, fill: "#8b5cf6" }  // center
+  const detect =  { x: 210, y: 115, fill: "#ec4899" }  // right
+
+  const cx = (n: { x: number }) => n.x + nw / 2
+  const cy = (n: { y: number }) => n.y + nh / 2
+  const bot = (n: { y: number }) => n.y + nh
 
   const edges = [
-    `M${stream.x + nw} ${stream.y + nh / 2} C${stream.x + nw + 20} ${stream.y + nh / 2}, ${ingest.x - 20} ${ingest.y + nh / 2}, ${ingest.x} ${ingest.y + nh / 2}`,
-    `M${ingest.x} ${ingest.y + nh / 2} C${ingest.x - 30} ${ingest.y + nh / 2}, ${analyze.x + nw + 30} ${analyze.y + nh / 2}, ${analyze.x + nw} ${analyze.y + nh / 2}`,
+    // STREAM → INGEST (vertical)
+    `M${cx(stream)} ${bot(stream)} L${cx(ingest)} ${ingest.y}`,
+    // INGEST → ANALYZE (fan left)
+    `M${cx(ingest)} ${bot(ingest)} C${cx(ingest)} ${bot(ingest) + 20}, ${cx(analyze)} ${analyze.y - 20}, ${cx(analyze)} ${analyze.y}`,
+    // INGEST → SCORE (fan center)
+    `M${cx(ingest)} ${bot(ingest)} L${cx(score)} ${score.y}`,
+    // INGEST → DETECT (fan right)
+    `M${cx(ingest)} ${bot(ingest)} C${cx(ingest)} ${bot(ingest) + 20}, ${cx(detect)} ${detect.y - 20}, ${cx(detect)} ${detect.y}`,
   ]
 
   return (
-    <svg className="absolute top-10 left-0 right-0 h-56" preserveAspectRatio="xMidYMin meet" viewBox="0 0 300 195">
+    <svg className="absolute top-10 left-0 right-0 h-44" preserveAspectRatio="xMidYMin meet" viewBox="0 0 300 150">
       {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i} />)}
       <PipelineNode label="STREAM" {...stream} nw={nw} nh={nh} delay="0s" />
       <PipelineNode label="INGEST" {...ingest} nw={nw} nh={nh} delay="0.7s" />
       <PipelineNode label="ANALYZE" {...analyze} nw={nw} nh={nh} delay="1.4s" />
+      <PipelineNode label="SCORE" {...score} nw={nw} nh={nh} delay="2.1s" />
+      <PipelineNode label="DETECT" {...detect} nw={nw} nh={nh} delay="2.8s" />
     </svg>
   )
 }
 
 function MobilePipelineBottom() {
-  const nw = 90, nh = 30
+  const nw = 80, nh = 26
 
-  // Three nodes in a zigzag column
-  const score =   { x: 160, y: 15,  fill: "#8b5cf6" }
-  const detect =  { x: 20,  y: 75,  fill: "#ec4899" }
-  const execute = { x: 160, y: 135, fill: "#ef4444" }
-
-  const edges = [
-    // SCORE → DETECT
-    `M${score.x} ${score.y + nh / 2} C${score.x - 30} ${score.y + nh / 2}, ${detect.x + nw + 30} ${detect.y + nh / 2}, ${detect.x + nw} ${detect.y + nh / 2}`,
-    // DETECT → EXECUTE
-    `M${detect.x + nw} ${detect.y + nh / 2} C${detect.x + nw + 30} ${detect.y + nh / 2}, ${execute.x - 30} ${execute.y + nh / 2}, ${execute.x} ${execute.y + nh / 2}`,
-  ]
+  // Single node — EXECUTE (converge point)
+  const execute = { x: 110, y: 15, fill: "#ef4444" }
 
   return (
-    <svg className="absolute bottom-0 left-0 right-0 h-48" preserveAspectRatio="xMidYMax meet" viewBox="0 0 300 180">
-      {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i + 3} />)}
-      <PipelineNode label="SCORE" {...score} nw={nw} nh={nh} delay="2.1s" />
-      <PipelineNode label="DETECT" {...detect} nw={nw} nh={nh} delay="2.8s" />
+    <svg className="absolute bottom-0 left-0 right-0 h-20" preserveAspectRatio="xMidYMax meet" viewBox="0 0 300 55">
       <PipelineNode label="EXECUTE" {...execute} nw={nw} nh={nh} delay="3.5s" />
     </svg>
   )
@@ -194,8 +196,10 @@ function MobilePipelineBottom() {
 function MobileConnectors() {
   return (
     <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-      {/* ANALYZE (bottom of top cluster) → SCORE (top of bottom cluster) */}
-      <path d="M30 28 C30 45, 70 55, 70 72" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.3" strokeDasharray="1.2 0.8" />
+      {/* Three converging lines from top fan-out to EXECUTE at bottom */}
+      <path d="M20 32 C20 55, 50 70, 50 82" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.25" strokeDasharray="1.2 0.8" />
+      <path d="M50 32 L50 82" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.25" strokeDasharray="1.2 0.8" />
+      <path d="M80 32 C80 55, 50 70, 50 82" fill="none" className="stroke-black/20 dark:stroke-neo-blue-400/30 animate-dash-flow" strokeWidth="0.25" strokeDasharray="1.2 0.8" />
     </svg>
   )
 }
