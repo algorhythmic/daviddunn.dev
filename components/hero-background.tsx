@@ -146,20 +146,18 @@ function DesktopConnectors() {
 function MobilePipelineTop() {
   const nw = 90, nh = 30
 
-  // Three nodes arranged in a zigzag column
+  // Three nodes in zigzag — spread vertically with more room
   const stream =  { x: 20,  y: 10,  fill: "#06b6d4" }
-  const ingest =  { x: 160, y: 70,  fill: "#3b82f6" }
-  const analyze = { x: 40,  y: 130, fill: "#10b981" }
+  const ingest =  { x: 160, y: 80,  fill: "#3b82f6" }
+  const analyze = { x: 40,  y: 150, fill: "#10b981" }
 
   const edges = [
-    // STREAM → INGEST
     `M${stream.x + nw} ${stream.y + nh / 2} C${stream.x + nw + 20} ${stream.y + nh / 2}, ${ingest.x - 20} ${ingest.y + nh / 2}, ${ingest.x} ${ingest.y + nh / 2}`,
-    // INGEST → ANALYZE
     `M${ingest.x} ${ingest.y + nh / 2} C${ingest.x - 30} ${ingest.y + nh / 2}, ${analyze.x + nw + 30} ${analyze.y + nh / 2}, ${analyze.x + nw} ${analyze.y + nh / 2}`,
   ]
 
   return (
-    <svg className="absolute top-10 left-0 right-0 h-48" preserveAspectRatio="xMidYMin meet" viewBox="0 0 300 175">
+    <svg className="absolute top-10 left-0 right-0 h-56" preserveAspectRatio="xMidYMin meet" viewBox="0 0 300 195">
       {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i} />)}
       <PipelineNode label="STREAM" {...stream} nw={nw} nh={nh} delay="0s" />
       <PipelineNode label="INGEST" {...ingest} nw={nw} nh={nh} delay="0.7s" />
