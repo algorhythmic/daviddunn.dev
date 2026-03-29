@@ -29,7 +29,7 @@ export default function Home() {
 
   return (
     <ThemeProvider>
-      <div className="bg-neo-yellow-light dark:bg-gray-900">
+      <div>
         <Navigation />
         <main>
           <Hero />

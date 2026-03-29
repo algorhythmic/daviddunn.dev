@@ -59,11 +59,18 @@ function useTypewriter(words: string[]) {
 
 export function Hero() {
   const typedRole = useTypewriter(roles)
+  const [heroHeight, setHeroHeight] = useState<number | null>(null)
+
+  // Capture viewport height once on mount — immune to address bar changes
+  useEffect(() => {
+    setHeroHeight(window.innerHeight)
+  }, [])
 
   return (
     <section
       id="hero"
-      className="h-[100svh] md:min-h-screen bg-neo-yellow-light dark:bg-slate-900 flex items-center justify-center pt-16 relative overflow-hidden"
+      className="bg-neo-yellow-light dark:bg-slate-900 flex items-center justify-center pt-10 md:pt-16 relative overflow-hidden"
+      style={{ height: heroHeight ? `${heroHeight}px` : "100svh" }}
     >
       <AnimatedBackground showPipeline />
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 text-center">

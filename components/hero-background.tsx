@@ -159,7 +159,7 @@ function MobilePipelineTop() {
   ]
 
   return (
-    <svg className="absolute top-0 left-0 right-0 h-48" preserveAspectRatio="xMidYMin meet" viewBox="0 0 300 175">
+    <svg className="absolute top-10 left-0 right-0 h-48" preserveAspectRatio="xMidYMin meet" viewBox="0 0 300 175">
       {edges.map((d, i) => <PipelineEdge key={i} d={d} index={i} />)}
       <PipelineNode label="STREAM" {...stream} nw={nw} nh={nh} delay="0s" />
       <PipelineNode label="INGEST" {...ingest} nw={nw} nh={nh} delay="0.7s" />
