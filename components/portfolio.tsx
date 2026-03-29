@@ -184,7 +184,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
 
 export function Portfolio() {
   return (
-    <section id="portfolio" className="min-h-dvh bg-neo-cyan-light dark:bg-gray-800 py-10 md:py-20 relative overflow-hidden">
+    <section id="portfolio" className="min-h-[100svh] md:min-h-screen bg-neo-cyan-light dark:bg-gray-800 py-10 md:py-20 relative overflow-hidden">
       <AnimatedBackground />
       <div className="relative z-10 max-w-5xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="text-center mb-6 md:mb-16">
