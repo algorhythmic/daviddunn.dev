@@ -63,7 +63,7 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="min-h-screen bg-neo-yellow-light dark:bg-slate-900 flex items-center justify-center pt-16 relative overflow-hidden"
+      className="min-h-dvh bg-neo-yellow-light dark:bg-slate-900 flex items-center justify-center pt-16 relative overflow-hidden"
     >
       <AnimatedBackground showPipeline />
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 text-center">

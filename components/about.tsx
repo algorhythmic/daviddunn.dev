@@ -34,7 +34,7 @@ export function About() {
   ]
 
   return (
-    <section id="about" className="min-h-screen bg-neo-red-light dark:bg-gray-900 py-10 md:py-20 relative overflow-hidden">
+    <section id="about" className="min-h-dvh bg-neo-red-light dark:bg-gray-900 py-10 md:py-20 relative overflow-hidden">
       <AnimatedBackground />
       <div className="relative z-10 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="text-center mb-6 md:mb-12">
