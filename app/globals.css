@@ -82,6 +82,16 @@
       linear-gradient(rgba(0, 0, 0, 0.35) 1.5px, transparent 1.5px),
       linear-gradient(90deg, rgba(0, 0, 0, 0.35) 1.5px, transparent 1.5px);
     background-size: 40px 40px;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.55));
+  }
+
+  .neo-grid-bg.boost {
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.6) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.6) 1.5px, transparent 1.5px);
+    filter:
+      drop-shadow(0 0 2px rgba(0, 0, 0, 0.8))
+      drop-shadow(0 0 5px rgba(0, 0, 0, 0.45));
   }
 
   .dark .neo-grid-bg {
@@ -89,6 +99,9 @@
       linear-gradient(rgba(59, 130, 246, 0.3) 1.5px, transparent 1.5px),
       linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1.5px, transparent 1.5px);
     background-size: 40px 40px;
+    filter:
+      drop-shadow(0 0 2px rgba(59, 130, 246, 0.7))
+      drop-shadow(0 0 5px rgba(59, 130, 246, 0.35));
   }
 
   .bg-graph-paper-dark {
@@ -254,29 +267,29 @@ html {
 
 @keyframes dot-traverse-h {
   0% { transform: translateX(0); opacity: 0; }
-  5% { opacity: 0.8; }
-  90% { opacity: 0.8; }
+  5% { opacity: 1; }
+  90% { opacity: 1; }
   100% { transform: translateX(var(--traverse-x, 100vw)); opacity: 0; }
 }
 
 @keyframes dot-traverse-h-rev {
   0% { transform: translateX(0); opacity: 0; }
-  5% { opacity: 0.8; }
-  90% { opacity: 0.8; }
+  5% { opacity: 1; }
+  90% { opacity: 1; }
   100% { transform: translateX(var(--traverse-x, -100vw)); opacity: 0; }
 }
 
 @keyframes dot-traverse-v {
   0% { transform: translateY(0); opacity: 0; }
-  5% { opacity: 0.8; }
-  90% { opacity: 0.8; }
+  5% { opacity: 1; }
+  90% { opacity: 1; }
   100% { transform: translateY(var(--traverse-y, 100vh)); opacity: 0; }
 }
 
 @keyframes dot-traverse-v-rev {
   0% { transform: translateY(0); opacity: 0; }
-  5% { opacity: 0.8; }
-  90% { opacity: 0.8; }
+  5% { opacity: 1; }
+  90% { opacity: 1; }
   100% { transform: translateY(var(--traverse-y, -100vh)); opacity: 0; }
 }
 

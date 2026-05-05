@@ -12,7 +12,7 @@ function delay(i: number): string {
   return `${(i * 1.7) % 8}s`
 }
 
-function GridDots({ width, height }: { width: number; height: number }) {
+function GridDots({ width, height, boost = false }: { width: number; height: number; boost?: boolean }) {
   const hLines = Array.from(
     { length: Math.ceil(height / 40) },
     (_, i) => (i + 1) * 40
@@ -22,10 +22,16 @@ function GridDots({ width, height }: { width: number; height: number }) {
     (_, i) => (i + 1) * 40
   )
 
+  const ballGlow = (color: string) =>
+    boost
+      ? `0 0 10px ${color}, 0 0 22px ${color}, 0 0 44px ${color}, 0 0 70px ${color}99`
+      : `0 0 8px ${color}, 0 0 18px ${color}, 0 0 36px ${color}aa`
+
   return (
     <>
       {hLines.map((y, i) => {
         const isReverse = i % 2 === 1
+        const color = pick(colors, i)
         return (
           <div
             key={`h-${i}`}
@@ -33,8 +39,9 @@ function GridDots({ width, height }: { width: number; height: number }) {
             style={{
               top: `${y}px`,
               [isReverse ? "right" : "left"]: 0,
-              marginTop: "-6px",
-              backgroundColor: pick(colors, i),
+              marginTop: "-5.25px",
+              backgroundColor: color,
+              boxShadow: ballGlow(color),
               "--traverse-x": isReverse ? `-${width}px` : `${width}px`,
               "--dot-duration": pick(durations, i + 3),
               animationDelay: delay(i),
@@ -45,6 +52,7 @@ function GridDots({ width, height }: { width: number; height: number }) {
 
       {vLines.map((x, i) => {
         const isReverse = i % 2 === 1
+        const color = pick(colors, i + 2)
         return (
           <div
             key={`v-${i}`}
@@ -52,8 +60,9 @@ function GridDots({ width, height }: { width: number; height: number }) {
             style={{
               left: `${x}px`,
               [isReverse ? "bottom" : "top"]: 0,
-              marginLeft: "-6px",
-              backgroundColor: pick(colors, i + 2),
+              marginLeft: "-5.25px",
+              backgroundColor: color,
+              boxShadow: ballGlow(color),
               "--traverse-y": isReverse ? `-${height}px` : `${height}px`,
               "--dot-duration": pick(durations, i),
               animationDelay: delay(i + 5),
@@ -65,7 +74,7 @@ function GridDots({ width, height }: { width: number; height: number }) {
   )
 }
 
-export function AnimatedBackground() {
+export function AnimatedBackground({ boost = false }: { boost?: boolean }) {
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null)
 
   useEffect(() => {
@@ -73,9 +82,9 @@ export function AnimatedBackground() {
   }, [])
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-70 dark:opacity-40">
-      <div className="absolute inset-0 neo-grid-bg" />
-      {dims && <GridDots width={dims.w} height={dims.h} />}
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className={`absolute inset-0 neo-grid-bg ${boost ? "opacity-90 dark:opacity-50 boost" : "opacity-70 dark:opacity-40"}`} />
+      {dims && <GridDots width={dims.w} height={dims.h} boost={boost} />}
     </div>
   )
 }
