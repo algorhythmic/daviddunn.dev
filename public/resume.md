@@ -19,39 +19,39 @@ Applied AI & Integration Engineer with 6+ years building data pipelines, BI plat
 
 **TECHNICAL PROJECTS**
 
-[**Saga**](https://github.com/algorhythmic/saga) **\- Agent Orchestration Framework** | Docker · MQTT · Gitea · Claude Code · Telegram · Proxmox  
-• Built Docker/MQTT/Gitea-based orchestration framework for parallel AI coding workstreams with Telegram-based spec intake, human review gates, containerized workers, and audit workflows.  
-• Designed agent roles, message-passing patterns, decision-review artifacts, and self-healing PR workflow for long-running coding projects.
+[**Saga**](https://github.com/algorhythmic/saga) **- Agent Orchestration Framework** | Docker · MQTT · Gitea · Claude Code · Telegram · Proxmox  
+• Built a multi-agent orchestration framework on Docker/MQTT/Gitea that runs parallel Claude Code workers against Telegram-based spec intake, with human review gates and self-healing PR loops for long-running projects.  
+• Codified agent roles, message-passing protocols, and review artifacts into reusable deployment patterns for autonomous coding workflows in production.
 
-[**Nexus**](https://github.com/algorhythmic/projectnexus) **\- Real-Time Prediction Market Intelligence Engine** | Python · WebSockets · DuckDB · Claude · Anomaly Detection  
-• Built streaming ingestion for 100K+ prediction-market events with auto-reconnect, async event bus, batch drain, and integrity validation for gaps, duplicates, and ordering.  
-• Developed sliding-window anomaly detection, semantic market clustering, and cross-market correlation logic; maintained 158 tests across 17 modules.
+[**Nexus**](https://github.com/algorhythmic/projectnexus) **- Real-Time Prediction Market Intelligence Engine** | Python · WebSockets · DuckDB · Claude · Convex  
+• Built real-time prediction market intelligence engine ingesting 100K+ events with WebSocket streaming, integrity validation, and async event-driven architecture.  
+• Developed Claude-powered semantic market clustering, sliding-window anomaly detection, and cross-market correlation; backed by an evaluation framework of 158 tests across 17 modules.
 
-[**marketfinder**](https://marketfinder.daviddunn.dev) **\- Arbitrade Discovery Interface** | Vite · TypeScript ·Convex · HTTP APIs  
-• Built full-stack client platform with public site, invite onboarding, AI-assisted interviews, structured profile data model, approval workflows, email, automation, and match tracking.  
-• Designed private matchmaker tooling for invite-code generation, applicant review, detailed user profiles, match visibility, and human-in-the-loop decision support.
+[**marketfinder**](https://marketfinder.daviddunn.dev) **- Live Dashboard for Nexus** | React · Vite · TypeScript · Convex · Tailwind  
+• Built reactive read-only dashboard surfacing Nexus intelligence — 10K+ live markets, anomaly feed with severity filtering, trending topic clusters, and side-by-side market comparison.  
+• Shipped responsive UI on TanStack React Table with mobile-first card layout and live Convex queries; deployed at [marketfinder.daviddunn.dev](https://marketfinder.daviddunn.dev)
 
 **PROFESSIONAL EXPERIENCE**
 
-**Applied AI & Integration Engineer | Client Projects | Santa Clara, CA	09/2025 \- Present**  
-• Built [**Happily.love**](http://www.happily.love), an AI-assisted matchmaking platform for a client, including public landing site, invite-based onboarding, AI interviews, structured profile model, approval workflows, email automation, match tracking, and private matchmaker dashboard.  
-• Designed human-in-the-loop decision-support tooling that converts qualitative interviews, questionnaires, and matchmaker notes into structured profiles for informed matchmaking decisions.
+**Applied AI & Integration Engineer | Client Projects | Santa Clara, CA	09/2025 - Present**  
+• Built [**Happily.love**](http://www.happily.love) end-to-end for a client: Claude-driven onboarding interviews, invite-based applicant flow, structured profile model, approval workflows, and a private matchmaker dashboard.  
+• Designed human-in-the-loop decision-support tooling that converts qualitative interviews and matchmaker notes into structured profile data for review and matching.
 
-**Data & BI Solutions Developer | Dunn & Done Systems · Remote | Santa Clara, CA	03/2025 \- 08/2025**  
-• Architected Python/Airflow ELT pipelines integrating Stripe, HubSpot, QuickBooks, and Google Ads into governed warehouses for SMB clients; defined lineage, dictionaries, and quality rules, cutting reporting effort 75%.  
-• Deployed AWS BI stack using S3, Redshift, dbt, and Metabase for real-time revenue, churn, and LTV dashboards; built LLM-assisted agents for data validation and metric reporting.
+**Data & BI Solutions Developer | Dunn & Done Systems · Remote | Santa Clara, CA	03/2025 - 08/2025**  
+• Built LLM-assisted agents for data validation and metric reporting on top of an AWS BI stack (S3, Redshift, dbt, Metabase) delivering real-time revenue, churn, and LTV dashboards for SMB clients.  
+• Architected Python/Airflow ELT pipelines integrating Stripe, HubSpot, QuickBooks, and Google Ads into governed warehouses with lineage and quality rules; cut reporting effort 75%.
 
-**Analytics Engineer | Front Row | Remote	10/2022 \- 09/2024**  
+**Analytics Engineer | Front Row | Remote	10/2022 - 09/2024**  
 • Authored modular dbt models and Looker/Metabase explores answering 80% of recurring product-marketing questions, reducing ad-hoc requests 60%; owned metric definitions and quality rules.  
 • Built experimentation pipeline using GTM, feature flags, dbt, and Python uplift analysis to support 20+ A/B tests and dynamic-pricing tactics that lifted average purchase price 8%.
 
-**Marketing Data Analyst | ORComm | Seoul, South Korea	01/2020 \- 08/2022**  
+**Marketing Data Analyst | ORComm | Seoul, South Korea	01/2020 - 08/2022**  
 • Built multi-tenant BigQuery and Data Studio reporting for 10 seed-stage consumer startups with CAC, ROAS, and cohort dashboards; reduced report build time 60%.  
 • Trained XGBoost propensity and churn models on behavioral data, improving conversion 25% and reducing churn 20%; introduced portfolio-wide data governance practices.
 
-**Business Intelligence Analyst | VR Comet | Seoul, South Korea	10/2018 \- 12/2019**  
+**Business Intelligence Analyst | VR Comet | Seoul, South Korea	10/2018 - 12/2019**  
 • Consolidated GA360, HubSpot, and Unity telemetry into a Redshift warehouse with retention and monetization dashboards supporting 15% MoM DAU growth and 10% CAC reduction.
 
 **EDUCATION**
 
-B.S. Physics \- Lake Forest College \- 2009 | Data Analyst in R \- [Dataquest.io](http://Dataquest.io) \- 2022 | Data Scientist in Python \- DataCamp \- 2024
+B.S. Physics - Lake Forest College - 2009 | Data Analyst in R - [Dataquest.io](http://Dataquest.io) - 2022 | Data Scientist in Python - DataCamp - 2024
