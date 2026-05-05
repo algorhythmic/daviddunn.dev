@@ -163,7 +163,7 @@ export function Hero({ onOpenResume }: HeroProps) {
       className="bg-neo-yellow-light dark:bg-slate-900 flex items-center justify-center py-10 md:py-16 relative overflow-hidden"
       style={{ height: heroHeight ? `${heroHeight}px` : "100svh" }}
     >
-      <AnimatedBackground />
+      <AnimatedBackground boost dimGlow />
       <div className="relative z-10 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
         <div className="hero-card bg-white dark:bg-slate-800 border-[3px] md:border-4 border-black dark:border-neo-blue-500 px-5 py-6 md:px-10 md:py-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] w-full max-w-sm sm:max-w-md md:max-w-3xl mx-auto">
           {/* Status pill */}

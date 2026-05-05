@@ -74,7 +74,13 @@ function GridDots({ width, height, boost = false }: { width: number; height: num
   )
 }
 
-export function AnimatedBackground({ boost = false }: { boost?: boolean }) {
+export function AnimatedBackground({
+  boost = false,
+  dimGlow = false,
+}: {
+  boost?: boolean
+  dimGlow?: boolean
+}) {
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null)
 
   useEffect(() => {
@@ -83,7 +89,11 @@ export function AnimatedBackground({ boost = false }: { boost?: boolean }) {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <div className={`absolute inset-0 neo-grid-bg ${boost ? "opacity-90 dark:opacity-50 boost" : "opacity-70 dark:opacity-40"}`} />
+      <div
+        className={`absolute inset-0 neo-grid-bg ${
+          boost ? "opacity-90 dark:opacity-50 boost" : "opacity-70 dark:opacity-40"
+        } ${dimGlow ? "dim-glow" : ""}`}
+      />
       {dims && <GridDots width={dims.w} height={dims.h} boost={boost} />}
     </div>
   )
