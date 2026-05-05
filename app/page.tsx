@@ -5,10 +5,13 @@ import { Hero } from "@/components/hero"
 import { Portfolio } from "@/components/portfolio"
 import { About } from "@/components/about"
 import { Navigation } from "@/components/navigation"
+import { ResumeTerminal } from "@/components/resume-terminal"
 import { ThemeProvider } from "@/contexts/theme-context"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
+  const [resumeOpen, setResumeOpen] = useState(false)
+  const openResume = () => setResumeOpen(true)
 
   useEffect(() => {
     setMounted(true)
@@ -32,10 +35,11 @@ export default function Home() {
       <div>
         <Navigation />
         <main>
-          <Hero />
+          <Hero onOpenResume={openResume} />
           <Portfolio />
-          <About />
+          <About onOpenResume={openResume} />
         </main>
+        <ResumeTerminal open={resumeOpen} onClose={() => setResumeOpen(false)} />
       </div>
     </ThemeProvider>
   )
