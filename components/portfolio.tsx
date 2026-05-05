@@ -14,7 +14,8 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
 
   return (
     <div
-      className={`bg-white dark:bg-slate-800 border-2 md:border-4 border-black dark:border-neo-blue-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ${rotation} hover:rotate-0`}
+      id={`case-study-${study.id}`}
+      className={`scroll-mt-24 bg-white/85 dark:bg-slate-800/85 backdrop-blur-[2px] border-2 md:border-4 border-black dark:border-neo-blue-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ${rotation} hover:rotate-0`}
     >
       {/* Header band */}
       <div
@@ -185,7 +186,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
 export function Portfolio() {
   return (
     <section id="portfolio" className="min-h-[100svh] md:min-h-screen bg-neo-cyan-light dark:bg-gray-800 py-10 md:py-20 relative overflow-hidden">
-      <AnimatedBackground />
+      <AnimatedBackground boost />
       <div className="relative z-10 max-w-5xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="text-center mb-6 md:mb-16">
           <h2 className="text-2xl md:text-6xl font-black text-foreground dark:text-white mb-2 md:mb-4">
