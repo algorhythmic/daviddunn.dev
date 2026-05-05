@@ -1,46 +1,25 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Hero } from "@/components/hero"
 import { Portfolio } from "@/components/portfolio"
 import { About } from "@/components/about"
 import { Navigation } from "@/components/navigation"
 import { ResumeTerminal } from "@/components/resume-terminal"
-import { ThemeProvider } from "@/contexts/theme-context"
 
 export default function Home() {
-  const [mounted, setMounted] = useState(false)
   const [resumeOpen, setResumeOpen] = useState(false)
   const openResume = () => setResumeOpen(true)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-neo-yellow-light flex items-center justify-center">
-        <div className="bg-white border-8 border-black p-12 shadow-[16px_16px_0px_0px_rgba(0,0,0,1)]">
-          <div className="w-16 h-16 border-8 border-black border-t-neo-blue-500 rounded-full animate-spin mx-auto mb-6"></div>
-          <h2 className="text-3xl font-black text-black mb-4">LOADING...</h2>
-          <p className="font-bold text-black">Preparing your experience</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <ThemeProvider>
-      <div>
-        <Navigation />
-        <main>
-          <Hero onOpenResume={openResume} />
-          <Portfolio />
-          <About onOpenResume={openResume} />
-        </main>
-        <ResumeTerminal open={resumeOpen} onClose={() => setResumeOpen(false)} />
-      </div>
-    </ThemeProvider>
+    <div>
+      <Navigation />
+      <main>
+        <Hero onOpenResume={openResume} />
+        <Portfolio />
+        <About onOpenResume={openResume} />
+      </main>
+      <ResumeTerminal open={resumeOpen} onClose={() => setResumeOpen(false)} />
+    </div>
   )
 }

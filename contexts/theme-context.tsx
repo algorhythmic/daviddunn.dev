@@ -12,37 +12,26 @@ type ThemeContextType = {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
+// Read the theme already applied by the pre-hydration script in app/layout.tsx.
+// On the server we default to "light" — the script will fix up the DOM before paint
+// on the client, and our state lazy-init matches that DOM on first client render.
+function readInitialTheme(): Theme {
+  if (typeof document === "undefined") return "light"
+  return document.documentElement.classList.contains("dark") ? "dark" : "light"
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light")
-  const [mounted, setMounted] = useState(false)
+  const [theme, setTheme] = useState<Theme>(readInitialTheme)
 
   useEffect(() => {
-    setMounted(true)
-    // Check saved preference first, then system preference, then default to light
-    const savedTheme = localStorage.getItem("theme") as Theme
-    if (savedTheme) {
-      setTheme(savedTheme)
-    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      setTheme("dark")
-    }
-  }, [])
-
-  useEffect(() => {
-    if (mounted) {
-      const root = window.document.documentElement
-      root.classList.remove("light", "dark")
-      root.classList.add(theme)
-      localStorage.setItem("theme", theme)
-    }
-  }, [theme, mounted])
+    const root = document.documentElement
+    root.classList.remove("light", "dark")
+    root.classList.add(theme)
+    localStorage.setItem("theme", theme)
+  }, [theme])
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"))
-  }
-
-  // Don't render children until mounted to prevent hydration issues
-  if (!mounted) {
-    return null
   }
 
   return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>
