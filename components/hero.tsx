@@ -280,25 +280,6 @@ export function Hero({ onOpenResume }: HeroProps) {
       </div>
 
       <style jsx>{`
-        @keyframes cardIn {
-          from {
-            opacity: 0;
-            transform: scale(0.92) translateY(24px) rotate(-3deg);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1) translateY(0) rotate(-1deg);
-          }
-        }
-        @keyframes floatAmbient {
-          0%   { transform: translateY(0) rotate(-1deg); }
-          50%  { transform: translateY(-5px) rotate(1.2deg); }
-          100% { transform: translateY(0) rotate(-1deg); }
-        }
-        @keyframes staggerIn {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
         @keyframes statusPing {
           0% { transform: scale(1); opacity: 0.75; }
           75%, 100% { transform: scale(2.4); opacity: 0; }
@@ -332,12 +313,6 @@ export function Hero({ onOpenResume }: HeroProps) {
           }
         }
 
-        :global(.hero-card) {
-          position: relative;
-          animation:
-            cardIn 380ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both,
-            floatAmbient 6s ease-in-out 600ms infinite;
-        }
         :global(.hero-card::after) {
           content: "";
           position: absolute;
@@ -388,10 +363,6 @@ export function Hero({ onOpenResume }: HeroProps) {
           box-shadow:
             0 0 32px 8px rgba(59, 130, 246, 0.9),
             0 0 80px 18px rgba(139, 92, 246, 0.55);
-        }
-        :global(.hero-stagger) {
-          opacity: 0;
-          animation: staggerIn 320ms ease-out both;
         }
         :global(.animate-status-ping) {
           animation: statusPing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
@@ -454,12 +425,6 @@ export function Hero({ onOpenResume }: HeroProps) {
         }
 
         @media (prefers-reduced-motion: reduce) {
-          :global(.hero-card),
-          :global(.hero-stagger) {
-            animation: none !important;
-            opacity: 1 !important;
-            transform: none !important;
-          }
           :global(.animate-status-ping) {
             animation: none !important;
           }

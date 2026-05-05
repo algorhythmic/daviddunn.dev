@@ -428,3 +428,48 @@ html {
   border-color: #3b82f6;
   box-shadow: 0 0 10px #3b82f6, 8px 8px 0px 0px rgba(0, 0, 0, 1);
 }
+
+/* ─── Hero entrance animations ─────────────────────────────────────────────
+ * These need to be in the synchronously-loaded stylesheet (not styled-jsx)
+ * so the initial-hidden state applies before first paint — otherwise the
+ * elements flash visible, then disappear, then animate back in.
+ */
+@keyframes heroCardIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(24px) rotate(-3deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotate(-1deg);
+  }
+}
+@keyframes heroFloatAmbient {
+  0%   { transform: translateY(0) rotate(-1deg); }
+  50%  { transform: translateY(-5px) rotate(1.2deg); }
+  100% { transform: translateY(0) rotate(-1deg); }
+}
+@keyframes heroStaggerIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-card {
+  position: relative;
+  animation:
+    heroCardIn 380ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both,
+    heroFloatAmbient 6s ease-in-out 600ms infinite;
+}
+.hero-stagger {
+  opacity: 0;
+  animation: heroStaggerIn 320ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-card,
+  .hero-stagger {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
