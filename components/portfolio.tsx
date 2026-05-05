@@ -185,14 +185,14 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
 
 export function Portfolio() {
   return (
-    <section id="portfolio" className="min-h-[100svh] md:min-h-screen bg-neo-cyan-light dark:bg-gray-800 py-10 md:py-20 relative overflow-hidden">
+    <section id="portfolio" className="min-h-[100svh] md:min-h-screen bg-green-300 dark:bg-gray-800 py-10 md:py-20 relative overflow-hidden">
       <AnimatedBackground boost />
       <div className="relative z-10 max-w-5xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="text-center mb-6 md:mb-16">
-          <h2 className="text-2xl md:text-6xl font-black text-foreground dark:text-white mb-2 md:mb-4">
+          <h2 className="section-text-outline text-2xl md:text-6xl font-black text-foreground dark:text-white mb-2 md:mb-4">
             CASE STUDIES
           </h2>
-          <p className="text-xs md:text-xl font-bold text-foreground dark:text-gray-200 max-w-2xl mx-auto">
+          <p className="section-text-outline-thin text-xs md:text-xl font-bold text-foreground dark:text-gray-200 max-w-2xl mx-auto">
             Real projects, real code, real users — not lorem ipsum placeholders
           </p>
         </div>
