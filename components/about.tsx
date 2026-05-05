@@ -1,10 +1,15 @@
 "use client"
 
-import { ExternalLink, Linkedin, Github, Twitter, Mail, MapPin, Calendar } from "lucide-react"
+import Image from "next/image"
+import { Terminal, Linkedin, Github, Instagram, Mail, MapPin, Calendar } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { AnimatedBackground } from "@/components/hero-background"
 
-export function About() {
+type AboutProps = {
+  onOpenResume: () => void
+}
+
+export function About({ onOpenResume }: AboutProps) {
   const skills = [
     "Python",
     "TypeScript",
@@ -35,7 +40,7 @@ export function About() {
 
   return (
     <section id="about" className="min-h-[100svh] md:min-h-screen bg-neo-red-light dark:bg-gray-900 py-10 md:py-20 relative overflow-hidden">
-      <AnimatedBackground />
+      <AnimatedBackground boost />
       <div className="relative z-10 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="text-center mb-6 md:mb-12">
           <h2 className="text-2xl md:text-6xl font-black text-foreground mb-2 md:mb-4 dark:text-white">ABOUT ME</h2>
@@ -47,11 +52,18 @@ export function About() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
           {/* Profile Card */}
           <div className="lg:col-span-1">
-            <Card className="border-2 md:border-4 border-theme-border shadow-[4px_4px_0px_0px] md:shadow-[8px_8px_0px_0px] shadow-theme-border bg-theme-surface dark:bg-slate-800 dark:border-neo-blue-500 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <Card className="border-2 md:border-4 border-theme-border shadow-[4px_4px_0px_0px] md:shadow-[8px_8px_0px_0px] shadow-theme-border bg-white/85 dark:bg-slate-800/85 backdrop-blur-[2px] dark:border-neo-blue-500 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <CardContent className="p-4 md:p-6">
                 <div className="text-center mb-4 md:mb-6">
-                  <div className="w-20 h-20 md:w-32 md:h-32 bg-gradient-to-br from-neo-cyan-light to-blue-500 dark:from-neo-cyan-dark dark:to-blue-400 border-2 md:border-4 border-theme-border dark:border-neo-blue-500 mx-auto mb-3 md:mb-4 flex items-center justify-center text-2xl md:text-4xl font-black text-theme-border dark:text-white">
-                    DD
+                  <div className="w-28 h-28 md:w-44 md:h-44 border-2 md:border-4 border-theme-border dark:border-neo-blue-500 mx-auto mb-3 md:mb-4 overflow-hidden bg-neo-cyan-light dark:bg-slate-900">
+                    <Image
+                      src="/dd-profile.png"
+                      alt="David Dunn"
+                      width={384}
+                      height={384}
+                      priority
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <h3 className="text-lg md:text-2xl font-black text-foreground mb-1 md:mb-2 dark:text-white">DAVID DUNN</h3>
                   <p className="text-sm md:text-base font-bold text-muted-foreground mb-3 md:mb-4 dark:text-gray-300">
@@ -65,20 +77,19 @@ export function About() {
                     </div>
                     <div className="flex items-center justify-center">
                       <Calendar size={14} className="mr-1.5 md:mr-2 dark:text-neo-blue-400" />
-                      3+ Years Experience
+                      6+ Years Experience
                     </div>
                   </div>
                 </div>
 
-                <a
-                  href="https://linkedin.com/in/mrdaviddunn"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
+                  onClick={onOpenResume}
                   className="flex items-center justify-center w-full bg-neo-green-light dark:bg-neo-green-dark hover:bg-green-500 text-theme-border dark:text-black font-black py-2 md:py-3 px-3 md:px-4 border-2 md:border-4 border-theme-border dark:border-black shadow-[3px_3px_0px_0px] md:shadow-[4px_4px_0px_0px] shadow-theme-border dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px] hover:shadow-theme-border active:shadow-none transition-all duration-150 mb-4 md:mb-6 text-sm md:text-base hover:translate-x-[1px] hover:translate-y-[1px] active:translate-x-[3px] active:translate-y-[3px]"
                 >
-                  <ExternalLink className="inline mr-1.5 md:mr-2" size={16} />
+                  <Terminal className="inline mr-1.5 md:mr-2" size={16} />
                   VIEW RESUME
-                </a>
+                </button>
 
                 <div className="space-y-2 md:space-y-3">
                   <a
@@ -100,13 +111,13 @@ export function About() {
                     GITHUB
                   </a>
                   <a
-                    href="https://x.com/MrDavidDunn"
+                    href="https://instagram.com/mrdaviddunn"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center w-full bg-cyan-400 hover:bg-cyan-500 text-black font-bold py-1.5 md:py-2 px-3 md:px-4 border-2 border-black dark:border-neo-blue-500 transition-all duration-150 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none hover:translate-x-[1px] hover:translate-y-[1px] active:translate-x-[2px] active:translate-y-[2px] text-sm md:text-base"
+                    className="flex items-center w-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 hover:from-pink-600 hover:via-red-600 hover:to-yellow-600 text-white font-bold py-1.5 md:py-2 px-3 md:px-4 border-2 border-black dark:border-neo-blue-500 transition-all duration-150 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none hover:translate-x-[1px] hover:translate-y-[1px] active:translate-x-[2px] active:translate-y-[2px] text-sm md:text-base"
                   >
-                    <Twitter className="mr-3" size={20} />
-                    TWITTER
+                    <Instagram className="mr-3" size={20} />
+                    INSTAGRAM
                   </a>
                   <a
                     href="mailto:davidalexanderdunn@gmail.com"
@@ -123,7 +134,7 @@ export function About() {
           {/* Content Cards */}
           <div className="lg:col-span-2 space-y-4 md:space-y-8">
             {/* Bio */}
-            <Card className="border-2 md:border-4 border-theme-border shadow-[4px_4px_0px_0px] md:shadow-[8px_8px_0px_0px] shadow-theme-border bg-theme-surface dark:bg-slate-800 dark:border-neo-blue-500 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <Card className="border-2 md:border-4 border-theme-border shadow-[4px_4px_0px_0px] md:shadow-[8px_8px_0px_0px] shadow-theme-border bg-white/85 dark:bg-slate-800/85 backdrop-blur-[2px] dark:border-neo-blue-500 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <CardContent className="p-3 md:p-6">
                 <h3 className="text-lg md:text-2xl font-black text-foreground mb-2 md:mb-4 dark:text-white">MY STORY</h3>
                 <div className="space-y-3 md:space-y-4 text-foreground dark:text-gray-200 font-bold leading-relaxed text-xs md:text-base">
@@ -154,7 +165,7 @@ export function About() {
             </Card>
 
             {/* Skills */}
-            <Card className="border-2 md:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white dark:bg-slate-800 dark:border-neo-blue-500 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <Card className="border-2 md:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white/85 dark:bg-slate-800/85 backdrop-blur-[2px] dark:border-neo-blue-500 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <CardContent className="p-3 md:p-6">
                 <h3 className="text-lg md:text-2xl font-black text-black dark:text-white mb-2 md:mb-4">TECHNICAL SKILLS</h3>
                 <div className="flex flex-wrap gap-1.5 md:gap-2">
@@ -171,7 +182,7 @@ export function About() {
             </Card>
 
             {/* Achievements */}
-            <Card className="border-2 md:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white dark:bg-slate-800 dark:border-neo-blue-500 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <Card className="border-2 md:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white/85 dark:bg-slate-800/85 backdrop-blur-[2px] dark:border-neo-blue-500 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <CardContent className="p-3 md:p-6">
                 <h3 className="text-lg md:text-2xl font-black text-black dark:text-white mb-2 md:mb-4">KEY ACHIEVEMENTS</h3>
                 <div className="space-y-2 md:space-y-3">
