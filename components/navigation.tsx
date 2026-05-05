@@ -1,12 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Menu, X } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("hero")
+  const [hidden, setHidden] = useState(false)
+  const lastScrollYRef = useRef(0)
 
   const navItems = [
     { id: "hero", label: "Home" },
@@ -16,9 +18,11 @@ export function Navigation() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = navItems.map((item) => document.getElementById(item.id))
-      const scrollPosition = window.scrollY + 100
+      const y = window.scrollY
 
+      // Active section highlight
+      const sections = navItems.map((item) => document.getElementById(item.id))
+      const scrollPosition = y + 100
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i]
         if (section && section.offsetTop <= scrollPosition) {
@@ -26,9 +30,19 @@ export function Navigation() {
           break
         }
       }
+
+      // Hide-on-scroll-down / show-on-scroll-up (mobile only via CSS)
+      const last = lastScrollYRef.current
+      const delta = y - last
+      if (Math.abs(delta) >= 5) {
+        if (y < 60) setHidden(false)
+        else if (delta > 0) setHidden(true)
+        else setHidden(false)
+        lastScrollYRef.current = y
+      }
     }
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
@@ -45,7 +59,11 @@ export function Navigation() {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-slate-800 border-b-2 md:border-b-4 border-black dark:border-neo-blue-500">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-slate-800 border-b-2 md:border-b-4 border-black dark:border-neo-blue-500 transition-transform duration-300 ease-out md:translate-y-0 ${
+        hidden && !isOpen ? "-translate-y-full" : "translate-y-0"
+      }`}
+    >
       <div className="mx-auto px-2 sm:px-6 lg:px-10 xl:px-16">
         <div className="flex justify-between items-center h-10 md:h-16">
           <div className="font-black text-sm md:text-xl text-black dark:text-white">
