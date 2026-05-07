@@ -6,10 +6,16 @@ const config: Config = {
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
+    "./lib/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
     "*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
+  future: {
+    // hover: utilities only apply on devices that actually support hover
+    // (i.e. mice/trackpads), preventing sticky :hover on touch devices.
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     container: {
       center: true,
