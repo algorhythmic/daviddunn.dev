@@ -1,21 +1,62 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import dynamic from "next/dynamic"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Github, ChevronDown, ChevronUp, Layers, Lightbulb, Wrench, User } from "lucide-react"
+import { ExternalLink, Github, ChevronDown, ChevronUp, Layers, Lightbulb, Wrench, User, Lock } from "lucide-react"
 import { caseStudies, type CaseStudy } from "@/lib/portfolio-data"
 import { AnimatedBackground } from "@/components/hero-background"
+
+const ArchitectureDiagram = dynamic(
+  () => import("@/components/architecture-diagram").then((m) => m.ArchitectureDiagram),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[400px] w-full flex items-center justify-center font-mono text-sm text-green-400 bg-black">
+        loading diagram…
+      </div>
+    ),
+  },
+)
 
 function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const rotations = ["-rotate-[0.5deg]", "rotate-[0.3deg]", "-rotate-[0.2deg]"]
-  const rotation = rotations[index % rotations.length]
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const applyHash = () => {
+      const hash = window.location.hash.slice(1).toLowerCase()
+      if (!hash) return
+      if (hash === study.slug || hash === `case-study-${study.id}`) {
+        setIsExpanded(true)
+        requestAnimationFrame(() => {
+          document
+            .getElementById(`case-study-${study.id}`)
+            ?.scrollIntoView({ behavior: "smooth", block: "start" })
+        })
+      }
+    }
+    applyHash()
+    window.addEventListener("hashchange", applyHash)
+    return () => window.removeEventListener("hashchange", applyHash)
+  }, [study.slug, study.id])
+
+  const toggleExpanded = () => {
+    setIsExpanded((prev) => {
+      const next = !prev
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href)
+        url.hash = next ? study.slug : ""
+        window.history.replaceState(null, "", url.toString())
+      }
+      return next
+    })
+  }
 
   return (
     <div
       id={`case-study-${study.id}`}
-      className={`scroll-mt-24 bg-white/85 dark:bg-slate-800/85 backdrop-blur-[2px] border-2 md:border-4 border-black dark:border-neo-blue-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ${rotation} hover:rotate-0`}
+      className="scroll-mt-12 md:scroll-mt-20 bg-white/85 dark:bg-slate-800/85 backdrop-blur-[2px] border-2 md:border-4 border-black dark:border-neo-blue-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-300"
     >
       {/* Header band */}
       <div
@@ -25,15 +66,15 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
           <div className="flex-1 min-w-0 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2 md:gap-3 mb-1 md:mb-2">
               <span className="text-2xl md:text-3xl">{study.icon}</span>
-              <h3 className="text-xl md:text-3xl font-black text-white tracking-tight leading-tight">
+              <h3 className="text-outline-black text-xl md:text-3xl font-black text-white tracking-tight leading-tight">
                 {study.title}
               </h3>
             </div>
-            <p className="text-xs md:text-base font-bold text-white/90">
+            <p className="text-outline-black text-xs md:text-base font-bold text-white/90">
               {study.subtitle}
             </p>
           </div>
-          <span className="text-[10px] md:text-xs font-black bg-black text-white px-2 py-1 md:px-3 md:py-1.5 border-2 border-white shrink-0 uppercase tracking-wider self-center md:self-start">
+          <span className="text-[10px] md:text-xs font-black bg-black text-white px-2 py-1 md:px-3 md:py-1.5 border-2 border-white shrink-0 uppercase tracking-wider self-center">
             Case Study {String(index + 1).padStart(2, "0")}
           </span>
         </div>
@@ -51,12 +92,12 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
           {study.highlights.map((h, i) => (
             <div
               key={i}
-              className="bg-neo-yellow-light/20 dark:bg-neo-yellow-dark/20 border-2 border-black dark:border-neo-blue-500 p-2 md:p-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center md:text-left"
+              className="bg-neo-yellow-light/20 dark:bg-zinc-800 border-2 border-black dark:border-neo-blue-500 p-2 md:p-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
             >
-              <div className="text-lg md:text-2xl font-black text-foreground dark:text-white mb-0.5 md:mb-1">
+              <div className="text-outline-white text-center text-lg md:text-2xl font-black text-foreground dark:text-white mb-0.5 md:mb-1">
                 {h.metric}
               </div>
-              <div className="text-[10px] md:text-xs font-bold text-muted-foreground dark:text-gray-300 leading-snug">
+              <div className="text-left text-[10px] md:text-xs font-bold text-muted-foreground dark:text-gray-300 leading-snug">
                 {h.description}
               </div>
             </div>
@@ -119,9 +160,13 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
                 </h4>
               </div>
               <div className="pl-10">
-                <div className="bg-gray-900 dark:bg-black border-2 border-black dark:border-neo-blue-500 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-mono text-sm text-green-400 leading-relaxed overflow-x-auto">
-                  {study.architectureDescription}
-                </div>
+                {study.architecture ? (
+                  <ArchitectureDiagram architecture={study.architecture} slug={study.slug} />
+                ) : (
+                  <div className="bg-gray-900 dark:bg-black border-2 border-black dark:border-neo-blue-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4 font-mono text-sm text-green-400 leading-relaxed overflow-x-auto">
+                    {study.architectureDescription}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -150,21 +195,35 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
+              title={link.private ? "This repository is private — link will 404 unless you have access" : undefined}
               className={`flex items-center gap-1.5 font-bold py-2 px-4 border-2 border-black dark:border-neo-blue-500 text-sm transition-all duration-150 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] ${
-                link.type === "github"
-                  ? "bg-gray-800 dark:bg-gray-700 text-white hover:bg-gray-900"
-                  : link.type === "live"
-                    ? "bg-neo-green-light dark:bg-neo-green-dark text-white hover:bg-green-600"
-                    : "bg-neo-yellow-light dark:bg-neo-yellow-dark text-black hover:bg-yellow-500"
+                link.private
+                  ? "bg-gray-600 dark:bg-gray-700 text-gray-200 hover:bg-gray-700 opacity-80"
+                  : link.type === "github"
+                    ? "bg-gray-800 dark:bg-gray-700 text-white hover:bg-gray-900"
+                    : link.type === "live"
+                      ? "bg-neo-green-light dark:bg-neo-green-dark text-white hover:bg-green-600"
+                      : "bg-neo-yellow-light dark:bg-neo-yellow-dark text-black hover:bg-yellow-500"
               }`}
             >
-              {link.type === "github" ? <Github size={14} /> : <ExternalLink size={14} />}
+              {link.private ? (
+                <Lock size={14} />
+              ) : link.type === "github" ? (
+                <Github size={14} />
+              ) : (
+                <ExternalLink size={14} />
+              )}
               {link.label}
+              {link.private && (
+                <span className="text-[10px] uppercase tracking-wider opacity-90 ml-0.5 font-mono">
+                  (private)
+                </span>
+              )}
             </a>
           ))}
 
           <button
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={toggleExpanded}
             className="w-full md:w-auto md:ml-auto flex items-center justify-center gap-1.5 font-black py-2 px-4 border-2 border-black dark:border-neo-blue-500 bg-white dark:bg-slate-700 text-foreground dark:text-white text-sm transition-all duration-150 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px]"
           >
             {isExpanded ? (
@@ -185,7 +244,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
 
 export function Portfolio() {
   return (
-    <section id="portfolio" className="min-h-[100svh] md:min-h-screen bg-green-300 dark:bg-gray-800 py-10 md:py-20 relative overflow-hidden">
+    <section id="portfolio" className="min-h-[100svh] md:min-h-screen bg-blue-600 dark:bg-gray-800 py-10 md:py-20 relative overflow-hidden">
       <AnimatedBackground boost />
       <div className="relative z-10 max-w-5xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="text-center mb-6 md:mb-16">
