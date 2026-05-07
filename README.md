@@ -1,100 +1,83 @@
-## Description
+# daviddunn.dev
 
-This repository contains the source code for David Dunn's personal website, hosted at `daviddunn.dev`. It's a modern web application built with Next.js and React, designed to showcase David's profile, projects, and other relevant information.
+Personal portfolio site for David Dunn — Applied AI Engineer based in Santa Clara, CA. Hosted at [daviddunn.dev](https://daviddunn.dev).
 
-It features a dynamic and responsive user interface with various sections, including:
-- A **Hero** section for an impactful introduction.
-- A **Dashboard** (potentially for displaying dynamic data or metrics).
-- A **Portfolio** to showcase projects and work.
-- A **Photo Gallery** for visual content.
-- An **About** page providing more details about David.
+## What's on the site
 
-The site is designed with a clean aesthetic and aims to provide a seamless user experience.
+The site is a single-page experience with four sections, navigated via a fixed header:
 
-## Tech Stack
+- **Hero** — name, typewriter role cycler, count-up stats (years / case studies / GitHub repos), and a `VIEW RESUME` button that opens a mac-style terminal modal rendering the resume from `public/resume.md`.
+- **Case Studies** — four expandable case study cards (Saga, Nexus, happily.love, MCP server ecosystem). Each card collapses to a hook + four highlight metrics + tech badges, and expands to show problem / solution / architecture / role. Each architecture is rendered as an interactive [React Flow](https://reactflow.dev) graph inside a mac-style terminal window with a maximize-to-modal action.
+- **About** — profile card (photo, role, social/email link via the footer), my-story bio, key achievements, and a **Technical Focus** card whose skill chips are clickable — each scrolls to the relevant case study.
+- **Footer** — terminal-styled copyright, socials, build credit.
 
-- **Framework**: [Next.js](https://nextjs.org/) (v15.2.4)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **UI Library**: [React](https://reactjs.org/) (v19)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **UI Components & Primitives**:
-  - [shadcn/ui](https://ui.shadcn.com/) (inferred from `components.json` and Radix UI usage)
-  - [Radix UI](https://www.radix-ui.com/) (for accessible, unstyled UI primitives)
-  - [Lucide React](https://lucide.dev/) (for icons)
-  - [Sonner](https://sonner.emilkowal.ski/) (for toasts/notifications)
-  - [Recharts](https://recharts.org/) (for charts, likely used in the Dashboard section)
-  - [CMDK](https://cmdk.paco.me/) (for command palette functionality)
-- **State Management**: React Context (e.g., `ThemeProvider` for dark mode)
-- **Linting**: ESLint (via `next lint`)
-- **Package Manager**: [pnpm](https://pnpm.io/)
+A persistent **status pill** in the menu bar links to the active build (`#saga`). Each case study has a deep-link hash slug (`/#saga`, `/#nexus`, `/#happily`, `/#mcp`) that auto-expands and scrolls to the matching card on load or hash change.
 
-## Features
+## Design
 
-- **Responsive Design**: Adapts to various screen sizes for optimal viewing on desktop and mobile devices.
-- **Dark Mode**: Includes a `ThemeProvider` for easy theme switching.
-- **Interactive Sections**: Dedicated components for Hero, Dashboard, Portfolio, Photo Gallery, and About sections.
-- **Modern UI/UX**: Leverages modern libraries and best practices for a smooth and engaging user experience.
-- **Clear Navigation**: User-friendly navigation to explore different parts of the site.
-- **Optimized Performance**: Built with Next.js for server-side rendering/static site generation capabilities, leading to fast load times.
+- **Neobrutalism**: thick borders, hard offset shadows, vivid fills, all-caps headings, chunky `font-black` weights. See `app/globals.css` for shared utilities (`.section-text-outline`, `.text-outline-black`, `.text-outline-white`, etc.).
+- **Animated grid background**: shared `AnimatedBackground` component (`components/hero-background.tsx`) renders a CSS grid with traversing colored balls; used across Hero, Portfolio, About, and Footer with section-specific `boost` and fade variants.
+- **Homebrew terminal aesthetic**: phosphor green `#28ff28` text on pure black, applied to the resume terminal modal and to the in-card React Flow architecture diagrams. The architecture window has mac-style chrome (traffic lights, title bar) — the green dot maximizes to a near-fullscreen modal portaled to `document.body`.
+- **Per-case-study identity**: each case study has a vivid two-color gradient header (Saga violet→pink, Nexus blue→sky, happily.love pink→orange, MCP emerald→lime) plus a unique icon and accent color.
 
-## Getting Started
+## Tech stack
 
-To get a local copy up and running, follow these steps.
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router) on React 19
+- **Language**: TypeScript
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) with a custom `neo-*` color palette and `hoverOnlyWhenSupported` enabled (no sticky hover on touch devices)
+- **UI primitives**: [shadcn/ui](https://ui.shadcn.com/) on top of [Radix UI](https://www.radix-ui.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Architecture diagrams**: [@xyflow/react](https://reactflow.dev/) (formerly React Flow), lazy-loaded via `next/dynamic`
+- **Markdown**: [react-markdown](https://github.com/remarkjs/react-markdown) + [remark-gfm](https://github.com/remarkjs/remark-gfm) (for the resume terminal)
+- **Theme**: custom `ThemeProvider` (`contexts/theme-context.tsx`) — class-based dark mode, persisted to `localStorage`, defaults to system color scheme
+- **Package manager**: [pnpm](https://pnpm.io/)
 
-### Prerequisites
+## Project layout
 
-- Node.js (v18.x or later recommended for Next.js 15)
-- pnpm (as `pnpm-lock.yaml` is present)
+```
+app/
+  layout.tsx          Root layout, metadata, theme init script
+  page.tsx            Composes <Navigation>, <Hero>, <Portfolio>, <About>, <Footer>, <ResumeTerminal>
+  globals.css         Theme tokens, neo utilities, animations, scrollbar
+components/
+  navigation.tsx      Fixed nav: 3-cell grid (logo / status pill / nav controls)
+  hero.tsx            Hero card, typewriter, count-up stats, magnetic CTAs
+  hero-background.tsx Shared animated grid + traversing balls
+  portfolio.tsx       Case study cards, hash deep-linking, expand-to-modal
+  about.tsx           Profile + bio + achievements + Technical Focus chips
+  footer.tsx          Terminal copyright, socials, build credit
+  resume-terminal.tsx Mac-style terminal modal rendering public/resume.md
+  architecture-diagram.tsx  React Flow + custom node shapes + maximize portal
+  theme-toggle.tsx    Sun/Moon icon swap with rotation animation
+contexts/
+  theme-context.tsx   Theme provider + useTheme hook
+lib/
+  portfolio-data.ts   Case study data: highlights, tech, links, architecture graphs
+public/
+  resume.md           Markdown resume served by the resume terminal
+  dd-profile.png      Profile photo
+```
 
-### Installation & Running Locally
+## Getting started
 
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/algorhythmic/daviddunn.tech.git
-    cd daviddunn.tech
-    ```
+```bash
+pnpm install
+pnpm dev
+```
 
-2.  **Install dependencies**:
-    ```bash
-    pnpm install
-    ```
+Open [http://localhost:3000](http://localhost:3000).
 
-3.  **Run the development server**:
-    ```bash
-    pnpm dev
-    ```
+## Scripts
 
-    Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
-
-## Available Scripts
-
-In the project directory, you can run the following scripts using pnpm:
-
--   `pnpm dev`
-    Runs the app in development mode.
-
--   `pnpm build`
-    Builds the app for production to the `.next` folder.
-
--   `pnpm start`
-    Starts a Next.js production server (requires `pnpm build` to be run first).
-
--   `pnpm lint`
-    Runs ESLint to analyze your code for potential errors and style issues.
+- `pnpm dev` — dev server (Next.js on port 3000)
+- `pnpm build` — production build
+- `pnpm start` — serve the production build
+- `pnpm lint` — ESLint via `next lint`
 
 ## Deployment
 
-This Next.js application can be deployed to any platform that supports Node.js applications or Next.js specifically. Some popular choices include:
+Deployed via Vercel.
 
--   **Vercel**
--   **Netlify**
--   **AWS Amplify**
--   **Google Cloud Run**
--   Other cloud providers or self-hosted solutions.
+## Author
 
-Refer to the Next.js deployment documentation for more details: [https://nextjs.org/docs/deployment](https://nextjs.org/docs/deployment)
-
-## Author & Acknowledgements
-
--   **Author**: David Dunn
--   **Initial Scaffolding/UI Components**: Created with the help of [v0.dev](https://v0.dev) and [shadcn/ui](https://ui.shadcn.com/).
+[David Dunn](https://linkedin.com/in/mrdaviddunn) · [github.com/algorhythmic](https://github.com/algorhythmic) · davidalexanderdunn@gmail.com

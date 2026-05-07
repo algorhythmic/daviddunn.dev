@@ -1,51 +1,50 @@
-# CLAUDE.md — Project Context for daviddunn.tech
+# CLAUDE.md — Project Context for daviddunn.dev
 
 ## Project Overview
 
-Personal portfolio website for David Alexander Dunn (github.com/algorhythmic), hosted at **daviddunn.dev** (recently changed TLD from .tech to .dev). Built with Next.js 15, React 19, TypeScript, Tailwind CSS, and shadcn/ui. Uses a **neobrutalist** design system (thick borders, hard box shadows, bold fills, all-caps headings, vivid accent colors).
+Personal portfolio site for David Alexander Dunn (github.com/algorhythmic), hosted at **daviddunn.dev** (formerly .tech). Built with Next.js 15, React 19, TypeScript, Tailwind CSS, and shadcn/ui. Uses a **neobrutalist** design system (thick borders, hard box shadows, bold fills, all-caps headings, vivid accent colors) layered over an animated grid background.
 
-## Strategic Direction
+Public-facing title: **"AI Engineer"** (positioning was repositioned from generic "Data Engineering" to AI/LLM/MCP focus).
 
-The site is being repositioned from a generic "data engineering" portfolio to a **"full-stack AI developer"** portfolio. The key changes:
+## Site Structure (current)
 
-1. **Replaced 9 fictional projects with 3 real case studies** based on actual repos and shipped products
-2. **Case study format** instead of project cards — each study has: problem, solution, role, architecture, quantified highlights, tech stack, and links
-3. **Navigation updated**: "Projects" → "Case Studies", logo ".TECH" → ".DEV"
-4. **Content must be authentic** — no fake data, no stock photos, no dead links
+`app/page.tsx` is a thin client component composing:
 
-## The Three Case Studies
+1. `Navigation` — fixed top nav, auto-hide on scroll-down (mobile), active-section highlighting, theme toggle.
+2. `Hero` — status pill, typewriter role ("AI Systems Builder", "Applied AI Engineer", "Data Automation Developer"), count-up stats, magnetic CTAs, entrance choreography, glow.
+3. `Portfolio` — three expandable case study cards (see below).
+4. `About` — profile card (photo, location, experience, social links), bio, technical skills, key achievements.
+5. `ResumeTerminal` — modal viewer with mac-style chrome and Homebrew-themed terminal that "types" `cat resume.md` then renders `public/resume.md` via `react-markdown`. Triggered from both Hero and About.
 
-### Case Study 1: Prediction Market Intelligence Platform
+`AnimatedBackground` (`components/hero-background.tsx`) is the shared grid+dots+balls background used across Hero and About sections, with a `boost` variant for stronger glow.
+
+## The Three Case Studies (`lib/portfolio-data.ts`)
+
+### 1. Prediction Market Intelligence Platform
 - **Repos**: projectnexus, marketfinder_ETL, arbytron, marketfinder
-- **What it is**: End-to-end system spanning ingestion → anomaly detection → LLM analysis → autonomous execution
-- **ProjectNexus**: Real-time WebSocket streaming from Kalshi, sliding-window anomaly detection (5/15/60/1440 min), Claude-powered narrative generation, LLM topic clustering, 158 tests across 17 modules, Fly.io deployment
-- **MarketFinder ETL**: Multi-layer comparison engine reducing 161M potential cross-platform comparisons to ~1K LLM calls (99.99% cost reduction). Uses semantic bucketing → hierarchical filtering → ML scoring → LLM evaluation (OpenAI, Anthropic, Vertex AI)
-- **Arbytron**: Autonomous arbitrage execution bot with Kafka, PostgreSQL, Prometheus, configurable risk controls
-- **MarketFinder**: React/Convex frontend (now merged into Nexus monorepo). Dashboard, anomaly feeds, market comparison, trending topics
-- **Key tech**: Python, TypeScript, React, Convex, Claude API, OpenAI API, Vertex AI, WebSockets, Kafka, PostgreSQL, DuckDB, Airflow, Docker, Fly.io
+- End-to-end system: ingestion → anomaly detection → LLM analysis → autonomous execution.
+- ProjectNexus: real-time WebSocket streaming from Kalshi, sliding-window anomaly detection (5/15/60/1440 min), Claude-powered narratives, LLM topic clustering, 158 tests across 17 modules, Fly.io.
+- MarketFinder ETL: multi-layer comparison reducing 161M comparisons → ~1K LLM calls (99.99% cost reduction) via semantic bucketing → hierarchical filtering → ML scoring → LLM evaluation.
+- Arbytron: autonomous arbitrage execution bot with Kafka, PostgreSQL, Prometheus, configurable risk controls.
+- MarketFinder: React/Convex frontend (now merged into Nexus monorepo).
 
-### Case Study 2: happily.love
-- **What it is**: AI-powered matchmaking SaaS platform (proprietary, private repo)
-- **Live at**: https://happily.love
-- **Presentation approach**: Screenshots, architecture diagrams, and narrative — no code links (proprietary)
-- **Includes**: AI matching engine, user onboarding, admin dashboard, consumer frontend
-- **TODO**: Get actual tech stack details from David to replace placeholder technologies
+### 2. happily.love
+- Live AI-powered matchmaking SaaS (proprietary, private repo) — https://happily.love
+- Presented via narrative + screenshots (no code links).
+- **Tech list is still placeholders** (`React`, `TypeScript`, `Next.js`, `AI/LLM Integration`, `Authentication`, `Cloud Deployment`) — needs real stack details from David.
 
-### Case Study 3: MCP Server Ecosystem
-- **Repos**: steam-mcp (JS, 5 stars, 1 fork), steamstats-mcp (Python), context_fetch_mcp (TS + MongoDB)
-- **What it is**: Three Model Context Protocol servers giving AI models structured access to external services
-- **steam-mcp**: Node.js/TypeScript, wraps Steam Web API (9 tools: player stats, achievements, game schema, news, etc.)
-- **steamstats-mcp**: Same concept rebuilt in Python — demonstrates MCP pattern portability
-- **context_fetch_mcp**: MCP documentation knowledge base backed by MongoDB with text search, metadata aggregation, Zod validation, and MCP resource discovery
+### 3. MCP Server Ecosystem
+- **Repos**: steam-mcp (JS, 5★), steamstats-mcp (Python), context_fetch_mcp (TS + MongoDB)
+- Three Model Context Protocol servers giving AI models structured access to external services.
 
 ## Full Repo Inventory (github.com/algorhythmic — 19 repos)
 
 | Repo | Description | Language | Stars | Status |
 |------|-------------|----------|-------|--------|
-| projectnexus | Prediction market intelligence engine | Python | 5 | Active, 73 commits |
+| projectnexus | Prediction market intelligence engine | Python | 5 | Active |
 | marketfinder | Prediction Market Discovery Platform (archived, merged into Nexus) | TypeScript | — | Archived |
-| auctionpilot | WoW TBC auction house toolkit (Lua addon + Python analytics) | Lua/Python | — | Active, 13 commits |
-| daviddunn.tech | This portfolio site | TypeScript | — | Active |
+| auctionpilot | WoW TBC auction house toolkit (Lua addon + Python analytics) | Lua/Python | — | Active |
+| daviddunn.dev | This portfolio site | TypeScript | — | Active |
 | marketfinder_ETL | Multi-layer arbitrage detection pipeline | TypeScript | 2 | Active |
 | arbytron | Autonomous Arbitration Arbiter | Jupyter Notebook | — | Active |
 | obsidiservicord | (private) | — | — | Private |
@@ -55,101 +54,54 @@ The site is being repositioned from a generic "data engineering" portfolio to a 
 | steam-mcp | MCP Server for Steam (JavaScript) | JavaScript | 5 | Active |
 | stEvalViz | Streamlit Prediction Dashboard | Python | 1 | Older |
 | registrarSearch | (private) | — | — | Private |
-| stockbot | Jupyter Notebook + R (bare README) | Jupyter Notebook | 2 | Minimal |
+| stockbot | Jupyter Notebook + R | Jupyter Notebook | 2 | Minimal |
 | py_projects | Python notebook collection | Jupyter Notebook | — | Older |
 | r_projects | R notebook collection | HTML | — | Older |
 | daviddunn-tech | Deprecated portfolio | TypeScript | — | Deprecated |
 | personalsite-deprecated | Old personal site | CSS | — | Deprecated |
 | try_git | First repo | — | — | 2013 |
 
-## Known Issues (from site review)
+> Note: GitHub repo for this site is still named `daviddunn.tech` — the live site URL has moved to `daviddunn.dev` (see commit `d809e72`), but the repo rename is pending.
 
-### Critical — FIXED
-- ~~**About bio is entirely satirical**~~ — Rewritten with genuine career narrative
-- ~~**"DOWNLOAD RESUME" button has no handler**~~ — Now links to LinkedIn (interim; real PDF still needed)
-- ~~**Photo gallery uses Unsplash stock images**~~ — Removed from site entirely
-- **Dashboard shows random fake data** — `Math.random()` generates all KPIs, but now labeled as "interactive demo" (acceptable)
-- ~~**Location says "San Francisco, CA"**~~ — Fixed to "Santa Clara, CA"
+## Status — Done
 
-### SEO / Technical — PARTIALLY FIXED
-- **Page is still `"use client"`** — metadata added to layout.tsx (SSR for meta tags works), but full SSR requires moving ThemeProvider to layout
-- ~~**Metadata is generic**~~ — Proper title, description, Open Graph, and Twitter cards added
-- ~~**Artificial 1.5s loading delay**~~ — Removed
+- Rebrand to "AI Engineer" positioning, three real case studies replacing 9 fictional projects.
+- Domain switched from .tech → .dev (`d809e72`).
+- About bio rewritten with genuine career narrative; Santa Clara location; "6+ Years Experience".
+- Resume system: replaced non-functional download button with `ResumeTerminal` modal that renders `public/resume.md`. Trigger lives in both Hero and About via `onOpenResume` prop drilled from `app/page.tsx`.
+- Profile pic (`public/dd-profile.png`) replacing placeholder; Instagram social link added.
+- Animated background system (grid + traversing dots + glowing balls) replacing the random-data dashboard. Extends to all sections, with a `boost` variant. Multiple polish passes for mobile (svh, JS-captured height, scroll-resize fixes for iOS address bar).
+- Hero overhaul: status pill, typewriter role cycler, count-up stats, magnetic CTAs, glow, entrance choreography. Hero gate animations moved into `globals.css` to avoid FOUC (`35ac5a9`); client-only mount gates removed (`2e2be9e`).
+- Mobile nav: compact, auto-hide on scroll-down + reveal on scroll-up.
+- Theme: defaults to system color scheme when no saved preference (`2e02068`); inline init script in `<head>` to prevent flash.
+- Section text-outline utility for legibility over animated backgrounds; refreshed About + Case Studies background colors; translucent case study cards with anchor IDs.
+- SEO metadata: proper title, description, Open Graph, Twitter card in `app/layout.tsx`.
+- ThemeProvider moved to `app/layout.tsx` (now from `@/contexts/theme-context`). `app/page.tsx` is still `"use client"` because it owns `resumeOpen` state — full server-component conversion would require lifting that state or using URL state.
+- React Server Components CVE patched (`dcfb697`).
 
-### Design / UX — REMAINING
-- **No footer, no copyright**
-- **No accessibility fundamentals** — no skip-to-content, no ARIA labels
-- **Massive Tailwind class duplication** — the neo shadow/border pattern is copy-pasted dozens of times, should be extracted to shared utilities
+## Status — Open TODOs
 
-## Files Changed So Far
-
-### `lib/portfolio-data.ts` — REPLACED
-- Old: 9 fictional project objects with dead links
-- New: 3 `CaseStudy` objects with full problem/solution/role/architecture/highlights/tech/links
-- Removed unused backward-compatible `projects` export (dead code)
-
-### `components/portfolio.tsx` — REPLACED
-- Old: Project card grid with category filter
-- New: Expandable case study cards. Collapsed view shows header band, hook, 4 metric cards, tech badges, links. Expanded view adds Problem, Solution, Architecture (terminal-style), and Role sections
-
-### `components/navigation.tsx` — MODIFIED
-- "Projects" → "Case Studies" in nav label
-- ".TECH" → ".DEV" in logo
-- Removed "Gallery" nav item (stock photo gallery removed from site)
-
-### `components/hero.tsx` — MODIFIED
-- Roles: "Data Engineer / Real-time Analytics / Full-Stack Development" → "AI Developer / Full-Stack Engineer / LLM & MCP Systems"
-- Badge chips: "Big Data / Analytics / Full-Stack" → "AI / LLM / Full-Stack / MCP Servers"
-- Icons: Database/BarChart3/Code → Cpu/Code/Plug
-- Tagline rewritten to AI-focused messaging
-
-### `components/about.tsx` — REWRITTEN
-- Removed entirely satirical bio ("University of Mars", "data pipelines for dinosaurs"), replaced with genuine career narrative
-- Title: "Senior Data & Analytics Engineer" → "Full-Stack AI Developer"
-- Location: "San Francisco, CA" → "Santa Clara, CA"
-- Skills list updated: removed generic data engineering tools, added Claude API, OpenAI API, Vertex AI, MCP SDK, Convex, etc.
-- Achievements: replaced fake metrics with real accomplishments from case studies
-- Resume button: replaced non-functional `<button>` with `<a>` linking to LinkedIn (interim until PDF resume is added)
-- Removed unused `Download` import, added `ExternalLink`
-
-### `components/dashboard.tsx` — MODIFIED
-- Subtitle changed to honestly label as "Interactive data visualization demo — built with Recharts and randomized sample data"
-
-### `app/layout.tsx` — MODIFIED
-- Title: "David's Website" → "David Dunn | Full-Stack AI Developer"
-- Description: "Welcome to my website!" → proper SEO description
-- Added Open Graph and Twitter card metadata
-
-### `app/page.tsx` — MODIFIED
-- Removed artificial 1.5s loading delay (`setTimeout`)
-- Removed `LoadingSpinner` import and `isLoading` state
-- Removed `PhotoGallery` import and component (stock photo gallery removed)
-- Kept `mounted` check for hydration mismatch prevention (instant, no delay)
-
-## Still TODO
-
-- [ ] Add resume PDF and wire download button (currently links to LinkedIn)
-- [ ] Add footer with copyright and social links
-- [ ] Get happily.love actual tech stack and update case study 2
-- [ ] Add screenshots/architecture diagrams to case studies
-- [ ] Consider adding `registrarSearch` as a case study if it becomes public
-- [ ] Extract repeated Tailwind neo-brutal patterns into shared utilities or @apply
-- [ ] Update GitHub profile README to match new positioning
-- [ ] Update experience from "3+ Years" if outdated
-- [ ] Move ThemeProvider to layout.tsx and convert page.tsx to server component for true SSR
-- [ ] Add sitemap.xml
-- [ ] Delete unused `components/photo-gallery.tsx` and `components/loading-spinner.tsx` (no longer imported)
-- [ ] Rename GitHub repo from `daviddunn.tech` to `daviddunn.dev`
+- [ ] Resume PDF — currently shipped as `public/resume.md` rendered via terminal modal. Decide whether to keep markdown-only or add a downloadable PDF.
+- [ ] Accessibility fundamentals: skip-to-content link, ARIA labels on interactive controls, focus-visible styling audit.
+- [ ] happily.love case study — replace placeholder tech list with real stack from David.
+- [ ] Add screenshots / architecture diagrams to case studies.
+- [ ] Consider adding `registrarSearch` as a case study if it becomes public.
+- [ ] Extract repeated neo-brutal Tailwind patterns (border + shadow + hover translate combo is duplicated dozens of times) into shared utilities or `@apply`.
+- [ ] Update GitHub profile README to match new positioning.
+- [ ] `app/sitemap.ts` not present — add one.
+- [ ] Rename GitHub repo from `daviddunn.tech` to `daviddunn.dev`.
+- [ ] Consider lifting `resumeOpen` state out of `app/page.tsx` so the page can be a server component.
 
 ## Design System Reference
 
-- **Aesthetic**: Neobrutalism — thick black borders (4px), hard box shadows (8-16px offset), vivid fills, all-caps headings, font-black weight
-- **Colors**: neo-blue-500 (#3b82f6) primary, neo-yellow-light (#fbbf24), neo-pink-light (#ec4899), neo-green-light (#10b981), neo-red-light (#ef4444), neo-cyan-light (#06b6d4), neo-purple-light (#8b5cf6)
-- **Dark mode**: Implemented via class strategy, slate backgrounds, neo-blue accent borders, glow effects
-- **Shadow pattern**: `border-4 border-black dark:border-neo-blue-500 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]`
-- **Interactive pattern**: hover reduces shadow + translates element, active removes shadow entirely
-- **Font**: Inter (but should be upgraded per frontend-design best practices)
-- **Components**: shadcn/ui primitives with Radix UI, Recharts for dashboard, Lucide icons
+- **Aesthetic**: Neobrutalism — thick borders (2px mobile / 4px desktop), hard box shadows (4–8px offset), vivid fills, all-caps headings, `font-black` weight.
+- **Colors**: `neo-blue-500` (#3b82f6) primary, `neo-yellow-light` (#fbbf24), `neo-pink-light` (#ec4899), `neo-green-light` (#10b981), `neo-red-light` (#ef4444), `neo-cyan-light` (#06b6d4), `neo-purple-light` (#8b5cf6).
+- **Dark mode**: class strategy via `ThemeProvider` (`contexts/theme-context.tsx`); slate backgrounds, `neo-blue` accent borders, glow effects.
+- **Shadow pattern**: `border-4 border-black dark:border-neo-blue-500 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]`.
+- **Interactive pattern**: hover reduces shadow + translates element; active removes shadow entirely.
+- **Background**: shared `AnimatedBackground` component — animated grid lines with traversing dots and glowing balls; `boost` prop for stronger glow.
+- **Font**: Inter.
+- **Components**: shadcn/ui primitives with Radix UI; Lucide icons; `react-markdown` + `remark-gfm` for resume rendering.
 
 ## Developer Info
 
@@ -157,8 +109,9 @@ The site is being repositioned from a generic "data engineering" portfolio to a 
 - **GitHub**: github.com/algorhythmic
 - **LinkedIn**: linkedin.com/in/mrdaviddunn
 - **X/Twitter**: @MrDavidDunn
+- **Instagram**: instagram.com/mrdaviddunn
 - **Email**: davidalexanderdunn@gmail.com
 - **Location**: Santa Clara, CA
 - **Domain**: daviddunn.dev
-- **Deployed via**: Vercel (assumed from Next.js setup)
-- **Package manager**: pnpm (fallback: npm with --legacy-peer-deps)
+- **Deployed via**: Vercel
+- **Package manager**: pnpm (fallback: npm with `--legacy-peer-deps`)
