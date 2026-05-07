@@ -9,6 +9,7 @@ export function Navigation() {
   const [activeSection, setActiveSection] = useState("hero")
   const [hidden, setHidden] = useState(false)
   const lastScrollYRef = useRef(0)
+  const mountTimeRef = useRef(0)
 
   const navItems = [
     { id: "hero", label: "Home" },
@@ -17,6 +18,8 @@ export function Navigation() {
   ]
 
   useEffect(() => {
+    mountTimeRef.current = Date.now()
+
     const handleScroll = () => {
       const y = window.scrollY
 
@@ -31,7 +34,15 @@ export function Navigation() {
         }
       }
 
-      // Hide-on-scroll-down / show-on-scroll-up (mobile only via CSS)
+      // Grace period after mount: keep nav visible during programmatic scroll
+      // (browser auto-scroll to hash anchor + our hashchange-driven scrollIntoView).
+      if (Date.now() - mountTimeRef.current < 1500) {
+        setHidden(false)
+        lastScrollYRef.current = y
+        return
+      }
+
+      // Hide-on-scroll-down / show-on-scroll-up
       const last = lastScrollYRef.current
       const delta = y - last
       if (Math.abs(delta) >= 5) {
@@ -60,12 +71,12 @@ export function Navigation() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-slate-800 border-b-2 md:border-b-4 border-black dark:border-neo-blue-500 transition-transform duration-300 ease-out md:translate-y-0 ${
+      className={`fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-white to-blue-200 dark:bg-gradient-to-br dark:from-slate-700 dark:to-blue-950 border-b-2 md:border-b-4 border-black dark:border-neo-blue-500 transition-transform duration-300 ease-out ${
         hidden && !isOpen ? "-translate-y-full" : "translate-y-0"
       }`}
     >
       <div className="mx-auto px-2 sm:px-6 lg:px-10 xl:px-16">
-        <div className="flex justify-between items-center h-10 md:h-16">
+        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 h-10 md:h-16">
           <div className="font-black text-sm md:text-xl text-black dark:text-white">
             DAVID{" "}
             <button
@@ -77,35 +88,54 @@ export function Navigation() {
             .DEV
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4">
-            <div className="flex space-x-1">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`px-4 py-2 font-bold border-2 border-black dark:border-neo-blue-500 transition-all duration-150 ${
-                    activeSection === item.id
-                      ? "bg-neo-blue-500 text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-                      : "bg-white dark:bg-slate-800 text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] hover:bg-neo-blue-100 dark:hover:bg-neo-blue-500"
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
+          {/* Status pill — centered between logo and right-side controls */}
+          <div className="flex justify-center min-w-0">
+            <div className="inline-flex items-center gap-1 md:gap-1.5 rounded-full bg-neo-purple-light dark:bg-neo-purple-dark border md:border-2 border-black dark:border-neo-purple-light px-2.5 py-0.5 md:px-3.5 md:py-1 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] md:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+              <span className="relative flex w-2.5 h-2.5 md:w-3 md:h-3">
+                <span className="absolute inset-0 rounded-full bg-emerald-300 animate-status-ping" />
+                <span className="relative rounded-full w-full h-full bg-emerald-300" />
+              </span>
+              <span className="font-mono font-bold text-[9px] md:text-[11px] tracking-[0.1em] md:tracking-[0.12em] text-white leading-none">
+                BUILDING{" "}
+                <a href="#saga" className="saga-link">
+                  SAGA
+                </a>
+              </span>
             </div>
-            <ThemeToggle />
           </div>
 
-          {/* Mobile Menu Button and Theme Toggle */}
-          <div className="md:hidden flex items-center space-x-1.5">
-            <ThemeToggle />
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-1.5 bg-neo-blue-500 border-2 border-black dark:border-neo-blue-500 font-bold text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none transition-all duration-150"
-            >
-              {isOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
+          {/* Right side: desktop nav + theme toggle, OR mobile menu + theme toggle */}
+          <div className="flex items-center justify-end">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
+              <div className="flex space-x-1">
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`px-4 py-2 font-bold border-2 border-black dark:border-neo-blue-500 transition-all duration-150 ${
+                      activeSection === item.id
+                        ? "bg-neo-blue-500 text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                        : "bg-white dark:bg-slate-800 text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] hover:bg-neo-blue-100 dark:hover:bg-neo-blue-500"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+              <ThemeToggle />
+            </div>
+
+            {/* Mobile Menu Button and Theme Toggle */}
+            <div className="md:hidden flex items-center space-x-1.5">
+              <ThemeToggle />
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-1.5 bg-neo-blue-500 border-2 border-black dark:border-black font-bold text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none transition-all duration-150"
+              >
+                {isOpen ? <X size={18} /> : <Menu size={18} />}
+              </button>
+            </div>
           </div>
         </div>
 

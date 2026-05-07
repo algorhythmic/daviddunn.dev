@@ -106,7 +106,7 @@ export function ResumeTerminal({ open, onClose }: Props) {
 
       {/* Window */}
       <div
-        className="relative w-full max-w-3xl h-[80vh] md:h-[78vh] flex flex-col rounded-xl overflow-hidden border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:border-neo-blue-500 animate-[termPop_320ms_cubic-bezier(0.2,0.9,0.3,1.2)_both]"
+        className="relative w-full max-w-3xl h-[80vh] md:h-[78vh] flex flex-col rounded-lg overflow-hidden border border-zinc-600 shadow-[0_20px_60px_rgba(0,0,0,0.6)] animate-[termPop_320ms_cubic-bezier(0.2,0.9,0.3,1.2)_both]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Title bar (macOS style) */}
@@ -141,7 +141,7 @@ export function ResumeTerminal({ open, onClose }: Props) {
               href="/resume.md"
               download="david-dunn-resume.md"
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1 text-[10px] md:text-xs font-mono text-zinc-300 hover:text-emerald-300 transition"
+              className="flex items-center gap-1 text-[10px] md:text-xs font-mono text-zinc-300 hover:text-[#28ff28] transition"
               aria-label="Download resume markdown"
             >
               <Download size={12} />
@@ -153,28 +153,28 @@ export function ResumeTerminal({ open, onClose }: Props) {
         {/* Terminal body */}
         <div
           ref={scrollRef}
-          className="flex-1 overflow-y-auto bg-black/85 backdrop-blur-md font-mono text-[12px] md:text-[13px] leading-relaxed text-emerald-400 p-4 md:p-5 selection:bg-emerald-400/30 selection:text-emerald-100"
+          className="resume-scroll flex-1 overflow-y-auto bg-black/85 backdrop-blur-md font-mono text-[12px] md:text-[13px] leading-relaxed text-[#28ff28] p-4 md:p-5 selection:bg-[#28ff28]/30 selection:text-black"
           style={{
-            textShadow: "0 0 8px rgba(16, 185, 129, 0.35)",
+            textShadow: "0 0 8px rgba(40, 255, 40, 0.45)",
           }}
         >
           {/* Boot line */}
-          <div className="text-emerald-500/70 mb-1">
+          <div className="text-[#28ff28]/70 mb-1">
             Last login: {new Date().toUTCString()} on ttys000
           </div>
 
           {/* Prompt + typed command */}
           <div className="flex flex-wrap">
-            <span className="text-emerald-300">{PROMPT}</span>
+            <span className="text-[#28ff28]">{PROMPT}</span>
             <span className="ml-1">{typed}</span>
             {phase === "typing" && (
-              <span className="inline-block w-[7px] h-[1em] bg-emerald-400 ml-0.5 align-middle animate-cursor-blink" />
+              <span className="inline-block w-[7px] h-[1em] bg-[#28ff28] ml-0.5 align-middle animate-cursor-blink" />
             )}
           </div>
 
           {/* Loading state */}
           {phase === "loading" && (
-            <div className="mt-2 text-emerald-300/80">
+            <div className="mt-2 text-[#28ff28]/80">
               <LoadingDots />
             </div>
           )}
@@ -197,8 +197,8 @@ export function ResumeTerminal({ open, onClose }: Props) {
 
               {/* Trailing prompt */}
               <div className="mt-6 flex">
-                <span className="text-emerald-300">{PROMPT}</span>
-                <span className="inline-block w-[7px] h-[1em] bg-emerald-400 ml-1 align-middle animate-cursor-blink" />
+                <span className="text-[#28ff28]">{PROMPT}</span>
+                <span className="inline-block w-[7px] h-[1em] bg-[#28ff28] ml-1 align-middle animate-cursor-blink" />
               </div>
             </div>
           )}
@@ -221,7 +221,7 @@ export function ResumeTerminal({ open, onClose }: Props) {
         .resume-md h1,
         .resume-md h2,
         .resume-md h3 {
-          color: #fef3c7; /* warm cream for headings */
+          color: #ffffff; /* warm cream for headings */
           text-transform: uppercase;
           letter-spacing: 0.04em;
           font-weight: 700;
@@ -232,31 +232,52 @@ export function ResumeTerminal({ open, onClose }: Props) {
         .resume-md h2 { font-size: 1em; }
         .resume-md h3 { font-size: 0.95em; }
         .resume-md p { margin: 0.4em 0; }
-        .resume-md strong { color: #fef3c7; font-weight: 700; }
+        .resume-md strong { color: #ffffff; font-weight: 700; }
         .resume-md em { color: #fde68a; font-style: italic; }
         .resume-md a {
-          color: #67e8f9;
+          color: #2828ff;
           text-decoration: underline;
-          text-decoration-color: rgba(103, 232, 249, 0.45);
+          text-decoration-color: rgba(40, 40, 255, 0.55);
         }
-        .resume-md a:hover { color: #a5f3fc; }
+        .resume-md a:hover { color: #5c5cff; }
         .resume-md ul { list-style: none; padding-left: 1.1em; margin: 0.3em 0; }
         .resume-md li { position: relative; margin: 0.2em 0; }
         .resume-md li::before {
           content: "▸";
           position: absolute;
           left: -1.1em;
-          color: #34d399;
+          color: #28ff28;
         }
         .resume-md hr {
           border: none;
-          border-top: 1px dashed rgba(52, 211, 153, 0.4);
+          border-top: 1px dashed rgba(40, 255, 40, 0.4);
           margin: 0.8em 0;
         }
         .resume-md code {
-          background: rgba(16, 185, 129, 0.12);
+          background: rgba(40, 255, 40, 0.12);
           padding: 0.05em 0.3em;
           border-radius: 2px;
+        }
+
+        /* Grey scrollbar */
+        .resume-scroll {
+          scrollbar-color: #52525b transparent;
+          scrollbar-width: thin;
+        }
+        .resume-scroll::-webkit-scrollbar {
+          width: 10px;
+        }
+        .resume-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .resume-scroll::-webkit-scrollbar-thumb {
+          background-color: #52525b;
+          border-radius: 5px;
+          border: 2px solid transparent;
+          background-clip: content-box;
+        }
+        .resume-scroll::-webkit-scrollbar-thumb:hover {
+          background-color: #71717a;
         }
       `}</style>
     </div>

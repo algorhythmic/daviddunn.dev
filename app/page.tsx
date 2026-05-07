@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Hero } from "@/components/hero"
 import { Portfolio } from "@/components/portfolio"
 import { About } from "@/components/about"
+import { Footer } from "@/components/footer"
 import { Navigation } from "@/components/navigation"
 import { ResumeTerminal } from "@/components/resume-terminal"
 
@@ -19,6 +20,7 @@ export default function Home() {
         <Portfolio />
         <About onOpenResume={openResume} />
       </main>
+      <Footer />
       <ResumeTerminal open={resumeOpen} onClose={() => setResumeOpen(false)} />
     </div>
   )

@@ -24,8 +24,8 @@ function GridDots({ width, height, boost = false }: { width: number; height: num
 
   const ballGlow = (color: string) =>
     boost
-      ? `0 0 10px ${color}, 0 0 22px ${color}, 0 0 44px ${color}, 0 0 70px ${color}99`
-      : `0 0 8px ${color}, 0 0 18px ${color}, 0 0 36px ${color}aa`
+      ? `0 0 8px ${color}, 0 0 16px ${color}, 0 0 26px ${color}aa`
+      : `0 0 6px ${color}, 0 0 12px ${color}cc`
 
   return (
     <>
