@@ -38,7 +38,7 @@ export interface CaseStudy {
   darkAccentColor: string
   problem: string
   solution: string
-  role: string
+  impact: string
   architectureDescription: string
   architecture?: Architecture
   highlights: {
@@ -60,16 +60,16 @@ export const caseStudies: CaseStudy[] = [
     slug: "saga",
     title: "Saga",
     subtitle: "Multi-agent orchestration system",
-    hook: "A personal multi-agent orchestration system that runs parallel Claude Code sessions in sandboxed containers — with critic gates, MQTT event streams, and a recursive PR loop back to its own repo.",
+    hook: "I send it a coding task from my phone. It splits the work across several Claude Code agents in sandboxed containers, reviews each plan before any code runs, and opens pull requests back to my repos — I stay the one who hits merge.",
     icon: "📜",
     accentColor: "bg-gradient-to-br from-violet-600 to-pink-200",
     darkAccentColor: "dark:from-violet-800 dark:to-pink-700",
     problem:
-      "Two ceilings make parallel coding work hard. The human ceiling: one operator can only context-switch across so many long-running streams before quality starts to slip. The agent ceiling: long-running Claude Code sessions drift as their context windows accumulate noise over time ('context rot'), so the agents themselves need time-gating to stay sharp. Existing frameworks address neither well by removing the human entirely (turning supervision into auditing-after-the-fact) and rarely time-bound their loops. The need is for the opposite shape: a small number of supervised, time-bounded Claude Code sessions, each on a different stream of the operator's own work, all visible and pausable without losing the loop on any one.",
+      "Running one AI coding agent is easy. Running several at once isn't — one person can only watch so many long sessions before quality slips, and the sessions themselves drift as their context fills with noise. I wanted several supervised agents working in parallel without losing track of any of them.",
     solution:
-      "Saga is a personal orchestrator running on a self-hosted Proxmox cluster. The operator hands it work via Telegram. Odin (Opus) decomposes it into independent or competitive workstreams; Mimir (Sonnet) critiques every plan before it executes. Heimdall — a Python daemon outside the container plane, the security boundary — launches N sandboxed dvergr workers, each running Anthropic's `/ralph-loop` inside a Trail of Bits hardened devcontainer (built from source, pinned by git commit — no opaque public images). Workers publish status, journals, and convergence signals over MQTT. Bragi compiles outputs into a git-versioned Obsidian vault. Eir reads everything and authors fix-PRs back to Saga's own repo, gated by Mimir's seven-checkbox patch review. Every container inherits Claude Max auth from a single Docker volume populated once by interactive `/login` — there is no API key in the picture.",
-    role:
-      "Sole architect, developer, and operator. Designed the seven Norse-named agent roles and their coordination protocols, wrote every persona prompt, hook, sidecar, and systemd unit, and provisioned the Proxmox + LXC homelab the system runs on. Authored the Phase 3 retrospective that surfaced the 'mechanical enforcement compounds, cultural enforcement decays' principle now baked into the contract-handoff layer.",
+      "Saga runs on my own home server. I hand it a task over Telegram; it breaks the work into independent streams, has a second model critique each plan before any code runs, then launches several agents — each isolated in its own hardened container with no API keys and no access to the host. They report progress over a live event stream, and a final agent drafts each fix as a pull request for me to review and merge.",
+    impact:
+      "Lets one person run several coding agents at once. I kick off work from my phone and come back to reviewed pull requests — parallel progress without sitting at the keyboard for each session.",
     architectureDescription:
       "Operator (Telegram) → Odin (Opus) plans → Mimir (Sonnet) critiques → Heimdall launches N Dvergr workers in Docker → MQTT events stream → Bragi compiles journal to git-versioned vault → Eir authors fix-PRs back to Saga's own repo",
     architecture: {
@@ -110,24 +110,24 @@ export const caseStudies: CaseStudy[] = [
     },
     highlights: [
       {
-        metric: "Critic-Actor Loop",
+        metric: "Phone → PR",
         description:
-          "Plans go through Mimir before workers launch; Eir's fix-PRs back into Saga's own repo go through Mimir before merge — same critic, two surfaces",
+          "Send a task from Telegram, get reviewed pull requests back. The loop runs unattended until merge.",
       },
       {
-        metric: "Hardened Sandbox",
+        metric: "Every plan reviewed",
         description:
-          "Each dvergr runs as a `/ralph-loop` inside a Trail of Bits hardened devcontainer, built from source and pinned by git commit — autonomy bounded by the sandbox, not by trust",
+          "A second model critiques each plan before code runs, and each fix before it merges.",
       },
       {
-        metric: "Human Operator Commits",
+        metric: "Sandboxed",
         description:
-          "The system proposes; the human operator commits. Every plan launch, Eir patch, and merge terminates at one person pressing one button — autonomy stops at the gate",
+          "Every agent runs in its own hardened container — no API keys, no access to the host machine.",
       },
       {
-        metric: "7 Roles",
+        metric: "I hit merge",
         description:
-          "Norse taxonomy by intent: Odin plans, Mimir critiques, Dvergar work, Eir patches, Bragi narrates, Heimdall guards, Ratatoskr ferries",
+          "The system proposes; I approve. Every launch and merge stops at one button.",
       },
     ],
     technologies: [
@@ -154,15 +154,15 @@ export const caseStudies: CaseStudy[] = [
     slug: "nexus",
     title: "Nexus",
     subtitle: "Prediction market intelligence platform",
-    hook: "An end-to-end system that ingests streaming prediction market data, detects anomalies, identifies cross-platform arbitrage using ML and LLMs, and surfaces structured intelligence for decision-making.",
+    hook: "A system that watches prediction markets on Kalshi and Polymarket in real time, flags unusual price moves, finds the same bet priced differently across platforms, and can place the trade to capture the gap.",
     icon: "📊",
     accentColor: "bg-gradient-to-br from-blue-600 to-sky-200",
     darkAccentColor: "dark:from-blue-800 dark:to-sky-700",
     problem:
-      "Prediction markets generate massive volumes of real-time price and volume data across multiple platforms (Kalshi, Polymarket). Identifying meaningful signals — anomalous price movements, correlated shifts across related markets, and cross-platform arbitrage opportunities — requires processing millions of data points with sub-minute latency. No existing tool combined real-time ingestion, statistical anomaly detection, LLM-powered semantic analysis, and autonomous execution in a single platform.",
+      "Prediction markets move fast and price the same events differently across platforms. Catching a gap worth trading means comparing millions of market pairs in near real time — too much to do by hand, and too expensive to point an LLM at every pair.",
     solution:
-      "I built a multi-repo platform spanning the full pipeline from data ingestion to autonomous trade execution. ProjectNexus handles real-time WebSocket streaming, sliding-window anomaly detection, and Claude-powered narrative generation that explains why markets moved. MarketFinder ETL is a multi-layer comparison engine that reduces 161M+ potential cross-platform comparisons to ~1K LLM calls using semantic bucketing, hierarchical filtering, and ML scoring — a 99.99% cost reduction. Arbytron is the autonomous execution layer with Kafka-based message brokering, position tracking, and configurable risk controls. The React/Convex frontend provides a live dashboard with anomaly feeds, market comparison tools, and trending topic views.",
-    role: "Sole architect and developer — designed the system architecture, built all backend services, trained the ML scoring model, integrated three LLM providers, built the frontend, and deployed to Fly.io.",
+      "I built the full pipeline. One service streams live prices and flags abnormal moves. A matching engine narrows 161M+ possible cross-platform pairs down to ~1,000 worth an LLM's attention — a 99.99% cost cut — by running cheap filters first and the LLM last. An execution bot places trades within risk limits, and a dashboard shows the live anomaly feed and open positions.",
+    impact: "Turns millions of raw market data points into a short list of tradeable price gaps — and can place the trade automatically within set risk limits, in near real time.",
     architectureDescription:
       "Ingestion (WebSocket streaming + REST polling) → Detection (sliding-window anomaly detection at 5/15/60/1440-min intervals) → Analysis (LLM topic clustering, cross-market correlation, narrative generation, multi-layer arbitrage comparison) → Execution (autonomous cross-platform arbitrage with Kafka and PostgreSQL)",
     architecture: {
@@ -197,22 +197,22 @@ export const caseStudies: CaseStudy[] = [
       {
         metric: "161M → 1K",
         description:
-          "Market comparisons reduced via semantic bucketing, hierarchical filtering, and ML scoring — 99.99% cost reduction",
+          "Cross-platform pairs filtered down before any LLM runs — 99.99% less cost.",
       },
       {
         metric: "158 Tests",
         description:
-          "Comprehensive test suite across 17 modules covering ingestion, anomaly detection, clustering, correlation, and API layers",
+          "Across ingestion, detection, clustering, and the API layer — 17 modules.",
       },
       {
         metric: "72h+",
         description:
-          "Continuous stable ingestion validated with 100K+ events, failure modes documented, formal decision gates passed",
+          "Continuous live ingestion, 100K+ events, no crash.",
       },
       {
-        metric: "3 LLM Providers",
+        metric: "3 LLMs",
         description:
-          "Anthropic Claude, OpenAI, and Google Vertex AI integrated for semantic matching, clustering, and narrative generation",
+          "Claude, OpenAI, and Vertex AI for matching, clustering, and analysis.",
       },
     ],
     technologies: [
@@ -232,10 +232,8 @@ export const caseStudies: CaseStudy[] = [
       "Fly.io",
     ],
     links: [
-      { label: "ProjectNexus", url: "https://github.com/algorhythmic/projectnexus", type: "github" },
-      { label: "MarketFinder ETL", url: "https://github.com/algorhythmic/marketfinder_ETL", type: "github" },
-      { label: "Arbytron", url: "https://github.com/algorhythmic/arbytron", type: "github" },
-      { label: "MarketFinder UI", url: "https://github.com/algorhythmic/marketfinder", type: "github" },
+      { label: "Live Site", url: "https://marketfinder.daviddunn.dev", type: "live" },
+      { label: "GitHub", url: "https://github.com/algorhythmic/projectnexus", type: "github" },
     ],
   },
   {
@@ -251,7 +249,7 @@ export const caseStudies: CaseStudy[] = [
       "Modern dating platforms rely on surface-level signals — photos, short bios, and swipe behavior — to match people. They optimize for engagement rather than compatibility. Users face decision fatigue from endless options, and matching algorithms treat people as inventory rather than individuals with complex preferences, values, and relationship goals.",
     solution:
       "I designed and built happily.love, a matchmaking service that uses AI to analyze compatibility at a deeper level than traditional swipe-based apps. The platform includes an intelligent matching engine, user onboarding flows that capture meaningful preference data, an admin dashboard for managing matches and monitoring platform health, and a consumer-facing interface designed around intentional connection rather than infinite scrolling.",
-    role: "Full-stack developer and technical co-founder — architecture design through deployment, including the AI matching pipeline, backend services, admin tooling, and user-facing frontend.",
+    impact: "A live product real people use to find partners — with a private matchmaker workflow behind it. Shipped and running at happily.love, not a portfolio demo.",
     architectureDescription:
       "Modern web frontend → Backend API (auth, profiles, matching logic) → AI compatibility engine → Admin dashboard for matchmaking operations and analytics",
     architecture: {
@@ -276,19 +274,19 @@ export const caseStudies: CaseStudy[] = [
     },
     highlights: [
       {
-        metric: "Full SaaS",
+        metric: "47 users",
         description:
-          "End-to-end consumer product: user auth, onboarding, profiles, matching, admin dashboard, and analytics",
+          "Real people onboarded onto the platform.",
       },
       {
         metric: "AI Matching",
         description:
-          "Intelligent compatibility engine that matches on values, goals, and behavioral signals — not just photos",
+          "Matches on values, goals, and behavior — not just photos.",
       },
       {
-        metric: "Admin Tooling",
+        metric: "21 matches",
         description:
-          "Internal dashboard for match management, user analytics, platform health monitoring, and operations",
+          "Matches made between members.",
       },
       {
         metric: "Live Product",
@@ -311,15 +309,15 @@ export const caseStudies: CaseStudy[] = [
     slug: "mcp",
     title: "MCP server ecosystem",
     subtitle: "Building the connective layer between AI models and external services",
-    hook: "Three Model Context Protocol servers across JavaScript and Python — giving AI assistants structured access to gaming data, documentation, and more.",
+    hook: "Three small servers that let AI assistants like Claude pull real data themselves — Steam game stats and a searchable docs library — instead of guessing.",
     icon: "🔌",
     accentColor: "bg-gradient-to-br from-emerald-600 to-lime-200",
     darkAccentColor: "dark:from-emerald-800 dark:to-lime-800",
     problem:
-      "AI assistants are powerful reasoners but have limited ability to interact with external services and data sources. The Model Context Protocol (MCP) is the emerging standard for giving AI models structured tool access, but the ecosystem is still young. Real-world API integrations require handling authentication, rate limiting, error recovery, and structured data transformation — challenges that get harder when the consumer is a language model, not a human.",
+      "AI assistants can reason but can't reach live data on their own. The Model Context Protocol fixes that, but each integration still has to handle auth, rate limits, and data shaped for a model to use rather than a person.",
     solution:
-      "I built three MCP servers that demonstrate different aspects of the protocol. The Steam MCP servers (built in both JavaScript and Python) expose the full Steam Web API to AI clients — player stats, achievements, store details, and news. The context_fetch_mcp server is a documentation knowledge base backed by MongoDB, enabling AI clients to fetch, store, search, and aggregate technical documentation. Together they range from API proxy (Steam) to knowledge management (context_fetch).",
-    role: "Sole developer on all three servers. Built the JavaScript Steam server first, then rebuilt it in Python to demonstrate MCP pattern portability. Designed the context_fetch_mcp architecture including MongoDB text indexing and Zod schema validation.",
+      "I built three. Two expose the full Steam API — player stats, achievements, store details, news — one in JavaScript and one in Python. The third is a MongoDB-backed docs library an assistant can search and add to. The JavaScript one picked up 5 GitHub stars from other developers building on it.",
+    impact: "Any MCP-capable assistant — Claude, Cursor, ChatGPT — gets clean access to Steam data and a searchable docs library with no custom glue code. Other developers have starred and forked them.",
     architectureDescription:
       "Each server implements MCP via STDIO transport. Steam servers wrap the Steam Web API with structured tool definitions and response normalization. context_fetch_mcp adds a MongoDB persistence layer with text search, metadata aggregation, and schema discovery via MCP resources.",
     architecture: {
@@ -344,22 +342,22 @@ export const caseStudies: CaseStudy[] = [
       {
         metric: "5 ★",
         description:
-          "steam-mcp has real community traction — GitHub stars and forks from other developers building on it",
-      },
-      {
-        metric: "2 Languages",
-        description:
-          "Steam MCP built in both JavaScript (Node.js + TypeScript) and Python, demonstrating protocol portability",
-      },
-      {
-        metric: "3 Servers",
-        description:
-          "Three distinct MCP servers: steam-mcp (JS), steamstats-mcp (Python), and context_fetch_mcp (TS + MongoDB)",
+          "steam-mcp picked up GitHub stars and forks from other developers.",
       },
       {
         metric: "9+ Tools",
         description:
-          "Steam servers expose 9 tools covering player data, game stats, store details, news, and global achievements",
+          "Player data, game stats, store details, news, and achievements.",
+      },
+      {
+        metric: "3 Servers",
+        description:
+          "Steam (JS), Steam (Python), and a MongoDB-backed docs library.",
+      },
+      {
+        metric: "2 Languages",
+        description:
+          "Same Steam server in JS and Python to prove the pattern is portable.",
       },
     ],
     technologies: [

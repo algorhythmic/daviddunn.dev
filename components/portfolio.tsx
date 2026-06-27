@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Github, ChevronDown, ChevronUp, Layers, Lightbulb, Wrench, User, Lock } from "lucide-react"
+import { ExternalLink, Github, ChevronDown, ChevronUp, Layers, Lightbulb, Wrench, TrendingUp, Lock } from "lucide-react"
 import { caseStudies, type CaseStudy } from "@/lib/portfolio-data"
 import { AnimatedBackground } from "@/components/hero-background"
 
@@ -149,6 +149,21 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
               </p>
             </div>
 
+            {/* Impact */}
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 bg-neo-purple-light dark:bg-neo-purple-dark border-2 border-black dark:border-neo-blue-500 flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <TrendingUp size={16} className="text-white" />
+                </div>
+                <h4 className="text-lg font-black text-foreground dark:text-white uppercase tracking-wide">
+                  Impact
+                </h4>
+              </div>
+              <p className="font-bold text-foreground dark:text-gray-200 leading-relaxed pl-10">
+                {study.impact}
+              </p>
+            </div>
+
             {/* Architecture */}
             <div>
               <div className="flex items-center gap-2 mb-3">
@@ -168,21 +183,6 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
                   </div>
                 )}
               </div>
-            </div>
-
-            {/* Role */}
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 bg-neo-purple-light dark:bg-neo-purple-dark border-2 border-black dark:border-neo-blue-500 flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                  <User size={16} className="text-white" />
-                </div>
-                <h4 className="text-lg font-black text-foreground dark:text-white uppercase tracking-wide">
-                  My Role
-                </h4>
-              </div>
-              <p className="font-bold text-foreground dark:text-gray-200 leading-relaxed pl-10">
-                {study.role}
-              </p>
             </div>
           </div>
         )}

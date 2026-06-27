@@ -121,10 +121,6 @@ export function About({ onOpenResume }: AboutProps) {
                   <p className="text-sm md:text-base font-bold text-muted-foreground mb-1 dark:text-gray-300">
                     Applied AI Engineer
                   </p>
-                  <p className="text-[11px] md:text-xs italic font-bold text-muted-foreground mb-3 md:mb-4 dark:text-gray-400">
-                    &ldquo;Keeping humans in the loop, for now.&rdquo;
-                  </p>
-
                   <div className="space-y-1 md:space-y-2 text-xs md:text-sm font-bold text-foreground dark:text-gray-200">
                     <div className="flex items-center justify-center">
                       <MapPin size={14} className="mr-1.5 md:mr-2 dark:text-neo-blue-400" />
@@ -160,9 +156,8 @@ export function About({ onOpenResume }: AboutProps) {
                 <h3 className="text-lg md:text-2xl font-black text-foreground mb-2 md:mb-4 dark:text-white">MY STORY</h3>
                 <div className="space-y-3 md:space-y-4 text-foreground dark:text-gray-200 font-bold leading-relaxed text-xs md:text-base">
                   <p>
-                    I build agentic systems that can plan, execute, review, and recover while keeping{" "}
-                    <span className="dark:text-neo-blue-300">humans in the loop</span>, mostly because we
-                    still have the passwords.
+                    I build AI systems that plan, execute, review, and fix their own work — with a
+                    person approving what actually ships.
                   </p>
                   <p>
                     I'm particularly interested in problems where AI is not the whole product, but{" "}
@@ -195,7 +190,7 @@ export function About({ onOpenResume }: AboutProps) {
                         Agent Orchestration
                       </h4>
                       <p className="font-bold text-foreground dark:text-gray-200 text-xs md:text-base">
-                        Built <strong className="dark:text-neo-blue-300">Saga</strong>, a multi-agent
+                        Built <a href="#saga" className="text-neo-blue-600 dark:text-neo-blue-300 font-black underline decoration-2 underline-offset-2 hover:decoration-4">Saga</a>, a multi-agent
                         orchestration system that coordinates parallel Claude Code workers in sandboxed
                         Docker containers — with critic gates, MQTT event streams, and a recursive PR
                         loop back to its own repo.
@@ -212,8 +207,8 @@ export function About({ onOpenResume }: AboutProps) {
                         Real-Time AI Intelligence
                       </h4>
                       <p className="font-bold text-foreground dark:text-gray-200 text-xs md:text-base">
-                        Built <strong className="dark:text-neo-blue-300">Nexus</strong> and{" "}
-                        <strong className="dark:text-neo-blue-300">marketfinder</strong>, combining
+                        Built <a href="#nexus" className="text-neo-blue-600 dark:text-neo-blue-300 font-black underline decoration-2 underline-offset-2 hover:decoration-4">Nexus</a> and{" "}
+                        <a href="#nexus" className="text-neo-blue-600 dark:text-neo-blue-300 font-black underline decoration-2 underline-offset-2 hover:decoration-4">marketfinder</a>, combining
                         streaming ingestion, anomaly detection, semantic market clustering, and
                         LLM-generated analysis.
                       </p>
@@ -229,7 +224,7 @@ export function About({ onOpenResume }: AboutProps) {
                         Shipped AI Product
                       </h4>
                       <p className="font-bold text-foreground dark:text-gray-200 text-xs md:text-base">
-                        Built <strong className="dark:text-neo-blue-300">happily.love</strong>, an
+                        Built <a href="#happily" className="text-neo-blue-600 dark:text-neo-blue-300 font-black underline decoration-2 underline-offset-2 hover:decoration-4">happily.love</a>, an
                         AI-powered matchmaking SaaS platform with guided onboarding, structured profile
                         modeling, and private matchmaker workflows.
                       </p>
