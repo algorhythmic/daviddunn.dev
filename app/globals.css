@@ -378,23 +378,23 @@ html {
    Disabled in dark mode where text is already white. */
 .section-text-outline {
   text-shadow:
-    -1px -1px 0 #fff,  0 -1px 0 #fff,  1px -1px 0 #fff,
-    -1px  0   0 #fff,                   1px  0   0 #fff,
-    -1px  1px 0 #fff,  0  1px 0 #fff,  1px  1px 0 #fff;
+    -1px -1px 0 #000,  0 -1px 0 #000,  1px -1px 0 #000,
+    -1px  0   0 #000,                   1px  0   0 #000,
+    -1px  1px 0 #000,  0  1px 0 #000,  1px  1px 0 #000;
 }
 @media (min-width: 768px) {
   .section-text-outline {
     text-shadow:
-      -1px -1px 0 #fff,  0 -1px 0 #fff,  1px -1px 0 #fff,
-      -1px  0   0 #fff,                   1px  0   0 #fff,
-      -1px  1px 0 #fff,  0  1px 0 #fff,  1px  1px 0 #fff;
+      -1px -1px 0 #000,  0 -1px 0 #000,  1px -1px 0 #000,
+      -1px  0   0 #000,                   1px  0   0 #000,
+      -1px  1px 0 #000,  0  1px 0 #000,  1px  1px 0 #000;
   }
 }
 .section-text-outline-thin {
   text-shadow:
-    -1px -1px 0 #fff,  0 -1px 0 #fff,  1px -1px 0 #fff,
-    -1px  0   0 #fff,                   1px  0   0 #fff,
-    -1px  1px 0 #fff,  0  1px 0 #fff,  1px  1px 0 #fff;
+    -1px -1px 0 #000,  0 -1px 0 #000,  1px -1px 0 #000,
+    -1px  0   0 #000,                   1px  0   0 #000,
+    -1px  1px 0 #000,  0  1px 0 #000,  1px  1px 0 #000;
 }
 .dark .section-text-outline {
   text-shadow:

@@ -95,8 +95,8 @@ export function About({ onOpenResume }: AboutProps) {
       <AnimatedBackground boost />
       <div className="relative z-10 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="text-center mb-6 md:mb-12">
-          <h2 className="section-text-outline text-2xl md:text-6xl font-black text-foreground mb-2 md:mb-4 dark:text-white">ABOUT ME</h2>
-          <p className="section-text-outline-thin text-xs md:text-xl font-bold text-foreground mb-4 md:mb-8 dark:text-gray-200">
+          <h2 className="section-text-outline text-2xl md:text-6xl font-black text-white mb-2 md:mb-4">ABOUT ME</h2>
+          <p className="section-text-outline-thin text-xs md:text-xl font-bold text-white mb-4 md:mb-8 dark:text-gray-200">
             Building intelligent systems from data pipelines to user interfaces
           </p>
         </div>
