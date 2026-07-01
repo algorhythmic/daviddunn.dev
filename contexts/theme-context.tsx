@@ -23,15 +23,39 @@ function readInitialTheme(): Theme {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(readInitialTheme)
 
+  // Keep the DOM class in sync with state. Note: we do NOT persist here — writing
+  // to localStorage on mount would lock in a preference the user never chose, so the
+  // site would stop following the OS setting after the first visit.
   useEffect(() => {
     const root = document.documentElement
     root.classList.remove("light", "dark")
     root.classList.add(theme)
-    localStorage.setItem("theme", theme)
   }, [theme])
 
+  // With no explicit preference saved, follow the OS light/dark setting live.
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const mq = window.matchMedia("(prefers-color-scheme: dark)")
+    const onChange = () => {
+      if (!localStorage.getItem("theme")) {
+        setTheme(mq.matches ? "dark" : "light")
+      }
+    }
+    mq.addEventListener("change", onChange)
+    return () => mq.removeEventListener("change", onChange)
+  }, [])
+
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"))
+    // Only an explicit toggle persists a preference.
+    setTheme((prevTheme) => {
+      const next = prevTheme === "light" ? "dark" : "light"
+      try {
+        localStorage.setItem("theme", next)
+      } catch {
+        /* ignore */
+      }
+      return next
+    })
   }
 
   return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>

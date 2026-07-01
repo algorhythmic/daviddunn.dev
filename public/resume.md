@@ -9,6 +9,28 @@
 
 Applied AI & Integration Engineer with 6+ years building data pipelines, BI platforms, automation workflows, and LLM-powered systems. Experienced connecting APIs, databases, dashboards, AI models, infrastructure, and human-in-the-loop workflows into production-ready tools for analytics, decision support, and operational automation. Recent work includes agent orchestration, real-time anomaly detection, AI-assisted onboarding, semantic clustering, and full-stack workflow platforms.
 
+**TECHNICAL SKILLS**
+
+**Applied AI & LLMs:** Claude, OpenAI, Vertex AI, AI agents, LLM workflows, semantic clustering, prompt engineering, MCP servers  
+**Integration & Automation:** API integration, workflow automation, Airflow, WebSockets, event-driven systems, Docker, Git, Linux  
+**Data Engineering:** Python, SQL, dbt, Kafka, Spark, DuckDB, PostgreSQL, SQLite, Snowflake, Redshift, BigQuery  
+**Analytics & ML:** anomaly detection, A/B testing, forecasting, statistical modeling, scikit-learn, statsmodels  
+**BI & Product:** Metabase, Looker, Tableau, Power BI, Streamlit, dashboard development, stakeholder requirements
+
+**TECHNICAL PROJECTS**
+
+[**Saga**](https://daviddunn.dev/projects/#saga) **\- Multi-Agent Orchestration System** | Docker · MQTT · Gitea · Claude Code · Telegram · Proxmox  
+• Built a multi-agent orchestration system on Docker/MQTT/Gitea that runs parallel Claude Code workers against Telegram-based spec intake, with human review gates and self-healing PR loops for long-running projects.  
+• Codified agent roles, message-passing protocols, and review artifacts into reusable deployment patterns for autonomous coding workflows in production.
+
+[**Nexus**](https://daviddunn.dev/projects/#nexus) **\- Real-Time Prediction Market Intelligence Engine** | Python · WebSockets · DuckDB · Claude · Convex  
+• Built real-time prediction market intelligence engine ingesting 100K+ events with WebSocket streaming, integrity validation, and async event-driven architecture.  
+• Developed Claude-powered semantic market clustering, sliding-window anomaly detection, and cross-market correlation; backed by an evaluation framework of 158 tests across 17 modules.
+
+[**marketfinder**](https://daviddunn.dev/projects/#marketfinder) **\- Live Dashboard for Nexus** | React · Vite · TypeScript · Convex · Tailwind  
+• Built the user-facing intelligence layer for Nexus, turning 10K+ live prediction markets into searchable dashboards, anomaly alerts, trend clusters, and comparison views.  
+• Shipped a responsive analytics interface using Convex live queries, TanStack React Table, severity filters, and mobile-first card layouts.
+
 **PROFESSIONAL EXPERIENCE**
 
 **Applied AI & Integration Engineer | Client Projects | Santa Clara, CA	10/2025 \- Present**  
@@ -29,28 +51,6 @@ Applied AI & Integration Engineer with 6+ years building data pipelines, BI plat
 
 **Business Intelligence Analyst | VR Comet | Seoul, South Korea	12/2018 \- 12/2019**  
 • Transformed Google Analytics, HubSpot, and Unity event data in Redshift into reusable SQL views and lightweight reports for retention, monetization, and acquisition analysis, helping identify growth opportunities tied to 15% MoM DAU growth.
-
-**TECHNICAL PROJECTS**
-
-[**Saga**](https://daviddunn.dev/#saga) **\- Multi-Agent Orchestration System** | Docker · MQTT · Gitea · Claude Code · Telegram · Proxmox  
-• Built a multi-agent orchestration system on Docker/MQTT/Gitea that runs parallel Claude Code workers against Telegram-based spec intake, with human review gates and self-healing PR loops for long-running projects.  
-• Codified agent roles, message-passing protocols, and review artifacts into reusable deployment patterns for autonomous coding workflows in production.
-
-[**Nexus**](https://daviddunn.dev/#nexus) **\- Real-Time Prediction Market Intelligence Engine** | Python · WebSockets · DuckDB · Claude · Convex  
-• Built real-time prediction market intelligence engine ingesting 100K+ events with WebSocket streaming, integrity validation, and async event-driven architecture.  
-• Developed Claude-powered semantic market clustering, sliding-window anomaly detection, and cross-market correlation; backed by an evaluation framework of 158 tests across 17 modules.
-
-[**marketfinder**](https://marketfinder.daviddunn.dev) **\- Live Dashboard for Nexus** | React · Vite · TypeScript · Convex · Tailwind  
-• Built the user-facing intelligence layer for Nexus, turning 10K+ live prediction markets into searchable dashboards, anomaly alerts, trend clusters, and comparison views.  
-• Shipped a responsive analytics interface using Convex live queries, TanStack React Table, severity filters, and mobile-first card layouts.
-
-**TECHNICAL SKILLS**
-
-**Applied AI & LLMs:** Claude, OpenAI, Vertex AI, AI agents, LLM workflows, semantic clustering, prompt engineering, MCP servers  
-**Integration & Automation:** API integration, workflow automation, Airflow, WebSockets, event-driven systems, Docker, Git, Linux  
-**Data Engineering:** Python, SQL, dbt, Kafka, Spark, DuckDB, PostgreSQL, SQLite, Snowflake, Redshift, BigQuery  
-**Analytics & ML:** anomaly detection, A/B testing, forecasting, statistical modeling, scikit-learn, statsmodels  
-**BI & Product:** Metabase, Looker, Tableau, Power BI, Streamlit, dashboard development, stakeholder requirements
 
 **EDUCATION**
 
