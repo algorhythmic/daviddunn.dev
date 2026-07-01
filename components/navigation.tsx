@@ -13,7 +13,7 @@ export function Navigation() {
 
   const navItems = [
     { id: "hero", label: "Home" },
-    { id: "portfolio", label: "Case Studies" },
+    { id: "portfolio", label: "Projects" },
     { id: "about", label: "About" },
   ]
 

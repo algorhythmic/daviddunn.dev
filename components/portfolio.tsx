@@ -75,7 +75,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
             </p>
           </div>
           <span className="text-[10px] md:text-xs font-black bg-black text-white px-2 py-1 md:px-3 md:py-1.5 border-2 border-white shrink-0 uppercase tracking-wider self-center">
-            Case Study {String(index + 1).padStart(2, "0")}
+            Project {String(index + 1).padStart(2, "0")}
           </span>
         </div>
       </div>
@@ -232,7 +232,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
               </>
             ) : (
               <>
-                FULL CASE STUDY <ChevronDown size={16} />
+                FULL PROJECT <ChevronDown size={16} />
               </>
             )}
           </button>
@@ -249,7 +249,7 @@ export function Portfolio() {
       <div className="relative z-10 max-w-5xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="text-center mb-6 md:mb-16">
           <h2 className="section-text-outline text-2xl md:text-6xl font-black text-foreground dark:text-white mb-2 md:mb-4">
-            CASE STUDIES
+            PROJECTS
           </h2>
           <p className="section-text-outline-thin text-xs md:text-xl font-bold text-foreground dark:text-gray-200 max-w-2xl mx-auto">
             Real projects, real code, real users — not lorem ipsum placeholders

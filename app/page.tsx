@@ -113,7 +113,7 @@ export default function Home() {
             that give AI assistants structured access to external data.
           </p>
           <p>
-            See the full case studies on the{" "}
+            See more on the{" "}
             <Link href="/projects" className={externalLink}>
               projects page
             </Link>

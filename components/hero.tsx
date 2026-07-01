@@ -203,7 +203,7 @@ export function Hero({ onOpenResume }: HeroProps) {
             <button
               type="button"
               onClick={() => scrollTo("portfolio")}
-              aria-label="4 case studies — go to Case Studies"
+              aria-label="4 projects — go to Projects"
               className="stat-btn hero-glow-sm hero-glow-pink inline-flex items-center gap-1.5 md:gap-1.5 bg-neo-pink-light dark:bg-pink-500 text-white font-black px-3 py-2 md:px-3 md:py-1.5 border-2 md:border-4 border-black dark:border-neo-blue-400 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:md:shadow-[5px_5px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:active:shadow-[inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[3px] active:translate-y-[3px]"
             >
               <Layers size={14} className="md:w-4 md:h-4 shrink-0" strokeWidth={2.5} />
@@ -211,8 +211,8 @@ export function Hero({ onOpenResume }: HeroProps) {
                 <CountUp to={4} duration={5000} delay={600} />
               </span>
               <span className="text-[11px] md:text-xs tracking-[0.1em] leading-none">
-                <span className="md:hidden">STUDIES</span>
-                <span className="hidden md:inline">CASE STUDIES</span>
+                <span className="md:hidden">PROJECTS</span>
+                <span className="hidden md:inline">PROJECTS</span>
               </span>
             </button>
             <a
@@ -250,7 +250,7 @@ export function Hero({ onOpenResume }: HeroProps) {
           onClick={() => scrollTo("portfolio")}
           className="hero-stagger mt-4 md:mt-8 cursor-pointer bg-transparent border-none"
           style={{ animationDelay: "1050ms" }}
-          aria-label="Scroll to case studies"
+          aria-label="Scroll to projects"
         >
           <span className="block animate-bounce">
             <ChevronDown size={36} className="mx-auto text-black dark:text-neo-blue-400 dark:neo-text-glow" />
