@@ -341,6 +341,17 @@ html {
   animation: cursor-blink 0.8s step-end infinite;
 }
 
+/* Resume button: vibrate with an amplitude driven by --vib (set from JS) */
+@keyframes resume-vibrate {
+  0%, 100% { transform: translate(calc(var(--vib, 0px) * -1), 0) rotate(-0.6deg); }
+  25%      { transform: translate(var(--vib, 0px), calc(var(--vib, 0px) * -1)) rotate(0.6deg); }
+  50%      { transform: translate(calc(var(--vib, 0px) * -1), var(--vib, 0px)) rotate(-0.4deg); }
+  75%      { transform: translate(var(--vib, 0px), var(--vib, 0px)) rotate(0.5deg); }
+}
+.animate-resume-vibrate {
+  animation: resume-vibrate 0.15s linear infinite;
+}
+
 /* Reduced motion: disable all custom animations */
 @media (prefers-reduced-motion: reduce) {
   .animate-dash-flow,
@@ -353,6 +364,7 @@ html {
   .animate-dot-traverse-h-rev,
   .animate-dot-traverse-v,
   .animate-dot-traverse-v-rev,
+  .animate-resume-vibrate,
   .float,
   .pulse-neo {
     animation: none !important;
