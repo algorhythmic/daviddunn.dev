@@ -27,7 +27,9 @@ const fieldFadeMask: CSSProperties = {
   maskImage: "radial-gradient(ellipse at center, black 30%, transparent 72%)",
 }
 
-const FLEE_RADIUS = 130 // start dodging when the cursor is this close (px)
+const FLEE_RADIUS = 150 // start reacting when the cursor is this close (px)
+const STEP = 0.6 // portion of the cursor overlap to move per event
+const MAX_STEP = 48 // cap on how far it darts in a single event (px)
 
 export function ProjectsButton() {
   const ref = useRef<HTMLAnchorElement>(null)
@@ -42,28 +44,61 @@ export function ProjectsButton() {
       const r = el.getBoundingClientRect()
       const cx = r.left + r.width / 2
       const cy = r.top + r.height / 2
-      const dx = cx - e.clientX
-      const dy = cy - e.clientY
-      const dist = Math.hypot(dx, dy) || 1
+      const dist = Math.hypot(cx - e.clientX, cy - e.clientY)
 
-      if (dist < FLEE_RADIUS) {
-        // Home center = current center minus the transform we've already applied
-        const homeX = cx - offsetRef.current.x
-        const homeY = cy - offsetRef.current.y
-        const ux = dx / dist
-        const uy = dy / dist
-        // Target: push the center just beyond the flee radius from the cursor
-        const targetX = e.clientX + ux * (FLEE_RADIUS + 16)
-        const targetY = e.clientY + uy * (FLEE_RADIUS + 16)
-        // Keep it on screen
-        const margin = 8
-        const halfW = r.width / 2
-        const halfH = r.height / 2
-        const clampedX = Math.min(Math.max(targetX, margin + halfW), window.innerWidth - margin - halfW)
-        const clampedY = Math.min(Math.max(targetY, margin + halfH), window.innerHeight - margin - halfH)
-        setOffset({ x: clampedX - homeX, y: clampedY - homeY })
+      // Cursor is far — leave the button where it fled to.
+      if (dist >= FLEE_RADIUS) return
+
+      // Home center = current center minus the transform we've already applied
+      const homeX = cx - offsetRef.current.x
+      const homeY = cy - offsetRef.current.y
+
+      // On-screen bounds for the button's center
+      const margin = 8
+      const halfW = r.width / 2
+      const halfH = r.height / 2
+      const minX = margin + halfW
+      const maxX = window.innerWidth - margin - halfW
+      const minY = margin + halfH
+      const maxY = window.innerHeight - margin - halfH
+      const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi)
+
+      // Direction away from the cursor (fall back to heading inward if the cursor
+      // is right on top of the button)
+      let ax: number
+      let ay: number
+      if (dist < 1) {
+        ax = (minX + maxX) / 2 - cx
+        ay = (minY + maxY) / 2 - cy
+        const l = Math.hypot(ax, ay) || 1
+        ax /= l
+        ay /= l
+      } else {
+        ax = (cx - e.clientX) / dist
+        ay = (cy - e.clientY) / dist
       }
-      // When the cursor is far, do nothing — the button stays where it fled to.
+
+      // Nudge proportional to how deep the cursor is inside the radius — small when
+      // barely near, larger up close, but capped so it never darts far.
+      const push = Math.min((FLEE_RADIUS - dist) * STEP, MAX_STEP)
+
+      let tx = clamp(cx + ax * push, minX, maxX)
+      let ty = clamp(cy + ay * push, minY, maxY)
+
+      // If a wall/corner ate most of the move, slip sideways along the wall (toward
+      // the more open side) instead of staying pinned.
+      if (Math.hypot(tx - cx, ty - cy) < push * 0.5) {
+        let tanX = -ay
+        let tanY = ax
+        if (tanX * ((minX + maxX) / 2 - cx) + tanY * ((minY + maxY) / 2 - cy) < 0) {
+          tanX = -tanX
+          tanY = -tanY
+        }
+        tx = clamp(cx + tanX * push, minX, maxX)
+        ty = clamp(cy + tanY * push, minY, maxY)
+      }
+
+      setOffset({ x: tx - homeX, y: ty - homeY })
     }
     window.addEventListener("mousemove", onMove)
     return () => window.removeEventListener("mousemove", onMove)
@@ -74,7 +109,7 @@ export function ProjectsButton() {
       ref={ref}
       href="/projects"
       aria-label="David's Projects"
-      className="group relative inline-block transition-transform duration-150 ease-out will-change-transform"
+      className="group relative inline-block transition-transform duration-100 ease-out will-change-transform"
       style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
     >
       {/* Small field of grid + nodes around the button, fading out at the edges */}

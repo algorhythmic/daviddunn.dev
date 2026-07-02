@@ -5,8 +5,8 @@ import { useEffect, useState } from "react"
 import { FileText } from "lucide-react"
 import { ResumeDocument } from "@/components/resume-document"
 
-// Grow ~1% for every 100px of cumulative mouse movement, capped at 10x.
-const GROWTH_PER_PX = 0.0001 // 1% / 100px
+// Grow ~2% for every 100px of cumulative mouse movement, capped at 10x.
+const GROWTH_PER_PX = 0.0002 // 2% / 100px
 const MAX_SCALE = 10
 
 export function ResumeButton() {
