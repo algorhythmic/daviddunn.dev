@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 
 // Neobrutalist button sitting in a small field of animated grid + moving glowing
-// nodes that fades out around it. The button fill is translucent so the single
-// grid shows through it. It also *flees* the cursor: when the pointer gets close,
-// it dodges away, so it can never actually be clicked.
+// nodes that fades out around it, with a translucent fill so the grid shows
+// through. It dodges the cursor — but if you actually manage to click it, the
+// resume button grows by 200% and catches fire (see resume-button.tsx).
 
 const NODE_COLORS = ["#3b82f6", "#ec4899", "#10b981", "#8b5cf6"]
 const glow = (c: string) => `0 0 4px ${c}, 0 0 9px ${c}, 0 0 14px ${c}aa`
@@ -49,11 +49,8 @@ export function ProjectsButton() {
       // Cursor is far — leave the button where it fled to.
       if (dist >= FLEE_RADIUS) return
 
-      // Home center = current center minus the transform we've already applied
       const homeX = cx - offsetRef.current.x
       const homeY = cy - offsetRef.current.y
-
-      // On-screen bounds for the button's center
       const margin = 8
       const halfW = r.width / 2
       const halfH = r.height / 2
@@ -63,8 +60,7 @@ export function ProjectsButton() {
       const maxY = window.innerHeight - margin - halfH
       const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi)
 
-      // Direction away from the cursor (fall back to heading inward if the cursor
-      // is right on top of the button)
+      // Direction away from the cursor (fall back to heading inward if it's on top)
       let ax: number
       let ay: number
       if (dist < 1) {
@@ -78,15 +74,12 @@ export function ProjectsButton() {
         ay = (cy - e.clientY) / dist
       }
 
-      // Nudge proportional to how deep the cursor is inside the radius — small when
-      // barely near, larger up close, but capped so it never darts far.
+      // Nudge proportional to how deep the cursor is inside the radius, capped
       const push = Math.min((FLEE_RADIUS - dist) * STEP, MAX_STEP)
-
       let tx = clamp(cx + ax * push, minX, maxX)
       let ty = clamp(cy + ay * push, minY, maxY)
 
-      // If a wall/corner ate most of the move, slip sideways along the wall (toward
-      // the more open side) instead of staying pinned.
+      // If a wall ate most of the move, slip sideways instead of pinning
       if (Math.hypot(tx - cx, ty - cy) < push * 0.5) {
         let tanX = -ay
         let tanY = ax
@@ -109,7 +102,19 @@ export function ProjectsButton() {
       ref={ref}
       href="/projects"
       aria-label="David's Projects"
-      className="group relative inline-block transition-transform duration-100 ease-out will-change-transform"
+      tabIndex={0}
+      onClick={(e) => {
+        // If you actually catch it: don't navigate — ignite + grow the resume button.
+        e.preventDefault()
+        window.dispatchEvent(new Event("resume-fire"))
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+          e.preventDefault()
+          window.dispatchEvent(new Event("resume-fire"))
+        }
+      }}
+      className="group relative inline-block transition-transform duration-100 ease-out will-change-transform outline-none rounded-sm focus-visible:ring-4 focus-visible:ring-offset-2 focus-visible:ring-neo-pink-light"
       style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
     >
       {/* Small field of grid + nodes around the button, fading out at the edges */}

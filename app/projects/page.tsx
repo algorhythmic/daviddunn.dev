@@ -7,21 +7,25 @@ import { About } from "@/components/about"
 import { Footer } from "@/components/footer"
 import { Navigation } from "@/components/navigation"
 import { ResumeTerminal } from "@/components/resume-terminal"
+import { ResumeDocument } from "@/components/resume-document"
 
 export default function Projects() {
-  const [resumeOpen, setResumeOpen] = useState(false)
-  const openResume = () => setResumeOpen(true)
+  // Hero opens the PDF document viewer (same as the landing page);
+  // About keeps the terminal viewer.
+  const [docOpen, setDocOpen] = useState(false)
+  const [termOpen, setTermOpen] = useState(false)
 
   return (
     <div>
       <Navigation />
       <main>
-        <Hero onOpenResume={openResume} />
+        <Hero onOpenResume={() => setDocOpen(true)} />
         <Portfolio />
-        <About onOpenResume={openResume} />
+        <About onOpenResume={() => setTermOpen(true)} />
       </main>
       <Footer />
-      <ResumeTerminal open={resumeOpen} onClose={() => setResumeOpen(false)} />
+      <ResumeDocument open={docOpen} onClose={() => setDocOpen(false)} />
+      <ResumeTerminal open={termOpen} onClose={() => setTermOpen(false)} />
     </div>
   )
 }
