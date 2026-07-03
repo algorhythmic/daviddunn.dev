@@ -341,54 +341,6 @@ html {
   animation: cursor-blink 0.8s step-end infinite;
 }
 
-/* Resume button: vibrate with an amplitude driven by --vib (set from JS) */
-@keyframes resume-vibrate {
-  0%, 100% { transform: translate(calc(var(--vib, 0px) * -1), 0) rotate(-0.6deg); }
-  25%      { transform: translate(var(--vib, 0px), calc(var(--vib, 0px) * -1)) rotate(0.6deg); }
-  50%      { transform: translate(calc(var(--vib, 0px) * -1), var(--vib, 0px)) rotate(-0.4deg); }
-  75%      { transform: translate(var(--vib, 0px), var(--vib, 0px)) rotate(0.5deg); }
-}
-.animate-resume-vibrate {
-  animation: resume-vibrate 0.15s linear infinite;
-}
-
-/* Button "on fire" flames */
-.btn-fire {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 55%;
-  height: 0;
-  pointer-events: none;
-  z-index: 20;
-}
-.btn-flame {
-  position: absolute;
-  bottom: 0;
-  border-radius: 50% 50% 50% 50% / 68% 68% 32% 32%;
-  background: linear-gradient(
-    to top,
-    #7c2d12 0%,
-    #ef4444 22%,
-    #f97316 50%,
-    #facc15 78%,
-    rgba(250, 204, 21, 0) 100%
-  );
-  filter: blur(2.5px);
-  mix-blend-mode: screen;
-  transform-origin: bottom center;
-  animation-name: flame-flicker;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  will-change: transform, opacity;
-}
-@keyframes flame-flicker {
-  0%   { transform: translateY(0) scaleY(1) scaleX(1) skewX(0deg); opacity: 0.85; }
-  30%  { transform: translateY(-10%) scaleY(1.3) scaleX(0.85) skewX(4deg); opacity: 1; }
-  60%  { transform: translateY(-4%) scaleY(0.95) scaleX(1.12) skewX(-4deg); opacity: 0.9; }
-  100% { transform: translateY(-16%) scaleY(1.38) scaleX(0.8) skewX(3deg); opacity: 1; }
-}
-
 /* Reduced motion: disable all custom animations */
 @media (prefers-reduced-motion: reduce) {
   .animate-dash-flow,
@@ -401,8 +353,6 @@ html {
   .animate-dot-traverse-h-rev,
   .animate-dot-traverse-v,
   .animate-dot-traverse-v-rev,
-  .animate-resume-vibrate,
-  .btn-flame,
   .float,
   .pulse-neo {
     animation: none !important;

@@ -1,13 +1,9 @@
-"use client"
-
 import type { CSSProperties } from "react"
-import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 
-// Neobrutalist button sitting in a small field of animated grid + moving glowing
-// nodes that fades out around it, with a translucent fill so the grid shows
-// through. It dodges the cursor — but if you actually manage to click it, the
-// resume button grows by 200% and catches fire (see resume-button.tsx).
+// Neobrutalist button linking to /projects, sitting in a small field of animated
+// grid + moving glowing nodes that fades out around it, with a translucent fill
+// so the grid shows through.
 
 const NODE_COLORS = ["#3b82f6", "#ec4899", "#10b981", "#8b5cf6"]
 const glow = (c: string) => `0 0 4px ${c}, 0 0 9px ${c}, 0 0 14px ${c}aa`
@@ -27,95 +23,12 @@ const fieldFadeMask: CSSProperties = {
   maskImage: "radial-gradient(ellipse at center, black 30%, transparent 72%)",
 }
 
-const FLEE_RADIUS = 150 // start reacting when the cursor is this close (px)
-const STEP = 0.6 // portion of the cursor overlap to move per event
-const MAX_STEP = 48 // cap on how far it darts in a single event (px)
-
 export function ProjectsButton() {
-  const ref = useRef<HTMLAnchorElement>(null)
-  const [offset, setOffset] = useState({ x: 0, y: 0 })
-  const offsetRef = useRef(offset)
-  offsetRef.current = offset
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      const el = ref.current
-      if (!el) return
-      const r = el.getBoundingClientRect()
-      const cx = r.left + r.width / 2
-      const cy = r.top + r.height / 2
-      const dist = Math.hypot(cx - e.clientX, cy - e.clientY)
-
-      // Cursor is far — leave the button where it fled to.
-      if (dist >= FLEE_RADIUS) return
-
-      const homeX = cx - offsetRef.current.x
-      const homeY = cy - offsetRef.current.y
-      const margin = 8
-      const halfW = r.width / 2
-      const halfH = r.height / 2
-      const minX = margin + halfW
-      const maxX = window.innerWidth - margin - halfW
-      const minY = margin + halfH
-      const maxY = window.innerHeight - margin - halfH
-      const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi)
-
-      // Direction away from the cursor (fall back to heading inward if it's on top)
-      let ax: number
-      let ay: number
-      if (dist < 1) {
-        ax = (minX + maxX) / 2 - cx
-        ay = (minY + maxY) / 2 - cy
-        const l = Math.hypot(ax, ay) || 1
-        ax /= l
-        ay /= l
-      } else {
-        ax = (cx - e.clientX) / dist
-        ay = (cy - e.clientY) / dist
-      }
-
-      // Nudge proportional to how deep the cursor is inside the radius, capped
-      const push = Math.min((FLEE_RADIUS - dist) * STEP, MAX_STEP)
-      let tx = clamp(cx + ax * push, minX, maxX)
-      let ty = clamp(cy + ay * push, minY, maxY)
-
-      // If a wall ate most of the move, slip sideways instead of pinning
-      if (Math.hypot(tx - cx, ty - cy) < push * 0.5) {
-        let tanX = -ay
-        let tanY = ax
-        if (tanX * ((minX + maxX) / 2 - cx) + tanY * ((minY + maxY) / 2 - cy) < 0) {
-          tanX = -tanX
-          tanY = -tanY
-        }
-        tx = clamp(cx + tanX * push, minX, maxX)
-        ty = clamp(cy + tanY * push, minY, maxY)
-      }
-
-      setOffset({ x: tx - homeX, y: ty - homeY })
-    }
-    window.addEventListener("mousemove", onMove)
-    return () => window.removeEventListener("mousemove", onMove)
-  }, [])
-
   return (
     <Link
-      ref={ref}
       href="/projects"
       aria-label="David's Projects"
-      tabIndex={0}
-      onClick={(e) => {
-        // If you actually catch it: don't navigate — ignite + grow the resume button.
-        e.preventDefault()
-        window.dispatchEvent(new Event("resume-fire"))
-      }}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
-          e.preventDefault()
-          window.dispatchEvent(new Event("resume-fire"))
-        }
-      }}
-      className="group relative inline-block transition-transform duration-100 ease-out will-change-transform outline-none rounded-sm focus-visible:ring-4 focus-visible:ring-offset-2 focus-visible:ring-neo-pink-light"
-      style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
+      className="group relative inline-block outline-none rounded-sm focus-visible:ring-4 focus-visible:ring-offset-2 focus-visible:ring-neo-pink-light"
     >
       {/* Small field of grid + nodes around the button, fading out at the edges */}
       <span
