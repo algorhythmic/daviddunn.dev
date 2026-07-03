@@ -28,7 +28,7 @@ export function ProjectsButton() {
     <Link
       href="/projects"
       aria-label="David's Projects"
-      className="group relative inline-block outline-none rounded-sm focus-visible:ring-4 focus-visible:ring-offset-2 focus-visible:ring-neo-pink-light"
+      className="group relative inline-block scale-[0.8] origin-left outline-none rounded-sm focus-visible:ring-4 focus-visible:ring-offset-2 focus-visible:ring-neo-pink-light"
     >
       {/* Small field of grid + nodes around the button, fading out at the edges */}
       <span
