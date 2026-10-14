@@ -2,56 +2,150 @@
 
 **Applied AI & Integration Engineer**
 
- Santa Clara, CA | US Citizen | (305) 833-3909 | [davidalexanderdunn@gmail.com](mailto:davidalexanderdunn@gmail.com)  
-[daviddunn.dev](http://www.daviddunn.dev) | [github.com/algorhythmic](http://github.com/algorhythmic) | [linkedin.com/in/mrdaviddunn](http://linkedin.com/in/mrdaviddunn)
+Santa Clara, CA \| US Citizen \| (305) 833-3909 \|
+<davidalexanderdunn@gmail.com>
+
+[daviddunn.dev](https://daviddunn.dev) \|
+[github.com/algorhythmic](https://github.com/algorhythmic) \|
+[linkedin.com/in/mrdaviddunn](https://linkedin.com/in/mrdaviddunn)
 
 **SUMMARY**
 
-Applied AI & Integration Engineer with 6+ years building data pipelines, BI platforms, automation workflows, and LLM-powered systems. Experienced connecting APIs, databases, dashboards, AI models, infrastructure, and human-in-the-loop workflows into production-ready tools for analytics, decision support, and operational automation. Recent work includes agent orchestration, real-time anomaly detection, AI-assisted onboarding, semantic clustering, and full-stack workflow platforms.
-
-**TECHNICAL SKILLS**
-
-**Applied AI & LLMs:** Claude, OpenAI, Vertex AI, AI agents, LLM workflows, semantic clustering, prompt engineering, MCP servers  
-**Integration & Automation:** API integration, workflow automation, Airflow, WebSockets, event-driven systems, Docker, Git, Linux  
-**Data Engineering:** Python, SQL, dbt, Kafka, Spark, DuckDB, PostgreSQL, SQLite, Snowflake, Redshift, BigQuery  
-**Analytics & ML:** anomaly detection, A/B testing, forecasting, statistical modeling, scikit-learn, statsmodels  
-**BI & Product:** Metabase, Looker, Tableau, Power BI, Streamlit, dashboard development, stakeholder requirements
+Applied AI & Integration Engineer, 7+ years across data engineering, BI,
+and LLM-powered systems. Builds AI systems that plan, execute, review,
+and fix their own work, with a person approving what actually ships.
+Recent work: MCP servers and guarded computer use, budgeted retrieval
+with evaluation harnesses, multi-agent orchestration with human review
+gates, and voice-first RAG.
 
 **TECHNICAL PROJECTS**
 
-[**Saga**](https://daviddunn.dev/projects/#saga) **\- Multi-Agent Orchestration System** | Docker · MQTT · Gitea · Claude Code · Telegram · Proxmox  
-• Built a multi-agent orchestration system on Docker/MQTT/Gitea that runs parallel Claude Code workers against Telegram-based spec intake, with human review gates and self-healing PR loops for long-running projects.  
-• Codified agent roles, message-passing protocols, and review artifacts into reusable deployment patterns for autonomous coding workflows in production.
+[**Heimdall**](https://github.com/algorhythmic/heimdall) ·
+[**Braid**](https://github.com/algorhythmic/braid) · [**Wayland Computer
+Use**](https://github.com/algorhythmic/wayland-computer-use) —
+**Local-First Agent Runtime** Go · Python · C · SQLite · MCP ·
+Linux/Windows CI
 
-[**Nexus**](https://daviddunn.dev/projects/#nexus) **\- Real-Time Prediction Market Intelligence Engine** | Python · WebSockets · DuckDB · Claude · Convex  
-• Built real-time prediction market intelligence engine ingesting 100K+ events with WebSocket streaming, integrity validation, and async event-driven architecture.  
-• Developed Claude-powered semantic market clustering, sliding-window anomaly detection, and cross-market correlation; backed by an evaluation framework of 158 tests across 17 modules.
+- Built two MCP servers and an agent skill for guarded desktop control
+  and observation (per-step focus/identity rechecks, failure-surviving
+  execution ledger, accessibility-tree evidence); 27/27 paired E2E
+  desktop tasks passed, batching cut median task time 37–47%, and change
+  detection ran 2.58× faster with 99.8% smaller responses vs. screenshot
+  polling; 167 tests.
 
-[**marketfinder**](https://daviddunn.dev/projects/#marketfinder) **\- Live Dashboard for Nexus** | React · Vite · TypeScript · Convex · Tailwind  
-• Built the user-facing intelligence layer for Nexus, turning 10K+ live prediction markets into searchable dashboards, anomaly alerts, trend clusters, and comparison views.  
-• Shipped a responsive analytics interface using Convex live queries, TanStack React Table, severity filters, and mobile-first card layouts.
+- Built Braid, explainable budget-bounded retrieval fusing BM25,
+  embeddings, graph PageRank, and recency, with an eval harness (grid
+  search, no-answer cases, forbidden-result and budget gates); cut warm
+  p50 query latency 19–41× at 2K–20K records.
+
+- Built Heimdall, a Go task-continuity system for long-running
+  human–agent work: event-sourced task state with replay, an MCP server
+  with scoped credentials and explicit write grants, evidence-based
+  completion checks, and reviewed state recovery; 293 tests.
+
+[**Saga**](https://daviddunn.dev/projects#saga) — **Multi-Agent
+Orchestration System** Docker · MQTT · Gitea · Claude Code · Telegram ·
+Proxmox
+
+- Runs parallel Claude Code workers in sandboxed containers (no API
+  keys, no host access) against Telegram spec intake, with critic review
+  of each plan before code runs and self-healing PR loops.
+
+- Human gates at every launch and merge: the system proposes, a person
+  approves; agent roles, message-passing protocols, and review artifacts
+  codified into reusable deployment patterns.
+
+[**dbriefly**](https://dbriefly.daviddunn.dev) — **Voice-First AI Audio
+Briefing Service** Python · FastAPI · Postgres/pgvector · Next.js ·
+Claude · OpenAI
+
+- Built an end-to-end audio pipeline (Whisper ASR, pgvector embeddings,
+  cross-source entity clustering, plan-and-execute LLM synthesis)
+  turning 80+ podcasts, channels, newsletters, and forums into a daily
+  5–10 min brief with inline source clips at ~\$0.03/brief.
+
+- Shipped a realtime voice agent (OpenAI Realtime, ~500 ms budget)
+  across web, Telegram, WhatsApp, SMS, and email on Postgres-only job
+  orchestration, a per-call cost ledger, and a self-healing ops loop
+  (automated critics + coding-agent fixes); ~700 integration tests.
+
+[**Nexus**](https://daviddunn.dev/projects#nexus) — **Real-Time
+Prediction Market Intelligence** Python · WebSockets · DuckDB · Claude ·
+Convex · React
+
+- Ingested 100K+ Kalshi/Polymarket events over 72h+ continuous runs
+  (WebSocket streaming, integrity validation), surfaced through
+  [marketfinder](https://marketfinder.daviddunn.dev), a live dashboard
+  of 10K+ markets with anomaly alerts and trend clusters.
+
+- Claude-powered semantic clustering, sliding-window anomaly detection,
+  and cross-market correlation; pre-filtered 161M cross-platform pairs
+  to ~1K before any LLM call (99.99% cost reduction); 158-test eval
+  suite across 17 modules.
+
+*Also:* [**Skald**](https://github.com/algorhythmic/skald) — Claude
+Code/Codex transcript archive (Go) ·
+[**steam-mcp**](https://github.com/algorhythmic/steam-mcp) — open-source
+Steam Web API MCP server (TypeScript)
 
 **PROFESSIONAL EXPERIENCE**
 
-**Applied AI & Integration Engineer | Client Projects | Santa Clara, CA	10/2025 \- Present**  
-• Built [**Happily.love**](http://www.happily.love) end-to-end for a client: Claude-assisted onboarding interviews, invite-based applicant flow, structured profile model, approval workflows, and private matchmaker dashboard.  
-• Designed human-in-the-loop decision-support tooling that converts qualitative interviews and matchmaker notes into structured candidate profiles for review, search, and matching.
+**Applied AI & Integration Engineer** \| Dunn & Done Systems
+(independent) \| Santa Clara, CA **10/2024 – Present**
 
-**Data & BI Solutions Developer | Dunn & Done Systems · Remote | Santa Clara, CA	10//2024 \- 10/2025**  
-• Built reusable Python/Airflow ELT workflows for SMB clients, normalizing CRM, payment, ad-platform, and accounting data into AWS-backed warehouse models with dbt lineage and quality checks; cut recurring reporting effort 75%.  
-• Developed LLM-assisted validation and metric-reporting workflows on top of S3, Redshift, dbt, and Metabase, checking metric definitions, flagging data quality issues, and supporting revenue, churn, and LTV reporting for SMB clients.
+- Scoped and delivered [Happily.love](https://happily.love) end-to-end
+  for a matchmaking client: Claude-assisted onboarding interviews,
+  invite-based applicant flow, structured profile model, approval
+  workflows, and a private matchmaker dashboard for searchable profiles.
 
-**Analytics Engineer | Front Row | Remote	10/2022 \- 09/2024**  
-• Authored modular dbt models and Looker/Metabase explores answering 80% of recurring product-marketing questions, reducing ad-hoc requests 60%; owned metric definitions and quality rules.  
-• Built an experimentation pipeline using GTM, feature flags, dbt, and Python uplift analysis to support 20+ A/B tests and dynamic-pricing tactics that lifted average purchase price 8%.
+- Built reusable Python/Airflow ELT workflows for SMB clients,
+  normalizing CRM, payment, ad, and accounting data into Redshift/dbt
+  models with LLM-assisted metric validation and Metabase
+  revenue/churn/LTV reporting; cut reporting effort 75%.
 
-**Marketing Data Analyst | ORComm | Seoul, South Korea	01/2020 \- 08/2022**  
-• Created reusable marketing analytics dashboards for 10 seed-stage consumer startups, standardizing CAC, ROAS, cohort retention, and campaign performance reporting; reduced recurring report build time 60%.  
-• Created cohort, funnel, and retention analyses to identify high-risk user segments, improve lifecycle targeting, and standardize metric definitions across client reporting.
+**Analytics Engineer** \| Front Row \| Remote **10/2022 – 09/2024**
 
-**Business Intelligence Analyst | VR Comet | Seoul, South Korea	12/2018 \- 12/2019**  
-• Transformed Google Analytics, HubSpot, and Unity event data in Redshift into reusable SQL views and lightweight reports for retention, monetization, and acquisition analysis, helping identify growth opportunities tied to 15% MoM DAU growth.
+- Authored modular dbt models and Looker/Metabase explores answering 80%
+  of recurring product-marketing questions, cutting ad-hoc requests 60%;
+  owned metric definitions and quality rules.
+
+- Built an experimentation pipeline (GTM, feature flags, dbt, Python
+  uplift analysis) supporting 20+ A/B tests and dynamic-pricing tactics
+  that lifted average purchase price 8%.
+
+**Marketing Data Analyst** \| ORComm \| Seoul, South Korea **01/2020 –
+08/2022**
+
+- Built reusable marketing dashboards and cohort/funnel/retention
+  analyses for 10 seed-stage consumer startups, standardizing CAC, ROAS,
+  and retention metrics across client reporting; reduced recurring
+  report build time 60%.
+
+**Business Intelligence Analyst** \| VR Comet \| Seoul, South Korea
+**12/2018 – 12/2019**
+
+- Transformed Google Analytics, HubSpot, and Unity event data in
+  Redshift into reusable SQL views and reports for retention,
+  monetization, and acquisition analysis, identifying growth
+  opportunities tied to 15% MoM DAU growth.
+
+**TECHNICAL SKILLS**
+
+**Applied AI & LLMs:** Claude API, Claude Code (skills, plugins, hooks),
+OpenAI, Vertex AI, MCP servers (TS/Python/Go), hybrid RAG
+
+**Evals & Observability:** eval harnesses, offline benchmarks,
+human-in-the-loop gates, cost ledgers, tracing, Grafana
+
+**Integration & Automation:** FastAPI, Pydantic, Airflow, WebSockets,
+MQTT, event-driven systems, Docker, CI/CD, Playwright, Git, Linux
+
+**Languages & Data:** Python, Go, TypeScript, SQL, dbt, Kafka, Spark,
+DuckDB, PostgreSQL, Snowflake, Redshift, BigQuery
+
+**Analytics, ML & BI:** anomaly detection, A/B testing, forecasting,
+scikit-learn, statsmodels, Metabase, Looker, Tableau, Streamlit
 
 **EDUCATION**
 
-B.S. Physics \- Lake Forest College \- 2009 | Data Analyst in R \- [Dataquest.io](http://Dataquest.io) \- 2022 | Data Scientist in Python \- DataCamp \- 2024
+B.S. Physics, Lake Forest College (2009)

@@ -4,8 +4,18 @@ import { useEffect, useRef, useState } from "react"
 import type { ReactNode } from "react"
 import { ChevronDown, Terminal, Calendar, Layers, Github } from "lucide-react"
 import { AnimatedBackground } from "@/components/hero-background"
+import { caseStudies } from "@/lib/portfolio-data"
 
+// Kept short so the typed line never wraps on narrow phones; the full title is
+// rendered statically (screen-reader text) so it is present in the SSR HTML.
+const TITLE = "Applied AI & Integration Engineer"
 const roles = ["AI Systems Builder", "Applied AI Engineer", "Data Automation Developer"]
+
+// Header stats are static so the server-rendered HTML already shows the real
+// values (no count-up from 1). Years matches the resume; the project count is
+// derived from the case studies rendered on this page.
+const YEARS_EXPERIENCE = 7
+const PROJECT_COUNT = caseStudies.length
 const TYPE_SPEED = 80
 const DELETE_SPEED = 50
 const PAUSE_AFTER_TYPE = 2000
@@ -56,40 +66,6 @@ function useTypewriter(words: string[]) {
   }, [display, phase, wordIndex, words])
 
   return display
-}
-
-// Counts up from 1 → `to` over `duration` ms with ease-out cubic.
-// Larger values increment faster (same total duration). Honors prefers-reduced-motion.
-function CountUp({ to, duration = 3000, delay = 0 }: { to: number; duration?: number; delay?: number }) {
-  const [value, setValue] = useState(to <= 1 ? to : 1)
-
-  useEffect(() => {
-    if (to <= 1) return
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setValue(to)
-      return
-    }
-
-    let raf = 0
-    let start = 0
-    const tick = (now: number) => {
-      if (!start) start = now
-      const t = Math.min(1, (now - start) / duration)
-      const eased = 1 - Math.pow(1 - t, 3) // easeOutCubic
-      setValue(Math.max(1, Math.round(1 + (to - 1) * eased)))
-      if (t < 1) raf = requestAnimationFrame(tick)
-    }
-    const startTimer = setTimeout(() => {
-      raf = requestAnimationFrame(tick)
-    }, delay)
-
-    return () => {
-      clearTimeout(startTimer)
-      cancelAnimationFrame(raf)
-    }
-  }, [to, duration, delay])
-
-  return <>{value}</>
 }
 
 // Translates child group toward cursor (max ±maxOffset px). No-op on touch / reduced-motion.
@@ -177,8 +153,9 @@ export function Hero({ onOpenResume }: HeroProps) {
             style={{ animationDelay: "420ms" }}
           >
             <h2 className="text-base md:text-3xl font-bold text-neo-blue-500 dark:text-neo-blue-400 dark:neo-text-glow min-w-0 text-center font-mono">
-              {typedRole}
-              <span className="inline-block w-[2px] md:w-[3px] h-[1em] bg-neo-blue-500 dark:bg-neo-blue-400 ml-0.5 align-middle animate-cursor-blink" />
+              <span className="sr-only">{TITLE}</span>
+              <span aria-hidden="true">{typedRole}</span>
+              <span aria-hidden="true" className="inline-block w-[2px] md:w-[3px] h-[1em] bg-neo-blue-500 dark:bg-neo-blue-400 ml-0.5 align-middle animate-cursor-blink" />
             </h2>
           </div>
 
@@ -191,42 +168,37 @@ export function Hero({ onOpenResume }: HeroProps) {
             <button
               type="button"
               onClick={() => scrollTo("about")}
-              aria-label="6 plus years of experience — go to About"
+              aria-label={`${YEARS_EXPERIENCE} plus years of experience — go to About`}
               className="stat-btn hero-glow-sm hero-glow-blue inline-flex items-center gap-1.5 md:gap-1.5 bg-neo-blue-500 dark:bg-neo-blue-600 text-white font-black px-3 py-2 md:px-3 md:py-1.5 border-2 md:border-4 border-black dark:border-neo-blue-400 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:md:shadow-[5px_5px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:active:shadow-[inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[3px] active:translate-y-[3px]"
             >
               <Calendar size={14} className="md:w-4 md:h-4 shrink-0" strokeWidth={2.5} />
               <span className="font-mono tabular-nums text-base md:text-lg leading-none">
-                <CountUp to={6} duration={5000} delay={600} />+
+                {YEARS_EXPERIENCE}+
               </span>
               <span className="text-[11px] md:text-xs tracking-[0.1em] leading-none">YEARS</span>
             </button>
             <button
               type="button"
               onClick={() => scrollTo("portfolio")}
-              aria-label="4 projects — go to Projects"
+              aria-label={`${PROJECT_COUNT} projects — go to Projects`}
               className="stat-btn hero-glow-sm hero-glow-pink inline-flex items-center gap-1.5 md:gap-1.5 bg-neo-pink-light dark:bg-pink-500 text-white font-black px-3 py-2 md:px-3 md:py-1.5 border-2 md:border-4 border-black dark:border-neo-blue-400 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:md:shadow-[5px_5px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:active:shadow-[inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[3px] active:translate-y-[3px]"
             >
               <Layers size={14} className="md:w-4 md:h-4 shrink-0" strokeWidth={2.5} />
               <span className="font-mono tabular-nums text-base md:text-lg leading-none">
-                <CountUp to={4} duration={5000} delay={600} />
+                {PROJECT_COUNT}
               </span>
-              <span className="text-[11px] md:text-xs tracking-[0.1em] leading-none">
-                <span className="md:hidden">PROJECTS</span>
-                <span className="hidden md:inline">PROJECTS</span>
-              </span>
+              <span className="text-[11px] md:text-xs tracking-[0.1em] leading-none">PROJECTS</span>
             </button>
             <a
               href="https://github.com/algorhythmic"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="27 GitHub repositories — open GitHub in new tab"
-              className="stat-btn hero-glow-sm hero-glow-emerald inline-flex items-center gap-1.5 md:gap-1.5 bg-neo-green-light dark:bg-emerald-500 text-white font-black px-3 py-2 md:px-3 md:py-1.5 border-2 md:border-4 border-black dark:border-neo-blue-400 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:md:shadow-[5px_5px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:active:shadow-[inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[3px] active:translate-y-[3px]"
+              aria-label="GitHub profile — open in new tab"
+              className="stat-btn hero-glow-sm hero-glow-emerald self-stretch inline-flex items-center gap-1.5 md:gap-1.5 bg-neo-green-light dark:bg-emerald-500 text-white font-black px-3 py-2 md:px-3 md:py-1.5 border-2 md:border-4 border-black dark:border-neo-blue-400 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none dark:shadow-[3px_3px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:md:shadow-[5px_5px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1),inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] dark:active:shadow-[inset_0_0_0_2px_rgba(0,0,0,1),0_0_0_2px_rgba(0,0,0,1)] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[3px] active:translate-y-[3px]"
             >
+              {/* No repo count: an unverified number is worse than none. */}
               <Github size={14} className="md:w-4 md:h-4 shrink-0" strokeWidth={2.5} />
-              <span className="font-mono tabular-nums text-base md:text-lg leading-none">
-                <CountUp to={27} duration={5000} delay={600} />
-              </span>
-              <span className="text-[11px] md:text-xs tracking-[0.1em] leading-none">REPOS</span>
+              <span className="text-[11px] md:text-xs tracking-[0.1em] leading-none">GITHUB</span>
             </a>
           </div>
 

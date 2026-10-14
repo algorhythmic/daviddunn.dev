@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useEffect, useMemo, useState } from "react"
+import { memo, useEffect, useMemo, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import {
   ReactFlow,
@@ -14,7 +14,52 @@ import {
   type NodeProps,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
-import type { Architecture, ArchNodeVariant } from "@/lib/portfolio-data"
+import type { Architecture, ArchEdgeVariant, ArchNodeVariant } from "@/lib/portfolio-data"
+
+const GREEN = "#28ff28"
+const AMBER = "#ffb000"
+
+const EDGE_STYLE: Record<
+  ArchEdgeVariant,
+  { color: string; width: number; dash?: string; legend: string }
+> = {
+  default: { color: GREEN, width: 1.5, legend: "delivered" },
+  feedback: { color: GREEN, width: 1.5, dash: "4 3", legend: "return path" },
+  optional: { color: GREEN, width: 1.75, dash: "9 5", legend: "optional (opt-in)" },
+  partial: { color: AMBER, width: 2, dash: "2 4", legend: "partial (in progress)" },
+}
+
+/** Legend is shown only when a diagram uses optional or partial edges. */
+function EdgeLegend({ architecture }: { architecture: Architecture }) {
+  const used = new Set(architecture.edges.map((e) => e.variant ?? "default"))
+  if (!used.has("optional") && !used.has("partial")) return null
+  const order: ArchEdgeVariant[] = ["default", "optional", "partial", "feedback"]
+  return (
+    <div className="shrink-0 bg-black border-t border-[#28ff28]/20 px-3 py-1.5 font-mono text-[10px] md:text-[11px] leading-tight flex flex-wrap justify-center gap-x-4 gap-y-1">
+      {order
+        .filter((v) => v === "default" || used.has(v))
+        .map((v) => {
+          const s = EDGE_STYLE[v]
+          return (
+            <div key={v} className="flex items-center gap-2" style={{ color: s.color }}>
+              <svg width="28" height="6" aria-hidden="true">
+                <line
+                  x1="0"
+                  y1="3"
+                  x2="28"
+                  y2="3"
+                  stroke={s.color}
+                  strokeWidth={2}
+                  strokeDasharray={s.dash}
+                />
+              </svg>
+              <span>{s.legend}</span>
+            </div>
+          )
+        })}
+    </div>
+  )
+}
 
 type NodeData = {
   label: string
@@ -151,22 +196,23 @@ function ArchFlowViewport({ architecture }: { architecture: Architecture }) {
   const edges: Edge[] = useMemo(
     () =>
       architecture.edges.map((e, i) => {
-        const isFeedback = e.variant === "feedback"
+        const variant = e.variant ?? "default"
+        const s = EDGE_STYLE[variant]
         return {
           id: e.id ?? `${e.from}-${e.to}-${i}`,
           source: e.from,
           target: e.to,
           label: e.label,
           type: "smoothstep",
-          animated: isFeedback,
-          markerEnd: { type: MarkerType.ArrowClosed, color: "#28ff28" },
+          animated: variant === "feedback",
+          markerEnd: { type: MarkerType.ArrowClosed, color: s.color },
           style: {
-            stroke: "#28ff28",
-            strokeWidth: 1.5,
-            strokeDasharray: isFeedback ? "4 3" : undefined,
+            stroke: s.color,
+            strokeWidth: s.width,
+            strokeDasharray: s.dash,
           },
           labelStyle: {
-            fill: "#28ff28",
+            fill: s.color,
             fontFamily: "var(--font-mono, ui-monospace, monospace)",
             fontSize: 10,
             fontWeight: 600,
@@ -174,7 +220,7 @@ function ArchFlowViewport({ architecture }: { architecture: Architecture }) {
           },
           labelBgStyle: {
             fill: "#000",
-            stroke: "#28ff28",
+            stroke: s.color,
             strokeWidth: 1,
           },
           labelBgPadding: [4, 2] as [number, number],
@@ -208,35 +254,41 @@ function ArchFlowViewport({ architecture }: { architecture: Architecture }) {
   )
 }
 
+const DOT_FOCUS =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#28ff28]"
+
 function TerminalTitleBar({
   title,
   maximized,
   onAction,
+  actionRef,
 }: {
   title: string
   maximized: boolean
   onAction: () => void
+  actionRef?: React.Ref<HTMLButtonElement>
 }) {
   return (
     <div className="bg-zinc-900 border-b border-[#28ff28]/20 px-3 py-2 flex items-center gap-2 select-none">
       <div className="flex gap-1.5 shrink-0">
+        {maximized ? (
+          <button
+            type="button"
+            onClick={onAction}
+            aria-label="Close architecture diagram"
+            className={`w-3 h-3 rounded-full bg-red-500/85 border border-red-800 hover:bg-red-400 hover:scale-110 transition cursor-pointer ${DOT_FOCUS}`}
+          />
+        ) : (
+          <span aria-hidden="true" className="w-3 h-3 rounded-full bg-red-500/85 border border-red-800" />
+        )}
+        <span aria-hidden="true" className="w-3 h-3 rounded-full bg-yellow-500/85 border border-yellow-800" />
         <button
-          type="button"
-          onClick={maximized ? onAction : undefined}
-          aria-label={maximized ? "Close" : "Close (decorative)"}
-          className="w-3 h-3 rounded-full bg-red-500/85 border border-red-800 hover:bg-red-400 hover:scale-110 transition cursor-pointer"
-        />
-        <button
-          type="button"
-          aria-label="Minimize (decorative)"
-          className="w-3 h-3 rounded-full bg-yellow-500/85 border border-yellow-800 hover:bg-yellow-400 hover:scale-110 transition cursor-pointer"
-        />
-        <button
+          ref={actionRef}
           type="button"
           onClick={onAction}
-          aria-label={maximized ? "Restore window" : "Maximize window"}
+          aria-label={maximized ? "Restore diagram size" : "Maximize architecture diagram"}
           title={maximized ? "Restore" : "Maximize to fit screen"}
-          className="w-3 h-3 rounded-full bg-green-500/90 border border-green-800 hover:bg-[#28ff28] hover:scale-110 transition cursor-pointer"
+          className={`w-3 h-3 rounded-full bg-green-500/90 border border-green-800 hover:bg-[#28ff28] hover:scale-110 transition cursor-pointer ${DOT_FOCUS}`}
         />
       </div>
       <div className="flex-1 text-center font-mono text-[11px] text-[#28ff28]/70 tracking-wider truncate px-2">
@@ -256,9 +308,19 @@ export function ArchitectureDiagram({
 }) {
   const [maximized, setMaximized] = useState(false)
   const title = `${slug} ─ architecture`
+  const openerRef = useRef<HTMLButtonElement>(null)
+  const restoreRef = useRef<HTMLButtonElement>(null)
+  const wasMaximized = useRef(false)
 
   useEffect(() => {
-    if (!maximized) return
+    if (!maximized) {
+      // Return focus to the maximize control after closing the modal.
+      if (wasMaximized.current) openerRef.current?.focus()
+      wasMaximized.current = false
+      return
+    }
+    wasMaximized.current = true
+    restoreRef.current?.focus()
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMaximized(false)
     }
@@ -279,20 +341,28 @@ export function ArchitectureDiagram({
           title={title}
           maximized={false}
           onAction={() => setMaximized(true)}
+          actionRef={openerRef}
         />
         <div className="relative w-full h-[400px] saga-arch-flow">
           <ArchFlowViewport architecture={architecture} />
         </div>
+        <EdgeLegend architecture={architecture} />
       </div>
 
       {/* Maximized modal — portaled to document.body to escape ancestor transforms */}
       {maximized &&
         typeof document !== "undefined" &&
         createPortal(
-          <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/85 backdrop-blur-sm p-3 md:p-6 animate-in fade-in duration-150">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/85 backdrop-blur-sm p-3 md:p-6 animate-in fade-in duration-150"
+          >
             <button
               type="button"
               aria-label="Close architecture diagram"
+              tabIndex={-1}
               onClick={() => setMaximized(false)}
               className="absolute inset-0 cursor-default"
             />
@@ -301,10 +371,12 @@ export function ArchitectureDiagram({
                 title={title}
                 maximized
                 onAction={() => setMaximized(false)}
+                actionRef={restoreRef}
               />
               <div className="relative flex-1 w-full saga-arch-flow">
                 <ArchFlowViewport architecture={architecture} />
               </div>
+              <EdgeLegend architecture={architecture} />
             </div>
           </div>,
           document.body,

@@ -6,13 +6,13 @@ import { ResumeButton } from "@/components/resume-button"
 import { ProjectsButton } from "@/components/projects-button"
 
 export const metadata: Metadata = {
-  title: "David Dunn",
+  title: "David Dunn | Applied AI & Integration Engineer",
   description:
-    "David Dunn — Applied AI & Integration Engineer in Santa Clara, CA. I build systems where AI is one intelligent layer inside something larger.",
+    "David Dunn — Applied AI & Integration Engineer in Santa Clara, CA. I build AI systems that plan, execute, review, and fix their own work, with a person approving what actually ships.",
   openGraph: {
-    title: "David Dunn",
+    title: "David Dunn | Applied AI & Integration Engineer",
     description:
-      "Applied AI & Integration Engineer building agentic systems, real-time data platforms, and shipped AI products.",
+      "I build AI systems that plan, execute, review, and fix their own work, with a person approving what actually ships.",
     url: "https://daviddunn.dev",
     siteName: "David Dunn",
     type: "website",
@@ -54,34 +54,32 @@ export default function Home() {
         </div>
 
         <div className="mt-8 space-y-5 text-[17px] leading-relaxed text-foreground/80">
-          <p>
-            I build systems where AI is one intelligent layer inside something larger — connected
-            to data, users, infrastructure, and human judgment. Today I work as an Applied AI
-            &amp; Integration Engineer, wiring LLMs, APIs, databases, and automation into tools
-            people actually use.
+          <p className="text-foreground font-medium">
+            I build AI systems that plan, execute, review, and fix their own work, with a person
+            approving what actually ships.
           </p>
           <p>
-            My path here wasn&apos;t a straight line. I studied physics at Lake Forest College,
-            then spent about four years in Seoul building business-intelligence and
-            marketing-analytics systems for early-stage consumer startups. Back in the US I moved
-            deeper into analytics and data engineering — modular dbt models, experimentation
-            pipelines, and ELT workflows for SMB clients — before focusing on applied AI.
+            My current focus is <Link href="/projects#odin" className={externalLink}>Odin</Link>,
+            a planned supervisory layer that keeps agent work moving across sessions and projects.
+            It builds on existing harnesses, starting with Claude Code, and delegates execution to{" "}
+            <Link href="/projects#saga" className={externalLink}>Saga</Link>,
+            whose container runtime is being separated into an independent service.
           </p>
           <p>
-            Most of my work now is agentic. I built{" "}
-            <Link href="/projects#saga" className={externalLink}>
-              Saga
+            Alongside that, I build <Link href="/projects#runtime" className={externalLink}>agent runtime tools</Link>:
+            {" "}Heimdall for task continuity, Skald for conversation archives, Braid for retrieval,
+            and Wayland Computer Use for guarded desktop actions.
+          </p>
+          <p>
+            I also built{" "}
+            <Link href="/projects#dbriefly" className={externalLink}>
+              dbriefly
             </Link>
-            , a multi-agent orchestration system that runs parallel Claude Code workers in
-            sandboxed containers with human review gates. I built{" "}
-            <a
-              href="https://github.com/algorhythmic/projectnexus"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={externalLink}
-            >
+            , a daily audio briefing from the podcasts, channels, and newsletters you follow, with
+            a voice agent you can talk back to;{" "}
+            <Link href="/projects#nexus" className={externalLink}>
               Nexus
-            </a>
+            </Link>
             , a real-time prediction-market intelligence engine, and its live dashboard{" "}
             <a
               href="https://marketfinder.daviddunn.dev"
@@ -91,26 +89,16 @@ export default function Home() {
             >
               marketfinder
             </a>
-            . And I built{" "}
-            <a
-              href="https://happily.love"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={externalLink}
-            >
-              happily.love
-            </a>{" "}
-            end-to-end for a client — AI-assisted onboarding, structured profiles, and a private
-            matchmaker dashboard. I also maintain a set of open-source{" "}
-            <a
-              href="https://github.com/algorhythmic"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={externalLink}
-            >
-              MCP servers
-            </a>{" "}
-            that give AI assistants structured access to external data.
+            ; and{" "}
+            <Link href="/projects#happily" className={externalLink}>
+              Happily.love
+            </Link>
+            , a matchmaking platform I scoped and delivered end-to-end for a client. I also
+            maintain{" "}
+            <Link href="/projects#mcp" className={externalLink}>
+              open-source MCP servers
+            </Link>{" "}
+            that let Claude and other assistants pull live data instead of guessing.
           </p>
           <p>
             See more on the{" "}

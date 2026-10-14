@@ -95,10 +95,22 @@ export function Navigation() {
                 <span className="absolute inset-0 rounded-full bg-emerald-300 animate-status-ping" />
                 <span className="relative rounded-full w-full h-full bg-emerald-300" />
               </span>
-              <span className="font-mono font-bold text-[9px] md:text-[11px] tracking-[0.1em] md:tracking-[0.12em] text-white leading-none">
-                BUILDING{" "}
-                <a href="#saga" className="saga-link">
-                  SAGA
+              <span className="font-mono font-bold text-[9px] md:text-[11px] tracking-[0.1em] md:tracking-[0.12em] text-white leading-none whitespace-nowrap">
+                NOW:{" "}
+                {/* Same-page anchor: Navigation only renders on /projects. */}
+                <a
+                  href="#odin"
+                  onClick={() => {
+                    // Re-clicking an unchanged hash fires no hashchange; replay it
+                    // so the card still expands and scrolls into view.
+                    if (window.location.hash === "#odin") {
+                      window.dispatchEvent(new HashChangeEvent("hashchange"))
+                    }
+                  }}
+                  className="saga-link"
+                  aria-label="Odin project design"
+                >
+                  ODIN
                 </a>
               </span>
             </div>

@@ -1,66 +1,178 @@
 "use client"
 
+import type { ReactNode } from "react"
 import Image from "next/image"
 import { Terminal, MapPin, Calendar } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { AnimatedBackground } from "@/components/hero-background"
+import { caseStudies } from "@/lib/portfolio-data"
 
 type AboutProps = {
   onOpenResume: () => void
 }
 
-export function About({ onOpenResume }: AboutProps) {
-  const focus: { label: string; items: { name: string; caseStudyId: number }[] }[] = [
-    {
-      label: "AI Systems",
-      items: [
-        { name: "LLM APIs (Claude · OpenAI · Vertex)", caseStudyId: 2 },
-        { name: "Multi-Agent Orchestration", caseStudyId: 1 },
-        { name: "MCP Servers", caseStudyId: 4 },
-        { name: "Evals", caseStudyId: 1 },
-      ],
-    },
-    {
-      label: "Infrastructure & Automation",
-      items: [
-        { name: "Docker", caseStudyId: 1 },
-        { name: "CI/CD", caseStudyId: 1 },
-        { name: "Proxmox", caseStudyId: 1 },
-        { name: "LXC", caseStudyId: 1 },
-        { name: "Fly.io", caseStudyId: 2 },
-        { name: "Prometheus", caseStudyId: 2 },
-        { name: "Grafana", caseStudyId: 2 },
-      ],
-    },
-    {
-      label: "Full-Stack Product",
-      items: [
-        { name: "Python", caseStudyId: 2 },
-        { name: "TypeScript", caseStudyId: 2 },
-        { name: "React", caseStudyId: 3 },
-        { name: "Next.js", caseStudyId: 3 },
-        { name: "Node.js", caseStudyId: 4 },
-        { name: "Tailwind", caseStudyId: 3 },
-      ],
-    },
-    {
-      label: "Data & Intelligence",
-      items: [
-        { name: "PostgreSQL", caseStudyId: 2 },
-        { name: "DuckDB", caseStudyId: 2 },
-        { name: "WebSockets", caseStudyId: 2 },
-        { name: "Kafka", caseStudyId: 2 },
-        { name: "dbt", caseStudyId: 2 },
-        { name: "Airflow", caseStudyId: 2 },
-      ],
-    },
-  ]
+// Project cards are addressed by slug (#runtime, #saga, ...), never by numeric
+// id, so renumbering or reordering the cards cannot break these links.
+type ProjectSlug = "odin" | "runtime" | "saga" | "dbriefly" | "nexus" | "happily" | "mcp"
 
-  const scrollToCaseStudy = (id: number) => {
-    const el = document.getElementById(`case-study-${id}`)
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" })
+const knownSlugs = new Set<string>(caseStudies.map((s) => s.slug))
+
+// Each skill links to the project that actually uses it. Skills from client or
+// employment work (no project card) render as plain, non-clickable chips.
+const focus: { label: string; items: { name: string; project?: ProjectSlug }[] }[] = [
+  {
+    label: "AI Systems",
+    items: [
+      { name: "Claude API", project: "nexus" },
+      { name: "OpenAI API", project: "dbriefly" },
+      { name: "Vertex AI" },
+      { name: "Agent Runtime · Computer Use", project: "runtime" },
+      { name: "Multi-Agent Orchestration", project: "saga" },
+      { name: "MCP Servers", project: "mcp" },
+      { name: "Evals", project: "runtime" },
+      { name: "Voice Agents", project: "dbriefly" },
+    ],
+  },
+  {
+    label: "Infrastructure & Automation",
+    items: [
+      { name: "Docker", project: "saga" },
+      { name: "CI/CD", project: "runtime" },
+      { name: "Proxmox", project: "saga" },
+      { name: "LXC", project: "saga" },
+      { name: "MQTT", project: "saga" },
+      { name: "Fly.io", project: "nexus" },
+      { name: "Grafana" },
+    ],
+  },
+  {
+    label: "Full-Stack Product",
+    items: [
+      { name: "Python", project: "dbriefly" },
+      { name: "Go", project: "runtime" },
+      { name: "TypeScript", project: "mcp" },
+      { name: "FastAPI", project: "dbriefly" },
+      { name: "React", project: "nexus" },
+      { name: "Next.js", project: "dbriefly" },
+      { name: "Node.js", project: "mcp" },
+    ],
+  },
+  {
+    label: "Data & Intelligence",
+    items: [
+      { name: "PostgreSQL · pgvector", project: "dbriefly" },
+      { name: "SQLite", project: "runtime" },
+      { name: "DuckDB" },
+      { name: "WebSockets", project: "nexus" },
+      { name: "Kafka" },
+      { name: "dbt" },
+      { name: "Airflow" },
+    ],
+  },
+]
+
+// Navigate to a project card via its slug hash. The card listens for
+// hashchange (expands + scrolls); re-clicking the current hash fires no event,
+// so replay it explicitly.
+function goToProject(slug: string) {
+  if (window.location.hash.slice(1).toLowerCase() === slug) {
+    window.dispatchEvent(new HashChangeEvent("hashchange"))
+  } else {
+    window.location.hash = slug
   }
+}
 
+const projectLinkClass =
+  "text-neo-blue-600 dark:text-neo-blue-300 font-black underline decoration-2 underline-offset-2 hover:decoration-4"
+
+function ProjectLink({ slug, children }: { slug: ProjectSlug; children: ReactNode }) {
+  if (!knownSlugs.has(slug)) return <span className="font-black">{children}</span>
+  return (
+    <a
+      href={`#${slug}`}
+      onClick={(e) => {
+        e.preventDefault()
+        goToProject(slug)
+      }}
+      className={projectLinkClass}
+    >
+      {children}
+    </a>
+  )
+}
+
+const chipBase =
+  "bg-neo-pink-light dark:bg-neo-pink-dark text-theme-border dark:text-black font-bold px-1.5 py-0.5 border md:border-2 border-theme-border dark:border-black text-[10px] md:text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+const chipInteractive =
+  "hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none transition-all duration-150 hover:translate-x-[1px] hover:translate-y-[1px] active:translate-x-[2px] active:translate-y-[2px] hover:bg-neo-pink-300 dark:hover:bg-neo-pink-light cursor-pointer"
+
+// Same order as the project cards.
+const achievements: { title: string; body: ReactNode }[] = [
+  {
+    title: "Odin · Next Project",
+    body: (
+      <>
+        Designing <ProjectLink slug="odin">Odin</ProjectLink> as a supervisory layer over existing
+        agent harnesses: persistent commitments, memory, attention routing and selective review.
+        Extraction from the original Saga prototype is planned; Claude Code is the first adapter.
+      </>
+    ),
+  },
+  {
+    title: "Agent Runtime",
+    body: (
+      <>
+        Built the independently usable tools behind a local-first{" "}
+        <ProjectLink slug="runtime">agent runtime</ProjectLink>: Wayland Computer Use acts on a
+        real desktop and rechecks focus and window identity before every input, Braid picks
+        context within a fixed budget, and Heimdall keeps task state and proposes completion from
+        evidence for human review.
+      </>
+    ),
+  },
+  {
+    title: "Worker Execution",
+    body: (
+      <>
+        Built <ProjectLink slug="saga">Saga</ProjectLink>&apos;s container-worker prototype with
+        MQTT events and reviewed maintenance PRs. The next phase separates execution into a
+        governed service that Odin or another orchestrator can use.
+      </>
+    ),
+  },
+  {
+    title: "Voice-First AI Briefings",
+    body: (
+      <>
+        Built <ProjectLink slug="dbriefly">dbriefly</ProjectLink>, a daily audio briefing built
+        from the podcasts, channels, and newsletters you follow, with original clips inline and a
+        realtime voice agent you can talk back to.
+      </>
+    ),
+  },
+  {
+    title: "Real-Time AI Intelligence",
+    body: (
+      <>
+        Built <ProjectLink slug="nexus">Nexus</ProjectLink> and its live dashboard{" "}
+        <ProjectLink slug="nexus">marketfinder</ProjectLink>, combining streaming ingestion, anomaly
+        detection, semantic market clustering, and LLM-generated analysis.
+      </>
+    ),
+  },
+  {
+    title: "Client Delivery",
+    body: (
+      <>
+        Scoped and delivered <ProjectLink slug="happily">happily.love</ProjectLink> end-to-end for a
+        matchmaking client: Claude-assisted onboarding interviews, an invite-based applicant flow,
+        structured profiles, approval workflows, and a private matchmaker dashboard.
+      </>
+    ),
+  },
+]
+
+export function About({ onOpenResume }: AboutProps) {
   const techFocusCard = (
     <Card className="border-2 md:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white/85 dark:bg-slate-800/85 backdrop-blur-[2px] dark:border-neo-blue-500 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
       <CardContent className="p-3 md:p-6">
@@ -72,16 +184,25 @@ export function About({ onOpenResume }: AboutProps) {
                 {label}
               </h4>
               <div className="flex flex-wrap gap-1 md:gap-1.5">
-                {items.map(({ name, caseStudyId }) => (
-                  <button
-                    key={name}
-                    type="button"
-                    onClick={() => scrollToCaseStudy(caseStudyId)}
-                    className="bg-neo-pink-light dark:bg-neo-pink-dark text-theme-border dark:text-black font-bold px-1.5 py-0.5 border md:border-2 border-theme-border dark:border-black text-[10px] md:text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none transition-all duration-150 hover:translate-x-[1px] hover:translate-y-[1px] active:translate-x-[2px] active:translate-y-[2px] hover:bg-neo-pink-300 dark:hover:bg-neo-pink-light cursor-pointer"
-                  >
-                    {name}
-                  </button>
-                ))}
+                {items.map(({ name, project }) =>
+                  project && knownSlugs.has(project) ? (
+                    <a
+                      key={name}
+                      href={`#${project}`}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        goToProject(project)
+                      }}
+                      className={`${chipBase} ${chipInteractive}`}
+                    >
+                      {name}
+                    </a>
+                  ) : (
+                    <span key={name} className={chipBase}>
+                      {name}
+                    </span>
+                  ),
+                )}
               </div>
             </div>
           ))}
@@ -119,7 +240,7 @@ export function About({ onOpenResume }: AboutProps) {
                   </div>
                   <h3 className="text-lg md:text-2xl font-black text-foreground mb-1 md:mb-2 dark:text-white">DAVID DUNN</h3>
                   <p className="text-sm md:text-base font-bold text-muted-foreground mb-1 dark:text-gray-300">
-                    Applied AI Engineer
+                    Applied AI &amp; Integration Engineer
                   </p>
                   <div className="space-y-1 md:space-y-2 text-xs md:text-sm font-bold text-foreground dark:text-gray-200">
                     <div className="flex items-center justify-center">
@@ -128,7 +249,7 @@ export function About({ onOpenResume }: AboutProps) {
                     </div>
                     <div className="flex items-center justify-center">
                       <Calendar size={14} className="mr-1.5 md:mr-2 dark:text-neo-blue-400" />
-                      6+ Years Experience
+                      7+ Years Experience
                     </div>
                   </div>
                 </div>
@@ -181,55 +302,19 @@ export function About({ onOpenResume }: AboutProps) {
               <CardContent className="p-3 md:p-6">
                 <h3 className="text-lg md:text-2xl font-black text-black dark:text-white mb-2 md:mb-4">KEY ACHIEVEMENTS</h3>
                 <div className="space-y-3 md:space-y-4">
-                  <div className="flex items-start">
-                    <div className="w-5 h-5 md:w-6 md:h-6 bg-neo-green-light dark:bg-neo-green-dark border md:border-2 border-theme-border dark:border-black flex items-center justify-center mr-2 md:mr-3 mt-0.5 font-black text-xs md:text-sm text-theme-border dark:text-black shrink-0">
-                      1
+                  {achievements.map(({ title, body }, i) => (
+                    <div key={title} className="flex items-start">
+                      <div className="w-5 h-5 md:w-6 md:h-6 bg-neo-green-light dark:bg-neo-green-dark border md:border-2 border-theme-border dark:border-black flex items-center justify-center mr-2 md:mr-3 mt-0.5 font-black text-xs md:text-sm text-theme-border dark:text-black shrink-0">
+                        {i + 1}
+                      </div>
+                      <div>
+                        <h4 className="font-black uppercase tracking-wide text-foreground dark:text-white text-xs md:text-base mb-1">
+                          {title}
+                        </h4>
+                        <p className="font-bold text-foreground dark:text-gray-200 text-xs md:text-base">{body}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-black uppercase tracking-wide text-foreground dark:text-white text-xs md:text-base mb-1">
-                        Agent Orchestration
-                      </h4>
-                      <p className="font-bold text-foreground dark:text-gray-200 text-xs md:text-base">
-                        Built <a href="#saga" className="text-neo-blue-600 dark:text-neo-blue-300 font-black underline decoration-2 underline-offset-2 hover:decoration-4">Saga</a>, a multi-agent
-                        orchestration system that coordinates parallel Claude Code workers in sandboxed
-                        Docker containers — with critic gates, MQTT event streams, and a recursive PR
-                        loop back to its own repo.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="w-5 h-5 md:w-6 md:h-6 bg-neo-green-light dark:bg-neo-green-dark border md:border-2 border-theme-border dark:border-black flex items-center justify-center mr-2 md:mr-3 mt-0.5 font-black text-xs md:text-sm text-theme-border dark:text-black shrink-0">
-                      2
-                    </div>
-                    <div>
-                      <h4 className="font-black uppercase tracking-wide text-foreground dark:text-white text-xs md:text-base mb-1">
-                        Real-Time AI Intelligence
-                      </h4>
-                      <p className="font-bold text-foreground dark:text-gray-200 text-xs md:text-base">
-                        Built <a href="#nexus" className="text-neo-blue-600 dark:text-neo-blue-300 font-black underline decoration-2 underline-offset-2 hover:decoration-4">Nexus</a> and{" "}
-                        <a href="#nexus" className="text-neo-blue-600 dark:text-neo-blue-300 font-black underline decoration-2 underline-offset-2 hover:decoration-4">marketfinder</a>, combining
-                        streaming ingestion, anomaly detection, semantic market clustering, and
-                        LLM-generated analysis.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="w-5 h-5 md:w-6 md:h-6 bg-neo-green-light dark:bg-neo-green-dark border md:border-2 border-theme-border dark:border-black flex items-center justify-center mr-2 md:mr-3 mt-0.5 font-black text-xs md:text-sm text-theme-border dark:text-black shrink-0">
-                      3
-                    </div>
-                    <div>
-                      <h4 className="font-black uppercase tracking-wide text-foreground dark:text-white text-xs md:text-base mb-1">
-                        Shipped AI Product
-                      </h4>
-                      <p className="font-bold text-foreground dark:text-gray-200 text-xs md:text-base">
-                        Built <a href="#happily" className="text-neo-blue-600 dark:text-neo-blue-300 font-black underline decoration-2 underline-offset-2 hover:decoration-4">happily.love</a>, an
-                        AI-powered matchmaking SaaS platform with guided onboarding, structured profile
-                        modeling, and private matchmaker workflows.
-                      </p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>

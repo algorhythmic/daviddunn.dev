@@ -1,83 +1,56 @@
 # daviddunn.dev
 
-Personal portfolio site for David Dunn — Applied AI Engineer based in Santa Clara, CA. Hosted at [daviddunn.dev](https://daviddunn.dev).
+David Dunn's portfolio — Applied AI & Integration Engineer in Santa Clara, CA.
 
-## What's on the site
+The home page introduces the work and links to seven projects on `/projects`: Odin, Agent Runtime, Saga, dbriefly, Nexus, Happily.love and MCP servers. Project cards retain the site's neobrutalist design, expandable details and architecture diagrams. Runtime figures link to their source reports and distinguish local benchmarks from general agent performance.
 
-The site is a single-page experience with four sections, navigated via a fixed header:
+Odin leads as a planned supervisory layer over existing agent harnesses. Saga distinguishes its working container prototype from its planned independent execution service. Neither card claims the extraction has shipped. The runtime card shows Heimdall and Skald screenshots; its public explainer position stays collapsed until a video is ready.
 
-- **Hero** — name, typewriter role cycler, count-up stats (years / case studies / GitHub repos), and a `VIEW RESUME` button that opens a mac-style terminal modal rendering the resume from `public/resume.md`.
-- **Case Studies** — four expandable case study cards (Saga, Nexus, happily.love, MCP server ecosystem). Each card collapses to a hook + four highlight metrics + tech badges, and expands to show problem / solution / architecture / role. Each architecture is rendered as an interactive [React Flow](https://reactflow.dev) graph inside a mac-style terminal window with a maximize-to-modal action.
-- **About** — profile card (photo, role, social/email link via the footer), my-story bio, key achievements, and a **Technical Focus** card whose skill chips are clickable — each scrolls to the relevant case study.
-- **Footer** — terminal-styled copyright, socials, build credit.
+## Run locally
 
-A persistent **status pill** in the menu bar links to the active build (`#saga`). Each case study has a deep-link hash slug (`/#saga`, `/#nexus`, `/#happily`, `/#mcp`) that auto-expands and scrolls to the matching card on load or hash change.
+Use pnpm and the checked-in `pnpm-lock.yaml`. The older npm lockfile is out of sync with the manifest.
 
-## Design
-
-- **Neobrutalism**: thick borders, hard offset shadows, vivid fills, all-caps headings, chunky `font-black` weights. See `app/globals.css` for shared utilities (`.section-text-outline`, `.text-outline-black`, `.text-outline-white`, etc.).
-- **Animated grid background**: shared `AnimatedBackground` component (`components/hero-background.tsx`) renders a CSS grid with traversing colored balls; used across Hero, Portfolio, About, and Footer with section-specific `boost` and fade variants.
-- **Homebrew terminal aesthetic**: phosphor green `#28ff28` text on pure black, applied to the resume terminal modal and to the in-card React Flow architecture diagrams. The architecture window has mac-style chrome (traffic lights, title bar) — the green dot maximizes to a near-fullscreen modal portaled to `document.body`.
-- **Per-case-study identity**: each case study has a vivid two-color gradient header (Saga violet→pink, Nexus blue→sky, happily.love pink→orange, MCP emerald→lime) plus a unique icon and accent color.
-
-## Tech stack
-
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router) on React 19
-- **Language**: TypeScript
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) with a custom `neo-*` color palette and `hoverOnlyWhenSupported` enabled (no sticky hover on touch devices)
-- **UI primitives**: [shadcn/ui](https://ui.shadcn.com/) on top of [Radix UI](https://www.radix-ui.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Architecture diagrams**: [@xyflow/react](https://reactflow.dev/) (formerly React Flow), lazy-loaded via `next/dynamic`
-- **Markdown**: [react-markdown](https://github.com/remarkjs/react-markdown) + [remark-gfm](https://github.com/remarkjs/remark-gfm) (for the resume terminal)
-- **Theme**: custom `ThemeProvider` (`contexts/theme-context.tsx`) — class-based dark mode, persisted to `localStorage`, defaults to system color scheme
-- **Package manager**: [pnpm](https://pnpm.io/)
-
-## Project layout
-
-```
-app/
-  layout.tsx          Root layout, metadata, theme init script
-  page.tsx            Composes <Navigation>, <Hero>, <Portfolio>, <About>, <Footer>, <ResumeTerminal>
-  globals.css         Theme tokens, neo utilities, animations, scrollbar
-components/
-  navigation.tsx      Fixed nav: 3-cell grid (logo / status pill / nav controls)
-  hero.tsx            Hero card, typewriter, count-up stats, magnetic CTAs
-  hero-background.tsx Shared animated grid + traversing balls
-  portfolio.tsx       Case study cards, hash deep-linking, expand-to-modal
-  about.tsx           Profile + bio + achievements + Technical Focus chips
-  footer.tsx          Terminal copyright, socials, build credit
-  resume-terminal.tsx Mac-style terminal modal rendering public/resume.md
-  architecture-diagram.tsx  React Flow + custom node shapes + maximize portal
-  theme-toggle.tsx    Sun/Moon icon swap with rotation animation
-contexts/
-  theme-context.tsx   Theme provider + useTheme hook
-lib/
-  portfolio-data.ts   Case study data: highlights, tech, links, architecture graphs
-public/
-  resume.md           Markdown resume served by the resume terminal
-  dd-profile.png      Profile photo
-```
-
-## Getting started
-
-```bash
-pnpm install
+```sh
+pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open http://localhost:3000. Before shipping:
 
-## Scripts
+```sh
+pnpm exec tsc --noEmit
+pnpm build
+pnpm start
+```
 
-- `pnpm dev` — dev server (Next.js on port 3000)
-- `pnpm build` — production build
-- `pnpm start` — serve the production build
-- `pnpm lint` — ESLint via `next lint`
+Run the TypeScript check separately: the existing Next configuration permits build-time type errors. The existing `lint` script requires an ESLint setup; it is not a substitute for the checks above.
 
-## Deployment
+## Content and routes
 
-Deployed via Vercel.
+| Location | Purpose |
+|---|---|
+| `app/page.tsx` | Home page, project links and resume viewer |
+| `app/projects/page.tsx` | Full portfolio, hero and About section |
+| `lib/portfolio-data.ts` | Seven project cards, source links and architecture data |
+| `components/portfolio.tsx` | Expandable cards and stable project anchors |
+| `components/architecture-diagram.tsx` | React Flow diagrams with distinct relationship styles |
+| `components/hero.tsx` | Role text and counters that render final values in initial HTML |
+| `components/about.tsx` | Experience, client work and skill links |
+| `public/resume.pdf`, `.docx`, `.md` | User-selected resume assets, served through the resume viewers |
+| `app/v/[slug]/page.tsx` | Unlisted intro-video pages; unavailable until configured with complete assets |
+| `lib/intro-videos.ts` | Server-side intro allowlist; empty until videos are ready |
+| `app/sitemap.ts` | Public home/projects routes only |
 
-## Author
+Deep links use `/projects#odin`, `#runtime`, `#saga`, `#dbriefly`, `#nexus`, `#happily` and `#mcp`. Private projects offer a walkthrough rather than linking to an inaccessible GitHub repository.
 
-[David Dunn](https://linkedin.com/in/mrdaviddunn) · [github.com/algorhythmic](https://github.com/algorhythmic) · davidalexanderdunn@gmail.com
+## Video publishing
+
+No video assets are included yet. Missing or unconfigured introductions return 404; no empty player appears on the runtime card. See [video publishing](docs/VIDEO-PUBLISHING.md) for asset preparation and activation.
+
+Unlisted pages are accessible to anyone who has the link. They use noindex metadata, stay out of the sitemap/navigation, and intro assets receive an `X-Robots-Tag` header. This is discoverability control, not authentication.
+
+## Stack and design
+
+Next.js 15 App Router, React 19, TypeScript, Tailwind CSS, shadcn/Radix primitives, Lucide icons, React Flow and Markdown resume rendering. Themes follow the system by default, with an explicit user override. The projects page uses thick borders, hard shadows, vivid accents, an animated grid and terminal-style diagrams; the home page uses a simpler layout.
+
+Deployment is configured through Vercel. Local edits and builds do not deploy the site.
