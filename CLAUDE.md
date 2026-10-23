@@ -1,10 +1,12 @@
 # Project context: daviddunn.dev
 
-Personal portfolio for David Dunn, Applied AI & Integration Engineer, Santa Clara, CA. Public repository: `algorhythmic/daviddunn.dev`; site: https://daviddunn.dev. Next.js 15.2.8, React 19, TypeScript, Tailwind, shadcn/Radix, Lucide, React Flow.
+Personal portfolio for David Dunn, focused on agent infrastructure and product engineering, Santa Clara, CA. Public repository: `algorhythmic/daviddunn.dev`; site: https://daviddunn.dev. Next.js 15.2.8, React 19, TypeScript, Tailwind, shadcn/Radix, Lucide, React Flow.
 
 ## Current structure (October 2026 revision)
 
-- `/`: simple introduction, ordered project links, resume document modal and theme toggle.
+- `/`: prewritten animated introduction followed by connected, expandable work rows. The prompt types, a five-second research sequence links public profiles, and the answer streams in. Pause, skip, replay and reduced-motion behavior share timing in `lib/intro-sequence.ts`; `components/workbench.tsx` coordinates playback and work visibility.
+- Landing copy and metadata share `lib/site-copy.ts`. Project order, statuses, public profiles and published articles/videos live in `lib/portfolio-activity.ts`. Everything, Projects, Articles and Videos filters derive counts from those records. Publications are currently empty; never include unlisted `/v/` introductions in this feed.
+- Expanded landing projects show `components/project-motion.tsx` animations with summaries from `lib/project-previews.ts` and links to `/projects#slug`. Landing order is Odin, Saga, Agent Runtime, dbriefly, Nexus, Happily.love, MCP servers.
 - `/projects`: `Navigation`, `Hero`, `Portfolio`, `About`, `Footer`, plus PDF/DOCX/Markdown and terminal resume viewers.
 - Seven cards, in order: Odin, Agent Runtime, Saga, dbriefly, Nexus, Happily.love, MCP servers. Data lives in `lib/portfolio-data.ts`; rendering and hash navigation in `components/portfolio.tsx`.
 - Stable anchors: `odin`, `runtime`, `saga`, `dbriefly`, `nexus`, `happily`, `mcp`. Use slugs in new links, not numeric card positions.
@@ -14,7 +16,8 @@ Personal portfolio for David Dunn, Applied AI & Integration Engineer, Santa Clar
 
 ## Content rules
 
-- Positioning: Applied AI & Integration Engineer; 7+ years of experience.
+- Positioning: agent infrastructure and product engineering; 7+ years of experience. Describe agent coordination, runtime tooling, observable runs, harnesses/evaluations and development from databases to interfaces in clear language. Keep shared copy in `lib/site-copy.ts` consistent across the landing, metadata and projects page.
+- The landing introduction is a scripted animation, not a live chat or live profile lookup. Keep it labelled as an animated introduction and retain its playback controls and static reduced-motion end state.
 - Odin is the first card, labelled as a specified design awaiting extraction. Its first adapter is Claude Code; other harness adapters and decision-model integrations remain planned. Saga owns execution, not Odin's planning or memory. Its independent API and durable run ledger are planned; the existing implementation is the April container-worker prototype. Keep this distinction in every summary and diagram.
 - The runtime card uses the supplied Heimdall and Skald screenshots. The former connection summary is removed; reserve that position for a public explainer without rendering a placeholder.
 - Agent runtime is a collection of independently usable tools with some partial/planned integrations, not a fully connected product. Link quantitative claims to the source report and retain relevant benchmark limits.
@@ -42,6 +45,6 @@ Production hosting uses Vercel. Do not deploy, push, change remote settings, or 
 
 ## Design
 
-Preserve neobrutalist projects styling: 2px mobile/4px desktop borders, hard offset shadows, bold headings, bright `neo-*` colors, dark-mode accents and animated grid backgrounds. The home page is deliberately simpler. Architecture diagrams use React Flow in a terminal frame; avoid presenting planned relationships as delivered. Keep keyboard/focus behavior, reduced-motion support and responsive layouts usable.
+Preserve neobrutalist projects styling: 2px mobile/4px desktop borders, hard offset shadows, bold headings, bright `neo-*` colors, dark-mode accents and animated grid backgrounds. The landing uses a conversational animation and connected work feed, styled with scoped CSS modules. Architecture diagrams use React Flow in a terminal frame; avoid presenting planned relationships as delivered. Keep keyboard/focus behavior, reduced-motion support and responsive layouts usable.
 
 Theme state belongs to `contexts/theme-context.tsx`. Shared primitives live under `components/ui/`; prefer existing components. Resume document and terminal modals have distinct roles, but both use the same selected asset set.

@@ -6,6 +6,7 @@ import { Terminal, MapPin, Calendar } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { AnimatedBackground } from "@/components/hero-background"
 import { caseStudies } from "@/lib/portfolio-data"
+import { SITE_ROLE } from "@/lib/site-copy"
 
 type AboutProps = {
   onOpenResume: () => void
@@ -218,7 +219,7 @@ export function About({ onOpenResume }: AboutProps) {
         <div className="text-center mb-6 md:mb-12">
           <h2 className="section-text-outline text-2xl md:text-6xl font-black text-white mb-2 md:mb-4">ABOUT ME</h2>
           <p className="section-text-outline-thin text-xs md:text-xl font-bold text-white mb-4 md:mb-8 dark:text-gray-200">
-            Building intelligent systems from data pipelines to user interfaces
+            Helping agents work together. Building the products around them.
           </p>
         </div>
 
@@ -240,7 +241,7 @@ export function About({ onOpenResume }: AboutProps) {
                   </div>
                   <h3 className="text-lg md:text-2xl font-black text-foreground mb-1 md:mb-2 dark:text-white">DAVID DUNN</h3>
                   <p className="text-sm md:text-base font-bold text-muted-foreground mb-1 dark:text-gray-300">
-                    Applied AI &amp; Integration Engineer
+                    {SITE_ROLE}
                   </p>
                   <div className="space-y-1 md:space-y-2 text-xs md:text-sm font-bold text-foreground dark:text-gray-200">
                     <div className="flex items-center justify-center">
@@ -277,13 +278,14 @@ export function About({ onOpenResume }: AboutProps) {
                 <h3 className="text-lg md:text-2xl font-black text-foreground mb-2 md:mb-4 dark:text-white">MY STORY</h3>
                 <div className="space-y-3 md:space-y-4 text-foreground dark:text-gray-200 font-bold leading-relaxed text-xs md:text-base">
                   <p>
-                    I build AI systems that plan, execute, review, and fix their own work — with a
-                    person approving what actually ships.
+                    I build systems that coordinate agents and give them the tools, context, and
+                    continuity to do useful work. That includes runtime tooling, monitoring that
+                    makes runs inspectable, and harnesses and evaluations that help measure results.
                   </p>
                   <p>
-                    I'm particularly interested in problems where AI is not the whole product, but{" "}
-                    <span className="dark:text-neo-blue-300">one intelligent layer inside a larger system</span>{" "}
-                    that's connected to data, users, workflows, infrastructure, and human judgment.
+                    I also build the products around those systems, from databases and services to{" "}
+                    <span className="dark:text-neo-blue-300">the interfaces people use</span>.
+                    I care about how the pieces work together and where human judgment belongs.
                   </p>
                   <p>
                     My path into AI engineering has not been a straight line, and that is part of the value

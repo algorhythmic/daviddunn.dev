@@ -1,8 +1,10 @@
 # daviddunn.dev
 
-David Dunn's portfolio — Applied AI & Integration Engineer in Santa Clara, CA.
+David Dunn's portfolio — agent infrastructure and product engineering in Santa Clara, CA.
 
-The home page introduces the work and links to seven projects on `/projects`: Odin, Agent Runtime, Saga, dbriefly, Nexus, Happily.love and MCP servers. Project cards retain the site's neobrutalist design, expandable details and architecture diagrams. Runtime figures link to their source reports and distinguish local benchmarks from general agent performance.
+The home page opens with a prewritten animated introduction: a prompt types itself, a five-second research sequence links public profiles, and a short answer introduces David. Pause, skip, replay and reduced-motion controls lead to connected, expandable work rows with project animations and links to the full portfolio. Everything, Projects, Articles and Videos filters share one feed; articles and videos show empty states until public entries are added.
+
+The seven projects are Odin, Saga, Agent Runtime, dbriefly, Nexus, Happily.love and MCP servers. `/projects` retains its neobrutalist cards, expandable details and architecture diagrams. Runtime figures link to source reports and distinguish local benchmarks from general agent performance.
 
 Odin leads as a planned supervisory layer over existing agent harnesses. Saga distinguishes its working container prototype from its planned independent execution service. Neither card claims the extraction has shipped. The runtime card shows Heimdall and Skald screenshots; its public explainer position stays collapsed until a video is ready.
 
@@ -29,7 +31,11 @@ Run the TypeScript check separately: the existing Next configuration permits bui
 
 | Location | Purpose |
 |---|---|
-| `app/page.tsx` | Home page, project links and resume viewer |
+| `app/page.tsx`, `components/workbench.tsx` | Animated landing, connected work rows and content filters |
+| `components/intro-animation.tsx`, `lib/intro-sequence.ts` | Prewritten introduction, shared timing and playback controls |
+| `lib/site-copy.ts` | Shared positioning, introduction and metadata copy |
+| `lib/portfolio-activity.ts` | Landing project order, statuses, public profiles and publication feed |
+| `components/project-motion.tsx`, `lib/project-previews.ts` | Project animations and preview summaries |
 | `app/projects/page.tsx` | Full portfolio, hero and About section |
 | `lib/portfolio-data.ts` | Seven project cards, source links and architecture data |
 | `components/portfolio.tsx` | Expandable cards and stable project anchors |
@@ -45,12 +51,12 @@ Deep links use `/projects#odin`, `#runtime`, `#saga`, `#dbriefly`, `#nexus`, `#h
 
 ## Video publishing
 
-No video assets are included yet. Missing or unconfigured introductions return 404; no empty player appears on the runtime card. See [video publishing](docs/VIDEO-PUBLISHING.md) for asset preparation and activation.
+No video assets are included yet. Missing or unconfigured introductions return 404; no empty player appears on the runtime card. See [video publishing](docs/VIDEO-PUBLISHING.md) for asset preparation, activation and the site-wide recording/animation plan.
 
 Unlisted pages are accessible to anyone who has the link. They use noindex metadata, stay out of the sitemap/navigation, and intro assets receive an `X-Robots-Tag` header. This is discoverability control, not authentication.
 
 ## Stack and design
 
-Next.js 15 App Router, React 19, TypeScript, Tailwind CSS, shadcn/Radix primitives, Lucide icons, React Flow and Markdown resume rendering. Themes follow the system by default, with an explicit user override. The projects page uses thick borders, hard shadows, vivid accents, an animated grid and terminal-style diagrams; the home page uses a simpler layout.
+Next.js 15 App Router, React 19, TypeScript, Tailwind CSS, shadcn/Radix primitives, Lucide icons, React Flow and Markdown resume rendering. Themes follow the system by default, with an explicit user override. The projects page uses thick borders, hard shadows, vivid accents, an animated grid and terminal-style diagrams; the landing page uses a conversational introduction and connected work feed.
 
 Deployment is configured through Vercel. Local edits and builds do not deploy the site.

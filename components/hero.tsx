@@ -5,11 +5,12 @@ import type { ReactNode } from "react"
 import { ChevronDown, Terminal, Calendar, Layers, Github } from "lucide-react"
 import { AnimatedBackground } from "@/components/hero-background"
 import { caseStudies } from "@/lib/portfolio-data"
+import { SITE_ROLE } from "@/lib/site-copy"
 
 // Kept short so the typed line never wraps on narrow phones; the full title is
 // rendered statically (screen-reader text) so it is present in the SSR HTML.
-const TITLE = "Applied AI & Integration Engineer"
-const roles = ["AI Systems Builder", "Applied AI Engineer", "Data Automation Developer"]
+const TITLE = SITE_ROLE
+const roles = ["Agent Systems Builder", "Runtime Tools Engineer", "Full-Stack Developer"]
 
 // Header stats are static so the server-rendered HTML already shows the real
 // values (no count-up from 1). Years matches the resume; the project count is
