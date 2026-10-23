@@ -26,6 +26,32 @@
   --green: #9ead95;
   --accent: #b4a4e1;
 }
+/* The viewport scrollbar belongs to html, outside the landing wrapper. */
+:global(html):has(.workspace) {
+  --landing-scroll-track: #fafaf9;
+  --landing-scroll-thumb: #9898a3;
+  --landing-scroll-hover: #777782;
+  scrollbar-width: thin;
+  scrollbar-color: var(--landing-scroll-thumb) var(--landing-scroll-track);
+}
+:global(html.dark):has(.workspace) {
+  --landing-scroll-track: #131315;
+  --landing-scroll-thumb: #686874;
+  --landing-scroll-hover: #858591;
+}
+/* Fallback for browsers that use the WebKit scrollbar pseudo-elements. */
+:global(html):has(.workspace)::-webkit-scrollbar { width: 10px; height: 10px; }
+:global(html):has(.workspace)::-webkit-scrollbar-track {
+  background: var(--landing-scroll-track);
+  border: 0;
+}
+:global(html):has(.workspace)::-webkit-scrollbar-thumb {
+  background: var(--landing-scroll-thumb);
+  border: 2px solid var(--landing-scroll-track);
+  border-radius: 999px;
+  box-shadow: none;
+}
+:global(html):has(.workspace)::-webkit-scrollbar-thumb:hover { background: var(--landing-scroll-hover); }
 .workspace a { text-decoration: none; }
 .workspace button { -webkit-tap-highlight-color: transparent; }
 .workspace a:focus-visible, .workspace button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
